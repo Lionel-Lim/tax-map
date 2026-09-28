@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "limsight-taxmap",
+  "compatibility_date": "2026-09-28",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "taxmap.limsight.com", "custom_domain": true }
+  ],
+  "assets": {
+    "directory": "./build",
+    "html_handling": "force-trailing-slash",
+    "not_found_handling": "none"
+  }
+}

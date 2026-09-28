@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.domain.json",
+  "compilerOptions": { "outDir": ".build/app-tests", "lib": ["ES2022", "DOM", "DOM.Iterable"] },
+  "include": ["src/lib/domain/**/*.ts", "src/lib/data/**/*.ts", "src/lib/map/presentation.ts", "tests/app/**/*.ts"]
+}

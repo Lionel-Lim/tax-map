@@ -1,0 +1,86 @@
+{
+  "verifiedOn": "2026-09-26",
+  "phase": "P3.1\u2013P3.8",
+  "applicationVersion": "0.3.0",
+  "dataVersion": "sample-2026-09-26-v1",
+  "landing": {
+    "area": "E06000016",
+    "geography": "LAD",
+    "mode": "annualised-ownership",
+    "ownershipYears": 20,
+    "buyer": "standard"
+  },
+  "checks": {
+    "typecheck": {
+      "errors": 0,
+      "warnings": 0
+    },
+    "domainTests": {
+      "passed": 97
+    },
+    "applicationTests": {
+      "passed": 23
+    },
+    "browserAcceptance": {
+      "passed": 26,
+      "durationSeconds": 44.8
+    },
+    "mobilePerformance": {
+      "passed": 1,
+      "evidence": "phase3-performance.json"
+    },
+    "staticBuild": {
+      "passed": true,
+      "routes": [
+        "/",
+        "/map/",
+        "/methodology/",
+        "/data-sources/"
+      ]
+    },
+    "releaseVerification": {
+      "verifiedArtifacts": 6250,
+      "manifestSha256": "798684c202cde82f6301c67bec36ca85863e591e1157642b131f8d7d32381da6"
+    },
+    "domainFilesUnchanged": {
+      "src/lib/domain/tax/area.ts": true,
+      "src/lib/domain/tax/comparison.ts": true,
+      "src/lib/domain/tax/council-tax.ts": true,
+      "src/lib/domain/tax/index.ts": true,
+      "src/lib/domain/tax/money.ts": true,
+      "src/lib/domain/tax/policy.ts": true,
+      "src/lib/domain/tax/rational.ts": true,
+      "src/lib/domain/tax/sdlt.ts": true,
+      "src/lib/domain/tax/types.ts": true,
+      "src/lib/domain/tax/validation.ts": true
+    }
+  },
+  "browser": "Chromium 145 (Playwright cached build 1208), macOS; desktop 1440\u00d71100 and mobile 390\u00d7844; explicit WebGL failure and network retry tested",
+  "dependencies": {
+    "maplibre-gl": "6.11.2",
+    "@playwright/test": "1.63.0",
+    "@sveltejs/adapter-static": "3.0.10",
+    "@sveltejs/kit": "2.70.3",
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "@types/node": "22.14.0",
+    "svelte": "5.57.1",
+    "svelte-check": "4.7.6",
+    "typescript": "5.9.3",
+    "vite": "8.3.1"
+  },
+  "evidence": [
+    "phase3-desktop.png",
+    "phase3-map-desktop.png",
+    "phase3-map-mobile.png",
+    "phase3-map-unavailable.png",
+    "phase3-webgl-fallback.png",
+    "phase3-performance.json"
+  ],
+  "limitations": [
+    "Internal five-council sample only; not a public England release",
+    "107/198 neighbourhood area estimates remain unavailable",
+    "Only all-property data supported",
+    "Performance run is local, with 4\u00d7 CPU slowdown and no network throttling; hosted and real-device checks remain Phase 4",
+    "MapLibre main chunk exceeds Vite\u2019s 500kB advisory, is lazy-loaded, and is included in measured budgets"
+  ]
+}

@@ -1,0 +1,7 @@
+# Exact direct and transitive runtime dependencies. Python 3.12.14.
+certifi==2026.7.22
+et_xmlfile==2.0.0
+numpy==2.3.5
+openpyxl==3.1.5
+pyproj==3.7.2
+shapely==2.1.2

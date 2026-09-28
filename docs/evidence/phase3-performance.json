@@ -1,0 +1,163 @@
+{
+  "measuredOn": "2026-09-26T10:42:47.356Z",
+  "environment": "Local Vite production preview; Chromium, 390×844 viewport, 4× CPU slowdown, cache disabled, no network throttling. Timings include automation and concurrent tests; not real-device or hosted latency.",
+  "initial": {
+    "encodedBytes": 1107993,
+    "decodedBytes": 3322821,
+    "resources": [
+      {
+        "path": "/_app/immutable/entry/start.2DQuOZDv.js",
+        "encodedBytes": 77,
+        "decodedBytes": 77
+      },
+      {
+        "path": "/_app/immutable/chunks/B16gpT3g.js",
+        "encodedBytes": 12433,
+        "decodedBytes": 33312
+      },
+      {
+        "path": "/_app/immutable/entry/app.Y-1s_6r6.js",
+        "encodedBytes": 1439,
+        "decodedBytes": 3329
+      },
+      {
+        "path": "/_app/immutable/chunks/C_qPIBJl.js",
+        "encodedBytes": 18222,
+        "decodedBytes": 48053
+      },
+      {
+        "path": "/_app/immutable/chunks/uBIymjUX.js",
+        "encodedBytes": 685,
+        "decodedBytes": 1233
+      },
+      {
+        "path": "/_app/immutable/chunks/xihTtKlq.js",
+        "encodedBytes": 65,
+        "decodedBytes": 65
+      },
+      {
+        "path": "/_app/immutable/nodes/0.gfW9Cfp1.js",
+        "encodedBytes": 967,
+        "decodedBytes": 967
+      },
+      {
+        "path": "/_app/immutable/nodes/4.DOihjp0g.js",
+        "encodedBytes": 278,
+        "decodedBytes": 278
+      },
+      {
+        "path": "/_app/immutable/chunks/DB9hY3pF.js",
+        "encodedBytes": 38,
+        "decodedBytes": 38
+      },
+      {
+        "path": "/_app/immutable/chunks/C5dSdBJa.js",
+        "encodedBytes": 27765,
+        "decodedBytes": 84908
+      },
+      {
+        "path": "/_app/immutable/assets/0.CEfTtb8x.css",
+        "encodedBytes": 3775,
+        "decodedBytes": 13804
+      },
+      {
+        "path": "/_app/immutable/assets/Explorer.cctNaSWq.css",
+        "encodedBytes": 1707,
+        "decodedBytes": 5593
+      },
+      {
+        "path": "/_app/immutable/nodes/1.CXWeD28t.js",
+        "encodedBytes": 576,
+        "decodedBytes": 576
+      },
+      {
+        "path": "/favicon.svg",
+        "encodedBytes": 235,
+        "decodedBytes": 235
+      },
+      {
+        "path": "/data/sample-2026-09-26-v1/manifest.json",
+        "encodedBytes": 283185,
+        "decodedBytes": 724513
+      },
+      {
+        "path": "/data/sample-2026-09-26-v1/areas.json",
+        "encodedBytes": 27550,
+        "decodedBytes": 333804
+      },
+      {
+        "path": "/data/sample-2026-09-26-v1/search.json",
+        "encodedBytes": 6142,
+        "decodedBytes": 37461
+      },
+      {
+        "path": "/data/sample-2026-09-26-v1/policy.json",
+        "encodedBytes": 783,
+        "decodedBytes": 783
+      },
+      {
+        "path": "/_app/immutable/assets/maplibre-gl.B8-mEBLf.css",
+        "encodedBytes": 10471,
+        "decodedBytes": 82962
+      },
+      {
+        "path": "/data/sample-2026-09-26-v1/boundaries/lad.geojson",
+        "encodedBytes": 37581,
+        "decodedBytes": 37581
+      },
+      {
+        "path": "/data/sample-2026-09-26-v1/boundaries/msoa.geojson",
+        "encodedBytes": 195860,
+        "decodedBytes": 195860
+      },
+      {
+        "path": "/_app/immutable/chunks/C_tvwFwd.js",
+        "encodedBytes": 283135,
+        "decodedBytes": 1062985
+      },
+      {
+        "path": "/_app/immutable/chunks/B5G-99D9.js",
+        "encodedBytes": 101,
+        "decodedBytes": 101
+      },
+      {
+        "path": "/_app/immutable/chunks/BWv_Txo-.js",
+        "encodedBytes": 49679,
+        "decodedBytes": 144601
+      },
+      {
+        "path": "/_app/immutable/workers/maplibre-gl-worker-CRiIRpYb.js",
+        "encodedBytes": 145244,
+        "decodedBytes": 509702
+      }
+    ]
+  },
+  "postcode": {
+    "encodedBytes": 333734,
+    "decodedBytes": 1081347,
+    "resources": [
+      {
+        "path": "/data/sample-2026-09-26-v1/postcodes/index.json",
+        "encodedBytes": 306574,
+        "decodedBytes": 859152
+      },
+      {
+        "path": "/data/sample-2026-09-26-v1/postcodes/LE4.json",
+        "encodedBytes": 27160,
+        "decodedBytes": 222195
+      }
+    ]
+  },
+  "timings": {
+    "overviewMilliseconds": 3029,
+    "postcodeMilliseconds": 1271,
+    "scenarioMilliseconds": 416
+  },
+  "budgets": {
+    "initialDecodedBytes": 4500000,
+    "postcodeDecodedBytes": 1300000,
+    "overviewMilliseconds": 20000,
+    "postcodeMilliseconds": 8000,
+    "scenarioMilliseconds": 3000
+  }
+}

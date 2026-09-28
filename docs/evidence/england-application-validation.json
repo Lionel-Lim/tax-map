@@ -1,0 +1,160 @@
+{
+  "verifiedOn": "2026-09-26",
+  "scope": "Internal England coverage expansion; production publication remains pending",
+  "dataVersion": "england-2026-09-26-v1",
+  "policyVersion": "illustrative-ppt:1.0.0",
+  "sdltRuleVersion": "sdlt-england-2025-04-01-v1",
+  "manifestSha256": "45ca39d27d9e3fe7150617e9d63bbc7f06b12e0a78d664cd5a0b85a5a319f4d3",
+  "coverage": {
+    "LAD": {
+      "available": 293,
+      "total": 296,
+      "unavailable": 3,
+      "unavailableReasons": {
+        "stock-marker-unverified": 1,
+        "stock-unavailable": 2
+      }
+    },
+    "MSOA": {
+      "available": 2961,
+      "total": 6856,
+      "unavailable": 3895,
+      "unavailableReasons": {
+        "boundary-invalid": 6,
+        "geography-needs-review": 140,
+        "stock-marker-unverified": 3843
+      }
+    }
+  },
+  "checks": {
+    "pythonPipeline": {
+      "passed": 66
+    },
+    "domain": {
+      "passed": 99
+    },
+    "dataAndState": {
+      "passed": 32,
+      "allDistrictsLoaded": 296,
+      "comparisons": 21456
+    },
+    "browser": {
+      "passed": 41,
+      "failed": 0
+    },
+    "typesAndSvelte": {
+      "errors": 0,
+      "warnings": 0
+    },
+    "staticBuild": {
+      "passed": true,
+      "prerenderedRoutes": [
+        "/",
+        "/map/",
+        "/methodology/",
+        "/data-sources/"
+      ]
+    },
+    "releaseVerifier": {
+      "artifacts": 6843,
+      "passed": true
+    },
+    "deterministicRebuild": {
+      "allReleaseFiles": 6844,
+      "byteIdentical": true,
+      "method": "retained-source deterministic rebuild"
+    }
+  },
+  "totalPassingTests": 238,
+  "browserCoverage": [
+    "England overview and lazy delivery",
+    "new postcodes in Manchester/Birmingham/Bristol/Newcastle/Oxford/York",
+    "global neighbourhood search and deep links",
+    "invalid boundaries and stock vintages",
+    "old sample release navigation and browser history",
+    "failed detail lookup and shared-area recovery",
+    "all comparison modes and buyer scope",
+    "personal overrides and reset",
+    "sharing with explicit postcode opt-in",
+    "keyboard and narrow-screen operation",
+    "without WebGL",
+    "static source/methodology without JavaScript"
+  ],
+  "performance": {
+    "evidence": "england-performance.json",
+    "initialEncodedBytes": 2076154,
+    "initialDecodedBytes": 5527217,
+    "detailDecodedBytes": 1158070,
+    "timings": {
+      "overviewMilliseconds": 4299,
+      "postcodeMilliseconds": 1548,
+      "scenarioMilliseconds": 654
+    },
+    "budgets": {
+      "initialDecodedBytes": 6000000,
+      "detailDecodedBytes": 1300000,
+      "overviewMilliseconds": 20000,
+      "postcodeMilliseconds": 8000,
+      "scenarioMilliseconds": 3000
+    },
+    "environment": "Local Vite production preview; Chromium, 390\u00d7844 viewport, 4\u00d7 CPU slowdown, cache disabled, no network throttling. Timings include automation; not real-device or hosted latency."
+  },
+  "sampleManifestSha256": "798684c202cde82f6301c67bec36ca85863e591e1157642b131f8d7d32381da6",
+  "visualEvidence": [
+    "docs/evidence/england-map-desktop.png",
+    "docs/evidence/england-map-mobile.png",
+    "docs/evidence/england-map-neighbourhoods.png",
+    "docs/evidence/england-map-withheld-boundary.png"
+  ],
+  "limitations": [
+    "Internal preview, no deployment",
+    "Unverified stock markers, geography conflicts and six invalid boundary shapes remain unavailable",
+    "Pinned source periods differ; only all-property inputs supported",
+    "Mobile performance measured locally, not on physical devices or hosted infrastructure",
+    "Public reuse/usable coverage/hosting/CI/rollback preparation remains Phase 4"
+  ],
+  "sha256": {
+    "package-lock.json": "1575d1176e26fd0341e94b68ba3d9a939bc51b3d11de47dc49c1d9bffed158d3",
+    "package.json": "4e875230972f9615e59fd6c4a70a708141c567d20ba85dcdae8e6135e9363146",
+    "src/app.css": "d31f4a06ecd5b1102fe337ff67b982aac1721239312cbd13b2de1a63fbb45a22",
+    "src/lib/components/Explorer.svelte": "25a52601f62aa942829c50cb5ceb29d9878463985660cc341d87dca5a9b39062",
+    "src/lib/components/ImpactPanel.svelte": "ab9ec0353387aec340273bee3b7706a7aab1953f40b83b0ebdd7b211a10eea0b",
+    "src/lib/data/index.ts": "a6f4902f594ced612b92db81e949d2a906b3bd89f7f9eca93a1e9e6de211f10c",
+    "src/lib/data/postcodes.ts": "7be0078eb650873754a9198fa778efd252a31210a21397f0135887db10f46785",
+    "src/lib/data/release.ts": "41a2e817268a67a8dc27130270a4f8713c050cb48a74624eff0eb2e96a14decb",
+    "src/lib/data/state.ts": "4b28a02d02f7d21e77616c473d70f3167746ea831286594aadc56c8e859a9051",
+    "src/lib/domain/tax/area.ts": "d971477390104d6d4295f9e7baed5fc2aa91a3be35e7d99b7bb1cf6a7f40ccdd",
+    "src/lib/domain/tax/comparison.ts": "619f535e85030f67166e9bddaf8e3499a9ffefa812fd2fcfff27537b95a3a948",
+    "src/lib/domain/tax/council-tax.ts": "e4b310b0d976b0cc1dabe7fb5c9d92b5d46cec9caf1db1d56009210936d2861e",
+    "src/lib/domain/tax/index.ts": "37d0123b49d303beb787fe5342d623dfd9229c31c4b2a7ec3486819e4e79ed37",
+    "src/lib/domain/tax/money.ts": "fe0badaf58f650d3bbc489ddd3a68d88dd6549096bdefd9ac47be157a9199e4f",
+    "src/lib/domain/tax/policy.ts": "bd38bb83cd848d043f5663b961f97bc44c637b715d32f53213027439a777f6eb",
+    "src/lib/domain/tax/rational.ts": "333fd568e26c1c1575d2b76690fe39f3c0b3369fb0ac5ca541f263d13d07384c",
+    "src/lib/domain/tax/sdlt.ts": "ca135c73d2a3ff219ff8112760336b529dbfe751c0636b0332e3a8af363d075e",
+    "src/lib/domain/tax/types.ts": "4fcaef9ea6c2f06855619a233baaf0f5e2025bdc9487eae9a721c4137ff90d6c",
+    "src/lib/domain/tax/validation.ts": "eda883376571f8f65dcfe866e1dd09f233be2478cc0ea73c50db86355eb16273",
+    "src/lib/map/MapLegend.svelte": "54424da8c51ad26d8900745a71c590a431d16caa316e942e0c427adba838f6ae",
+    "src/lib/map/TaxMap.svelte": "d165b3019737252d582fe99f36a072ea21d677964992e01f0df46bbdaa83a4f4",
+    "src/routes/+layout.svelte": "b2aa3472bd68833fd2fe3a8be173b445d3bf4eff0ddf76e8ecc851bd1ea0fd1f",
+    "src/routes/+layout.ts": "c99ecc4f19c0da816a224ef18de036f3d7ae1ab03b2692441bc52887d3881513",
+    "src/routes/+page.svelte": "38ff045023f39d986c4799a5f66560cfe7e83e2ba27560dfab2fc8721057f740",
+    "src/routes/data-sources/+page.server.ts": "88c1bcc06c7a6b941aac1c4fe674ad22e6f00ea78a0bf7ce84e68327c8dd14b6",
+    "src/routes/data-sources/+page.svelte": "b5d93576ec02eba9efa3d23cd87abde3d10516a8e665cb7a7126c25aedc875b1",
+    "src/routes/map/+page.svelte": "4ec1bac7332370baec63cd21fa3708f6f120855721e2c79333cb8406047c9bb5",
+    "src/routes/methodology/+page.svelte": "7121a16c638bd7f90caf71046bb8233600141bbc3b8dd7b7b0b4cdbdec58ca67",
+    "tests/app/data.test.ts": "bd5d6e53cec5ae0986897fe94111be1a5ac39900a3d1e5dc702502fe8a4aaa22",
+    "tests/app/national-data.test.ts": "44f660ff18594d9f08ea0545c467f46396756137f24d57ef28bd4f9da8254a71",
+    "tests/app/state.test.ts": "432e60ca990fee4dc3c655c11cb195871a987655c7a2b9071f119ce6fbbee267",
+    "tests/browser/england-performance.spec.ts": "27c15012876972c4bec7ac081bacdce060e1ae6764a156f5df378c7fd73d411d",
+    "tests/browser/england.spec.ts": "65029ddec795a8abbfd7b0bea45d27948e9d0718ec789011107616ba2147c2dd",
+    "tests/browser/performance.spec.ts": "18c8d1dd1f9c7e9bb76c051553d90ae26f221b5563a0b240aab9f3977edfd7af",
+    "tests/browser/phase3.spec.ts": "0f19ada67341eceb0a8cbe58a1d2f2fb6df8f85e0db42eb6707edf46d10e1369",
+    "tests/domain/area.test.ts": "e9fcbdf88ffed78f248ec0aa68650a5db77780568ef7a3d855841e0a003d6485",
+    "tests/domain/arithmetic.test.ts": "967b6c2e0898213c4c6c8707678ebac77c809685d8751c40d7639a649b4d89c5",
+    "tests/domain/cli.test.ts": "86cddf7afcfc190209e819417eb88cd18b4a4c0e388dbbdc641e64ac9233a247",
+    "tests/domain/comparison.test.ts": "0b203b34719df00f99c4ff675e4fbb8dcbf3781c673147d61b620c026df1dd42",
+    "tests/domain/council-tax.test.ts": "58ed6477a4c9038b391522c60676a2813bf44912033e0d04670f7a85fcd5bb11",
+    "tests/domain/data-versions.test.ts": "cc051d2611d9fc5c5f99e0417eb89bce89ee99d0508474b25ed5309f36c8aa9d",
+    "tests/domain/sdlt.test.ts": "f90f8f082103c2f371cbc5b31c781c8c03af9b32f008e8ba87f44a6a97b9493a"
+  }
+}

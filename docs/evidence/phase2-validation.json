@@ -1,0 +1,86 @@
+{
+  "verifiedOn": "2026-09-26",
+  "phase": "P2.1-P2.5",
+  "engineVersion": "1.0.0",
+  "inputSchemaVersion": "1.0.0",
+  "dataVersion": "sample-2026-09-26-v1",
+  "policyVersion": "illustrative-ppt:1.0.0",
+  "sdltRuleVersion": "sdlt-england-2025-04-01-v1",
+  "toolchain": {
+    "node": "v22.14.0",
+    "npm": "11.11.0",
+    "typescript": "5.9.3"
+  },
+  "checks": {
+    "npm run check": {
+      "exitCode": 0,
+      "configurations": [
+        "strict Node",
+        "browser without Node types"
+      ]
+    },
+    "npm test": {
+      "exitCode": 0,
+      "tests": 97,
+      "pass": 97,
+      "fail": 0,
+      "skipped": 0
+    },
+    ".venv/bin/python -m pipeline verify-release": {
+      "exitCode": 0,
+      "verifiedArtifacts": 6250
+    },
+    "phase1InputsUnchanged": {
+      "manifestSha256": "798684c202cde82f6301c67bec36ca85863e591e1157642b131f8d7d32381da6",
+      "configurationFiles": 6,
+      "pipelineFiles": 8
+    }
+  },
+  "sampleIntegration": {
+    "areasPerMode": 203,
+    "standardModes": 3,
+    "availablePerMode": 96,
+    "unavailablePerMode": 107,
+    "personalBillRepairs": 107,
+    "resetPreservesUnavailable": true
+  },
+  "independentExamples": [
+    "five Phase 0 MSOA comparisons",
+    "Leicester LAD baseline",
+    "Phase 0 synthetic cases",
+    "GOV.UK standard £295,000 purchase",
+    "GOV.UK eligible first-time £500,000 purchase"
+  ],
+  "limitations": [
+    "Phase 3 browser interface not yet built",
+    "Five-authority sample remains internal only",
+    "Supported SDLT scenario assumptions must be explicit; no silent profile fallback"
+  ],
+  "sha256": {
+    ".node-version": "c989649ac5c541692f22f2e41f5fbc34927c02bf1644e5dcca46bb4c88281f87",
+    "data/fixtures/phase2-sdlt-examples.json": "dbe3913a34ed96eff0d63bd54fc6f7cf77a659a8179f0cf9857283ffe8030f0f",
+    "data/rules/sdlt-england-2025-04-01.json": "ebb6690a7434324e97d38dfe1fc648d2ca2fe548fc09eb29bd2aa95d807fe646",
+    "package-lock.json": "195df44d457c410537f3fc743f7fb086dd64d40888748205b52efdce5112c31e",
+    "package.json": "2675548f1531d393ddb8cb01ae7846b195501829c9f4148ad5ffef780453b751",
+    "scripts/domain/build.mjs": "03e0ed10a815515734e04b42f730f9e1a85155535d4807c521a164f67e8adefb",
+    "scripts/domain/compare.ts": "bb161a2f1f42fd81730c4f6ca6ebec77ab251e1de07153e132b2d1dd3ffea569",
+    "src/lib/domain/tax/area.ts": "45e9fa50deab72b968e06b628296bcff98b8f34140aef4c4f44a8130736a3fbf",
+    "src/lib/domain/tax/comparison.ts": "619f535e85030f67166e9bddaf8e3499a9ffefa812fd2fcfff27537b95a3a948",
+    "src/lib/domain/tax/council-tax.ts": "e4b310b0d976b0cc1dabe7fb5c9d92b5d46cec9caf1db1d56009210936d2861e",
+    "src/lib/domain/tax/index.ts": "37d0123b49d303beb787fe5342d623dfd9229c31c4b2a7ec3486819e4e79ed37",
+    "src/lib/domain/tax/money.ts": "fe0badaf58f650d3bbc489ddd3a68d88dd6549096bdefd9ac47be157a9199e4f",
+    "src/lib/domain/tax/policy.ts": "bd38bb83cd848d043f5663b961f97bc44c637b715d32f53213027439a777f6eb",
+    "src/lib/domain/tax/rational.ts": "333fd568e26c1c1575d2b76690fe39f3c0b3369fb0ac5ca541f263d13d07384c",
+    "src/lib/domain/tax/sdlt.ts": "ca135c73d2a3ff219ff8112760336b529dbfe751c0636b0332e3a8af363d075e",
+    "src/lib/domain/tax/types.ts": "4fcaef9ea6c2f06855619a233baaf0f5e2025bdc9487eae9a721c4137ff90d6c",
+    "src/lib/domain/tax/validation.ts": "eda883376571f8f65dcfe866e1dd09f233be2478cc0ea73c50db86355eb16273",
+    "tests/domain/area.test.ts": "e9fcbdf88ffed78f248ec0aa68650a5db77780568ef7a3d855841e0a003d6485",
+    "tests/domain/arithmetic.test.ts": "967b6c2e0898213c4c6c8707678ebac77c809685d8751c40d7639a649b4d89c5",
+    "tests/domain/cli.test.ts": "86cddf7afcfc190209e819417eb88cd18b4a4c0e388dbbdc641e64ac9233a247",
+    "tests/domain/comparison.test.ts": "0b203b34719df00f99c4ff675e4fbb8dcbf3781c673147d61b620c026df1dd42",
+    "tests/domain/council-tax.test.ts": "58ed6477a4c9038b391522c60676a2813bf44912033e0d04670f7a85fcd5bb11",
+    "tests/domain/sdlt.test.ts": "f90f8f082103c2f371cbc5b31c781c8c03af9b32f008e8ba87f44a6a97b9493a",
+    "tsconfig.domain-browser.json": "7d1298b063c0932ea5a794fb6419134f7521a6d513622cc8a42a655abc5f5ef7",
+    "tsconfig.domain.json": "f88a8a3687c10aa170186388136d0724cd68d4a916452f500e773c7f428a17d1"
+  }
+}

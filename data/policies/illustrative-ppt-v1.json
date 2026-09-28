@@ -1,0 +1,20 @@
+{
+  "id": "illustrative-ppt",
+  "version": "1.0.0",
+  "status": "illustrative",
+  "label": "Illustrative 0.48% property tax — uncapped",
+  "jurisdiction": "England",
+  "currency": "GBP",
+  "annualRate": { "numerator": 48, "denominator": 10000 },
+  "residenceScope": "primary-residence",
+  "replacesCouncilTax": true,
+  "sdltTreatment": "abolished-for-supported-primary-residence-purchases",
+  "annualIncreaseCap": null,
+  "deferralModelled": false,
+  "defaultComparison": "ongoing-owner",
+  "valuationMeasure": "ONS median transaction price, all property types",
+  "methodologyVersion": "phase0-v1",
+  "reviewedOn": "2026-09-06",
+  "contextSource": "https://fairershare.org.uk/proportional-property-tax/",
+  "note": "An illustrative replacement scenario. This configuration does not implement the complete Fairer Share proposal or describe an enacted tax."
+}

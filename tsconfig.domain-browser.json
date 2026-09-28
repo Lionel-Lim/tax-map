@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.domain.json",
+  "compilerOptions": { "types": [], "noEmit": true },
+  "include": ["src/lib/domain/**/*.ts"]
+}

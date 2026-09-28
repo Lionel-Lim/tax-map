@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": true,
+    "verbatimModuleSyntax": true,
+    "rootDir": ".",
+    "outDir": ".build/domain",
+    "types": ["node"],
+    "lib": ["ES2022"],
+    "skipLibCheck": true
+  },
+  "include": ["src/lib/domain/**/*.ts", "tests/domain/**/*.ts", "scripts/domain/**/*.ts"]
+}

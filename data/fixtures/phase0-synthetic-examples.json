@@ -1,0 +1,16 @@
+{
+  "purpose": "Independently specified expected results for the future calculation engine",
+  "policy": "illustrative-ppt:1.0.0",
+  "cases": [
+    { "id": "rate-048", "mode": "ongoing-owner", "propertyValuePence": 30000000, "annualCouncilTaxPence": 180000, "expectedScenarioPence": 144000, "expectedAnnualChangePence": -36000, "expectedMonthlyEquivalentPence": -3000 },
+    { "id": "higher-cost", "mode": "ongoing-owner", "propertyValuePence": 50000000, "annualCouncilTaxPence": 180000, "expectedScenarioPence": 240000, "expectedAnnualChangePence": 60000, "expectedMonthlyEquivalentPence": 5000 },
+    { "id": "no-change", "mode": "ongoing-owner", "propertyValuePence": 37500000, "annualCouncilTaxPence": 180000, "expectedAnnualChangePence": 0 },
+    { "id": "annualised-example", "mode": "annualised-ownership", "propertyValuePence": 50000000, "annualCouncilTaxPence": 180000, "sdltPence": 1500000, "ownershipYears": 20, "expectedCurrentPence": 255000, "expectedAnnualChangePence": -15000, "note": "SDLT is a supplied fixture input here; rule-engine verification belongs to Phase 2." },
+    { "id": "purchase-year-example", "mode": "purchase-year", "propertyValuePence": 50000000, "annualCouncilTaxPence": 180000, "sdltPence": 1500000, "expectedCurrentPence": 1680000, "expectedFirstYearChangePence": -1440000, "expectedRecurringMonthlyDisplay": null },
+    { "id": "missing-price", "propertyValuePence": null, "expectedStatus": "unavailable", "expectedReason": "price-unavailable" },
+    { "id": "unknown-stock-marker", "rawBandH": "-", "expectedStatus": "unavailable", "expectedReason": "stock-marker-unverified" },
+    { "id": "suppressed-stock", "rawBandH": "[c]", "expectedStatus": "unavailable", "expectedReason": "stock-suppressed" },
+    { "id": "zero-stock-total", "sumOfBandCounts": 0, "expectedStatus": "unavailable", "expectedReason": "stock-total-nonpositive" },
+    { "id": "zero-ownership-period", "mode": "annualised-ownership", "ownershipYears": 0, "expectedStatus": "invalid-input" }
+  ]
+}

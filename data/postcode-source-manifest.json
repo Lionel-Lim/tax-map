@@ -1,0 +1,799 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "phase1-sample-2026-09-26",
+  "status": "internal-validation-source-contract",
+  "sources": [
+    {
+      "publisher": "ONS",
+      "retrievedOn": "2026-09-26",
+      "licence": "Open Government Licence v3.0; Northern Ireland data subject to separate LPS end-user licence",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Contains OS data © Crown copyright and database right 2025",
+        "Contains Royal Mail data © Royal Mail copyright and database right 2025",
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "id": "postcode-directory",
+      "localPath": "data/raw/phase1/onspd-may2025.zip",
+      "downloadUrl": "https://www.arcgis.com/sharing/rest/content/items/3be72478d8454b59bb86ba97b4ee325b/data",
+      "referencePeriod": "2025-05-01",
+      "geography": "ONSPD May 2025 V2; MSOA 2021 England/Wales; source LAD codes retain pre-change Barnsley/Sheffield codes despite May 2025 administrative geography described by user guide; current and terminated UK and Crown Dependency postcodes",
+      "bytes": 245482583,
+      "sha256": "7a2ca62fbf46389235c228c004be540426789ad7e4f31fc28761326aca10a88e",
+      "schema": {
+        "members": "Data/multi_csv/ONSPD_MAY_2025_UK_*.csv",
+        "postcodeColumn": "pcds",
+        "terminationColumn": "doterm",
+        "countryColumn": "ctry",
+        "msoaColumn": "msoa21",
+        "ladColumn": "oslaua",
+        "latitudeColumn": "lat",
+        "longitudeColumn": "long",
+        "positionQualityColumn": "osgrdind",
+        "coordinateSentinel": 99.999999,
+        "editionNote": "V2 dated 17 June 2025 corrects Northern Ireland latitude/longitude conversion.",
+        "ladVintageCaveat": "Observed current source records use E08000016 (Barnsley) and E08000019 (Sheffield), whereas pinned official parent lookup uses E08000038/E08000039. Retain source code, inventory these reviewed exceptions, withhold affected sample estimates, reject any other unexplained non-null English geography join.",
+        "outputLadField": "sourceLad; not a claim that every code matches LAD25 boundaries"
+      },
+      "members": [
+        {
+          "name": "Data/ONSPD_MAY_2025_UK.csv",
+          "sha256": "99a0810e2297ee023f4b7a50452d31f1656f97792b02ff5c77f6099a45a41ad2"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_AB.csv",
+          "sha256": "edc6855bd7c8377311a5cc1f671c4f0d0d9aef7787cc4f0cb5430e6ec2961124"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_AL.csv",
+          "sha256": "bdfb604d5f2f52c4b1f58464f81527f9dbfd87e435d2e56ea7a27fa4756b8e23"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_B.csv",
+          "sha256": "9811d1500b7167184fb7c7f423e9f84192f266d38040ee3f3dc8294c3bd6d3c8"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BA.csv",
+          "sha256": "7ad21a76906d2268622de64f9f7691e105ad423f7a493144e2b096e533916344"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BB.csv",
+          "sha256": "0928d66b2a4e11fdb8bbac3acd3333b30445d1a2e5ee5f90ca70c56d6be14374"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BD.csv",
+          "sha256": "abdc964dd260ae6d443ceb4dbc656cc95a37b82bfedbbc931b0e1c1f026b5945"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BH.csv",
+          "sha256": "2f0dc1a311a2b3bb069606b4052d8f1807d3a5d168287c1802096496eeb10165"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BL.csv",
+          "sha256": "15974f227d08b9695df1bfb9bb440e88074b786a3cc9980ddc7d7056c731bd90"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BN.csv",
+          "sha256": "3dc87ff0bd744d7cc79df15d7695b2d0cb407b0e3d0673acbfd782bd50c04e02"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BR.csv",
+          "sha256": "9972ce476749dc0287f4ce06bf261cb9f2e33e76f19c6c48dedab1f054bc53a6"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BS.csv",
+          "sha256": "06532cf575336913ec5917148a67348a7305aeb0ae11259fef06e426317c7656"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_BT.csv",
+          "sha256": "d3dfb18995ee56b1cd1a71edd8db519ea7d67777eb87f5fa4b448f0abd5dc606"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CA.csv",
+          "sha256": "d3b7967e151d4a2920d01a47705a3de6fba192c65592916d96f412867cb079fd"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CB.csv",
+          "sha256": "8ad526ec5ccf55e671a8dd6290595369ad58ffd976d57bb9c50e21f208f492e8"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CF.csv",
+          "sha256": "2e527a709031f45c59bb62fd9834088e53ad9f2fce6e02810da877721961184c"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CH.csv",
+          "sha256": "0a680fe18f3afe80f64ce38c770ef00d19da073c6f4ef2e5c4b850ea2dc47eaa"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CM.csv",
+          "sha256": "080cc2c261ae8dc3070b6e5fc26890531bc6d7e96248a48e714c4da9c5d680a7"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CO.csv",
+          "sha256": "612980faae74027c6508ca1b9dfca8315431070a7760aba603518e5bc0a9c3bb"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CR.csv",
+          "sha256": "0142cfa8326eec96fa40c5984f0f5aea4d6b631d3576ecd807300f5f53631d8e"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CT.csv",
+          "sha256": "359b3575b9c7c72194fc13fb9d0326ef7552f189ba672f0e3a922ccea79d89a2"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CV.csv",
+          "sha256": "bc50be9e68b401ebea36f95d3eacfd672c1d692a108ef0c0cc6c9e2aa1306002"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_CW.csv",
+          "sha256": "2c1daa419084b381d3e7551732488f35475ad906084410e5e51e0a523c9efc29"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DA.csv",
+          "sha256": "4d35f72b7abe54d4810389b1f90c5e21c27f2f19493deb67061ad69793c18e98"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DD.csv",
+          "sha256": "0df1746fa47d01c6b2322933f99f24bc5f04641cc6792da1872a2621f123437d"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DE.csv",
+          "sha256": "24abcde061f7cbd3e84190a2cac25645236024b9fc8a22f85afbca2b2654d7f7"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DG.csv",
+          "sha256": "e20d32dc2b3ccace90bbd3f790a10e8fda80a8644da242c1278644177958d49d"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DH.csv",
+          "sha256": "9f3b283ebd89e7472bf2ace6c14a64d21a4414474dbc0a85b6fb3fbf0c32ff43"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DL.csv",
+          "sha256": "108f25c43b7189da7ba470ef6c37babf52048b2074b4d63abb8ca4639857a541"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DN.csv",
+          "sha256": "6fffb8104bda40eef2fb73aa93f3f9dfce1c0f1a0958bba768752adc94002d5c"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DT.csv",
+          "sha256": "17d3d8b6e9d83d81006bb699cdee1ea19152e631d6aa4df2d5be22ef8eaa3655"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_DY.csv",
+          "sha256": "9d6e09b58a586860ca0eabedba2855a5531970756afbb35ed838411c3e47466f"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_E.csv",
+          "sha256": "bedf6d469b739a8dd1d5d7f318d822a78a2ed918a07ee8f0ebe0e6c18067a94a"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_EC.csv",
+          "sha256": "3872af0dc5fb18a2094cf16c033c17c5b51cd16b64fc4721b17fe1b407eeead3"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_EH.csv",
+          "sha256": "33de400bdf69feebccc251b7d0ea54802f940208c7b28556ab0ccbc6c5eb0148"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_EN.csv",
+          "sha256": "9a2b8a111b166f39a392d150cf0589f441a4c150f64cc1db62fd40479b784e99"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_EX.csv",
+          "sha256": "f8b4383b573299e34e3bdee3e136f5338390629277c059f64be613def2705993"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_FK.csv",
+          "sha256": "5593eadd307c4fc76ddcdb7fa518ac5f88e19ea02ec44c720c14ce10a5dfed47"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_FY.csv",
+          "sha256": "a9292e0b0798ab22d08e755ba307f3c0aff9ec85e79615d467f53c8db51ea467"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_G.csv",
+          "sha256": "200ae54277b3f97ce40f3306c2454df119bcdb3d42c129495f746d2f2505ecf4"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_GL.csv",
+          "sha256": "267fc10060bc33cc880050042409f0f0c996b3bb8514f1a065299b2c3748d231"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_GU.csv",
+          "sha256": "a08db456ee0512192908554ba0ee5601aeba1022fd8f726a0069b3dcfa37e0b5"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_GY.csv",
+          "sha256": "97b4a32cbafff182e43275989e1fd0aec501c553aeac8e058f859871f900ed74"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HA.csv",
+          "sha256": "720f49ea76b553572609ed03d3ed4cda047dee9941260f80ad8b4703945d7b24"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HD.csv",
+          "sha256": "692d91acc4ed1c2b4376ed369e50fb449257c896a5a8d2ec2dc540bff44597d9"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HG.csv",
+          "sha256": "bd5614f7a790f19edce10a750e164bb53b1afba37e077844a0d5523be3bb3192"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HP.csv",
+          "sha256": "05f0492ebc43e08c48afa482b683091e58a82a77b241efb8284173c673c3a3f5"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HR.csv",
+          "sha256": "3ba4495ece0ae22ef2df76a90d2753bd923a7b8b383a1be8616d05c9798e2594"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HS.csv",
+          "sha256": "edd1d7017fb3117c05d45e6cc490d9fcdb5a3eb05c47b00e83998e184bade06b"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HU.csv",
+          "sha256": "79654236b71ae1a9e5aa4ca16f1aa9be84cf4d464b48d83074eaec545f17d70b"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_HX.csv",
+          "sha256": "3fe58a3aea7f0dae55169937b83cd294bbb5621c1a5cfaad5da056a6d15e5624"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_IG.csv",
+          "sha256": "1b9a49fa784f39cc5e98f4b6aa84e21171722d1856ff0be828c43c487e521328"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_IM.csv",
+          "sha256": "2aa7a794f8f4a3cc40530e7d3abc1d9e7b84b6f2055233d61c74d4cdfa6bfccf"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_IP.csv",
+          "sha256": "a6be4ccbae9c213a9c88fcf6462ab8e4ced4a6202e79b33a80774729ec389bbd"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_IV.csv",
+          "sha256": "6941930a2e458447d302a04be27dea156ebe54e02ecc5df18ed912a78aeee343"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_JE.csv",
+          "sha256": "7dd8aff486cc45c1831a726eebf9fbafe76acde8f9ab770f5d23aeb218cd403a"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_KA.csv",
+          "sha256": "7ec80781cb89ec9a8e7ec4255cce94dca86972278614d4b62c7461fddef0378f"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_KT.csv",
+          "sha256": "debae9b57486e854bb06882e34b754ee871765eae90e93b9ee4a69c404b24fd8"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_KW.csv",
+          "sha256": "de21004912b2211820ec4318cdb2859c072c7dce0aaca5dd13b41e5dc3d964a7"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_KY.csv",
+          "sha256": "40c74939bde829a3b512deeffaf5957146855a151e548715a12230e59baf6e8a"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_L.csv",
+          "sha256": "52b0480cb3a3e78bf3b726e7db279cb276d44d527896bab00e93c031410f1289"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_LA.csv",
+          "sha256": "f571af258bc26e1ce56fdf5cdc160d3dbf8b636cc874479ed222a2c1b5f20d44"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_LD.csv",
+          "sha256": "7b646e0300958c678654495ab5a898d2c001416f82c6eb7ad41fda8a5fe92729"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_LE.csv",
+          "sha256": "1b6fc9e2a8116b5abbed449db3e4d108d9963b03b0893adcb7e80eff3e1d7e4f"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_LL.csv",
+          "sha256": "957af60a25fa0f94aa454a22ed2880c64778d18b3a04580638009dc2b9ced176"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_LN.csv",
+          "sha256": "0d875dac21d02bb4827d99cb0aeb48f5639c42733b7f264442d7899526d8e921"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_LS.csv",
+          "sha256": "bda8eb6d6616ce0a3d04738a3ed696edda47c28003ac7cd3b9da86c275d58c7b"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_LU.csv",
+          "sha256": "0ecec507f3735ef00a46f6c83cf7675135c172adf6596c2443a2c9253431342c"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_M.csv",
+          "sha256": "747d129aa6f8473e8004af788147de52c31bf85ab7c8b82cd7869326fe05306a"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_ME.csv",
+          "sha256": "df4ceab0082bf848465fbe67c1ac3235fda459347362388b26e65fc77d2ebc71"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_MK.csv",
+          "sha256": "b561a200004f219c1c76edde83d3294884272cdbe450dad707a35f7c7efe0943"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_ML.csv",
+          "sha256": "9835a8203d977785ecd064ec6542dd25877559ba00186ce965e261db0036bde6"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_N.csv",
+          "sha256": "4d7ffeaf36c80b215d1282f0b9b31c8290a796ff522872133d2994feb143f381"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_NE.csv",
+          "sha256": "ff57c8b99b0b4b10d116514cc826d9a5c19d407622228924a816f0f8cbbbd53c"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_NG.csv",
+          "sha256": "b1fa9fc1de9f7da070ab115cecde9095db37de32b7b435275404645c27b60aac"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_NN.csv",
+          "sha256": "a8fbf048326ff0f6a3f244f878772ee0da487056376c32ddfd173c6f60374669"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_NP.csv",
+          "sha256": "19fe1edfcc85e3681e59bf85633656a30e13acb8fff9f6c33a67bf65459c5089"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_NR.csv",
+          "sha256": "679cd5fa5936cce1a5b6790ca26db9617436ba0b9bc337061e69808003594502"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_NW.csv",
+          "sha256": "0a55ab74ee66d0723101bbcc7f7fcc0f718732b2e2892f7f135db8b55f2a5af9"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_OL.csv",
+          "sha256": "0a430eedd0682b7ad19f2dcbe191681f4c24e9efde4be4651d5ecf59b2aec87d"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_OX.csv",
+          "sha256": "1e528b61a27980ba42473d73ce2d5569e3fdf2306437d238b6a563b3535bc877"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_PA.csv",
+          "sha256": "0f9c93b12a9f45639c10f8b45acd42e8e3e9b467777aec4c0d2b743059c4db3a"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_PE.csv",
+          "sha256": "b500755584fb2d57c647c0e6a72121eaec694b3a2a349c1f1257e59849fcc2c6"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_PH.csv",
+          "sha256": "82faa873945ebe6c4bb559934c6ade50e9f7c6f849f93327ee554b7b74813c0e"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_PL.csv",
+          "sha256": "f1aff85e56b54f1fd20df8ecb5a299a61252cbf56cdd8c734161d585f3d5242b"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_PO.csv",
+          "sha256": "44cfd178dfe33ef9e198e70d2bf10cd254deb335283ae00e00996f7653c8f991"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_PR.csv",
+          "sha256": "f57b4b27f6b05e0dcba951d1d0803fd4c1d70d29c4222bc35d5d3936d2ac9c7b"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_RG.csv",
+          "sha256": "cff17ad7eb26be3df2a4da26f4f0d550c40ee6e09ca0d1d9859542f26592eaad"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_RH.csv",
+          "sha256": "342aae9814e55c77625e8277b3870fd4ac49d999b0438d2b6510569394749f6f"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_RM.csv",
+          "sha256": "d5103b17b67d3dc964e5f3280cfbba586298bcd2279fa43bd72d12ef62167ecb"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_S.csv",
+          "sha256": "180a388eaad849ed54586795bcc48a5b801fc8d8324e88a8b5d0eed5b85734b5"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SA.csv",
+          "sha256": "8eb92b8c8174725b485629b4bdc267abb59fe61e24b17d9c2b8c71c9c29d54e0"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SE.csv",
+          "sha256": "b56f20b4445835e508d93c9bf7cd5b0f32bd95cb23eb320111550fec6ca10846"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SG.csv",
+          "sha256": "295a77c56ffa98e54725723841dc1714705267bf33f2e3d544d9d3331e9be7cf"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SK.csv",
+          "sha256": "afc15c146613ab2a96db00f378e822063589a6db739ab8df7017f987e5d88af5"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SL.csv",
+          "sha256": "4c5e8b720a4f1b9bbd63dd1d8e65ff7cf1c166e2bb4ac8bd5a0d2093ba21eeb2"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SM.csv",
+          "sha256": "7df53c9840e8b33ec3244ebf53d5518917153e53975988e30c2665c9df76e0b4"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SN.csv",
+          "sha256": "656b5a69d688e54934f0626d8f7b9d768a58ac5574d00e7a6fd4a00526923017"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SO.csv",
+          "sha256": "88d66c53daa137c04a674633305c9457f78d0f69f1ea2efa8f5cd9ceebf6bffd"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SP.csv",
+          "sha256": "515216c5af8cd2c611f0ef1312e3c030eb45e30d3cf4bd55ba92e14ed1a9e873"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SR.csv",
+          "sha256": "1de61f9ef91741a4f783cf4b068f313eb50a29352406f1b9cc98432388b08776"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SS.csv",
+          "sha256": "e5b105220e061443b944a6107d1e2479735f9b9aacef8103360b3741a09e5a41"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_ST.csv",
+          "sha256": "071848da062c29c8868dca85c92cd01211d461d7786d17f1304d58c234e3cd27"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SW.csv",
+          "sha256": "da7e4dbaffb68b930281eaa54f3520d7bb171cd7f0af31bcc75b97854e115a44"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_SY.csv",
+          "sha256": "39388be7181b090df10d5a381e74d537a86afc13f2980454ced63e752d8fec40"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TA.csv",
+          "sha256": "2b0909065bf6696a27e06e7dc99ea30f4244444c48377ea7c664ef68788d07fa"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TD.csv",
+          "sha256": "96806604ef51788f61fff703fc702fd4d991a1ebbb5434fd3f9111924f7beee5"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TF.csv",
+          "sha256": "43616589e74dffc17bb28f7aa43a8a3542bac3a048607bc6283e90731c171542"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TN.csv",
+          "sha256": "39983ee5e72359da90bb64641f54aaf2ad4daa3bff928e0811be3c0c72ddfe1f"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TQ.csv",
+          "sha256": "c78fa99fc7f182272656c18ad00f9dbf7116a87943540fc33abf9ee72fc13681"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TR.csv",
+          "sha256": "1aebfac4cb6f04bacff57de9584bb6e28efb8dfc43a52ce7d825be28557b5977"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TS.csv",
+          "sha256": "207461619b4eeb1f9e86175fd835e32b87c435d1957e0498ee28853bdb625343"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_TW.csv",
+          "sha256": "7e492ce93f3c76b8cdb1cd3ca18493b10af23302cb12d166f2481a019b7e5c02"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_UB.csv",
+          "sha256": "01f519c023f47f41f68a13aaefd07007d5541601a3e3e802afac06a103efde36"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_W.csv",
+          "sha256": "c2bf85cf546ef6a35ef9088857e0eca15e3420242f676f29291a8e8f84e2e222"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WA.csv",
+          "sha256": "dfd4360c5e935d7d0698cf9198e2b7943e8108cadda556d4b69f3a195d3f22ff"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WC.csv",
+          "sha256": "8c5288c70d702054bcda9819f1983fbc4b4249c6c8b1bf9e7b400da69cded1d0"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WD.csv",
+          "sha256": "7d0d1b036cd2e2bc83f68a7008cc3786b562cc3109adfedc8f41d4368dc9ae73"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WF.csv",
+          "sha256": "9745adbd1e25ed43e50fdcbbbff6b6fbf75ba38724839ff3a7cde51b19e56717"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WN.csv",
+          "sha256": "18cce220dcf5942d85fe8503da971498d5006aaf771a014a5182f53af661b7ff"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WR.csv",
+          "sha256": "2e8b05e67144bde2f858179d5c8fc684df448bb3e6d2e74cfcee3ee61f39271a"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WS.csv",
+          "sha256": "87e1d80568cbd3f7636a93d64c39f6b37b73747d03f9eafb6acb0c5ebda87e26"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_WV.csv",
+          "sha256": "cb9faaeacb0b8f385c6468b3692237450ca73b65575c2ac632c044280552a320"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_YO.csv",
+          "sha256": "9c534c840ca81a236bca2ea1412a774d7c573ca1ca59a31ba76ae20d59778aae"
+        },
+        {
+          "name": "Data/multi_csv/ONSPD_MAY_2025_UK_ZE.csv",
+          "sha256": "1e296965a8ab8da1a9cd387a7a0bb79820828247c345733392676cf49aef52f8"
+        },
+        {
+          "name": "Documents/2001 Census Output Area Classification Names and Codes UK.csv",
+          "sha256": "f3ea777beab0c05cc4224ddccdb85b15f93d6aa5e60d5ba05c4370a8dec5d727"
+        },
+        {
+          "name": "Documents/2011 Census Output Area Classification Names and Codes UK.csv",
+          "sha256": "c33e8488df9d255572cc25c13b32a45a067a2d44302f59fed6d751e7d68f9a6b"
+        },
+        {
+          "name": "Documents/BUA24 names and codes EW as at 04_24.csv",
+          "sha256": "9755a1b2725d4d411ce8bc4ba11840e963cc74b7037e7f9fa623f09004f6ae69"
+        },
+        {
+          "name": "Documents/CALNCV names and codes EN as at 07_23.csv",
+          "sha256": "377858c18b283285c862419b27a3e0874b8749498ee1a6e02125988c8418d5a7"
+        },
+        {
+          "name": "Documents/CAS ward names and codes UK as at 01_03.csv",
+          "sha256": "6671da92569067d8a81bd763152c9837cb5d3b65ec461962f668e21b0c0132e7"
+        },
+        {
+          "name": "Documents/Country names and codes UK as at 08_12.csv",
+          "sha256": "3de1dfc60ab34bb9f70d08b48213a6656da83d2c0511b11149a5b5bfef81428f"
+        },
+        {
+          "name": "Documents/County Electoral Division names and codes EN as at 05_23.csv",
+          "sha256": "218af93fd50134793195b31c036080e376bfd695f2ae2b09e75f7a1fd35b1761"
+        },
+        {
+          "name": "Documents/County names and codes UK as at 12_23.csv",
+          "sha256": "a447a1acf299b6c638001f94d7816604b57163dde26c4436b1f7520987b8685b"
+        },
+        {
+          "name": "Documents/EER names and codes UK as at 12_10.csv",
+          "sha256": "205329173217a71a541209d837bdf8e024747f2f99bfdb5b8f2fc0bf4c803030"
+        },
+        {
+          "name": "Documents/HLTHAU names and codes UK as at 04_19 (OSHLTHAU).csv",
+          "sha256": "46e574f18701757884b6ecbf30953f99836db4222b8730558bdd68a078fd0608"
+        },
+        {
+          "name": "Documents/ICB names and codes UK as at 04_23.csv",
+          "sha256": "45d61f4329e91d5708ebf8123ad6c6d30beb7bbf3e727e4a227520bf2a2efcf5"
+        },
+        {
+          "name": "Documents/IMD lookup EN as at 12_19.csv",
+          "sha256": "b68793580bce950d50478b80077122c99e9a0b06a19e5aeafa5ce2d2542447ad"
+        },
+        {
+          "name": "Documents/IMD lookup NI as at 12_17.csv",
+          "sha256": "fa1b4527a8e6e0c87aab2bbd286ccd9c38fafbe0fb887bfa963d7c3aa9d76100"
+        },
+        {
+          "name": "Documents/IMD lookup SC as at 12_20.csv",
+          "sha256": "924eb93dbbe77e95e0c4096da7a0859d17fef292ba4a37a69588ccfe4a742be7"
+        },
+        {
+          "name": "Documents/IMD lookup WA as at 12_19.csv",
+          "sha256": "6aa66499ab7856dd6e5c49deaf45f6727d32c81dbe0368fda240270587ff8250"
+        },
+        {
+          "name": "Documents/ITL125_ITL225_ITL325_LAU125_LAD24_UK_LU.csv",
+          "sha256": "fbe1e6a411dd47fd8103a5ea6316eca61af04b2f17a29b6891f3a1cf1caac0d4"
+        },
+        {
+          "name": "Documents/LA_UA names and codes UK as at 04_23.csv",
+          "sha256": "f385fd32f5c9eb5f72f365ec76ead431e99e510ec7c17259a6d6613d67695794"
+        },
+        {
+          "name": "Documents/LEP names and codes EN as at 04_21 v2.csv",
+          "sha256": "00cf0b95f4f554799ee3284c526c48d0dab0e5f91f4bfb821ccf9ba0f57b2846"
+        },
+        {
+          "name": "Documents/LOC names and codes UK as at 07_22.csv",
+          "sha256": "4c0472214f655984181a2db737a65024b9eede37a6e59cc45c1a4c4125207fcc"
+        },
+        {
+          "name": "Documents/LSOA (2001) names and codes EW & NI as at 02_05.csv",
+          "sha256": "dd74238d4fd5bcbe4c9fa2b70c3a0dc96306ecb43551a5ab1e65c106709b02ca"
+        },
+        {
+          "name": "Documents/LSOA (2011) names and codes UK as at 12_12.csv",
+          "sha256": "bff6c8124c185c1695a52d2ddf7217cefb576225bf51ca682e81520eed9be31f"
+        },
+        {
+          "name": "Documents/LSOA (2021) names and codes EW as at 12_21.csv",
+          "sha256": "d690be4317061da6faca716bd788de4286154043383e1f62a014ef35c5fb3bee"
+        },
+        {
+          "name": "Documents/LSOA (2021) names and codes SC as at 12_24.csv",
+          "sha256": "676402c8ff49759a589cefb1c180d2ba28e3091d802d6b0ed6ae64f1fc7b2a54"
+        },
+        {
+          "name": "Documents/MSOA (2001) names and codes GB as at 11_11.csv",
+          "sha256": "0f6885ad123fa988213cdaef0a6dc4f71c92594d9ef5a154ce0c3d0a67a15009"
+        },
+        {
+          "name": "Documents/MSOA (2011) names and codes UK as at 12_12.csv",
+          "sha256": "1fae1a5a221b7cb1868ca9e56af8f1c0b053d9360e6be643d0c0543de82cc12c"
+        },
+        {
+          "name": "Documents/MSOA (2021) names and codes EW as at 12_21.csv",
+          "sha256": "0a766f94c773731821812f4190e96ab43d59340d0338fc85355001b29f978c3f"
+        },
+        {
+          "name": "Documents/MSOA (2021) names and codes SC as at 12_24.csv",
+          "sha256": "d1aff049384e27b6be90f8cb3f7ab4467c83f97d559a529bc41c030d81ed76de"
+        },
+        {
+          "name": "Documents/NHSER names and codes EN as at 04_24.csv",
+          "sha256": "97adaeb7e517abaebdafbcb6945238f0f467302463e304e95af703e291ff5777"
+        },
+        {
+          "name": "Documents/National Park names and codes GB as at 03_23.csv",
+          "sha256": "5b36c335081b8153aad0f96b1db29520522b8c47bfa3ef40c51c75cb9820507c"
+        },
+        {
+          "name": "Documents/OA22_DZ22_IZ22_SC_LU.csv",
+          "sha256": "9ada28e0e05e618a4c1665cc1cb899f3c02e040c98cb621dee1aa05591c4301a"
+        },
+        {
+          "name": "Documents/PCT names and codes UK as at 04_19.csv",
+          "sha256": "b2d44f0408ac177692d2d04e02e290969524548d005fb404af704dd8bd5a5baf"
+        },
+        {
+          "name": "Documents/PFA names and codes GB as at 12_15.csv",
+          "sha256": "172d12ab9916aea4046103e3d6e9d50998812d2f980e0456b1c4d2807cbe66fa"
+        },
+        {
+          "name": "Documents/Parish_NCP names and codes EW as at 12_21.csv",
+          "sha256": "5211c5f359d91ea5c5cf4d2d9c5c2d9116083c8d8634cbd3fa5e8a8d1f312938"
+        },
+        {
+          "name": "Documents/Region names and codes EN as at 12_20 (RGN).csv",
+          "sha256": "a851f7697afc327c4f95317838314fac0ab3e4f263e3104bcbb27a763e4358fd"
+        },
+        {
+          "name": "Documents/Rural Urban (2011) Indicator names and codes GB as at 12_16.csv",
+          "sha256": "11b0270180ca5db8bebd869f45a57552eb1d760f6e58c6ed311d6b81a528fe9b"
+        },
+        {
+          "name": "Documents/Rural Urban (2021) Indicator names and codes EW as at 05_25.csv",
+          "sha256": "c245046f98dcee29a21ff6ed2f69a3bf5a7c1fb783b229d18a4e14c3b67d1b5d"
+        },
+        {
+          "name": "Documents/SDZ names and codes NI as at 03_21.csv",
+          "sha256": "54fbd4506bcfb681edfc898dbd4999acf1f3d52925a9361a29cdc2822d2e4ab3"
+        },
+        {
+          "name": "Documents/SSR names and codes UK as at 12_05 (STREG).csv",
+          "sha256": "00c075e5ac733b17b1455d213a540091e52952e00368e98e7285fd51f06c8181"
+        },
+        {
+          "name": "Documents/Statistical ward names and codes UK as at 2005.csv",
+          "sha256": "9bf28cd5d8090043957b318ad17a4157d48a4b9f989a3543ee79e9282d1bee64"
+        },
+        {
+          "name": "Documents/Sub_ICB Location and Local Health Board names and codes EW as at 04_23.csv",
+          "sha256": "b75617adf2f3f26615f4587a8ba06b1d0ffd0d0fe6a34adf5bf05674d494993d"
+        },
+        {
+          "name": "Documents/Sub_ICB Location and Local Health Board names and codes UK as at 04_23.csv",
+          "sha256": "38de363b43488b2239d022f9ae1d4684aeba5afc753ed851e7ba92b5ec426acc"
+        },
+        {
+          "name": "Documents/TECLEC names and codes UK as at 12_16.csv",
+          "sha256": "638aa54fd78c9510853f85c440a64036adbbbd04d33dfa37c05953c2cde07e86"
+        },
+        {
+          "name": "Documents/TTWA names and codes UK as at 12_11 v5.csv",
+          "sha256": "9c1adc8c59df6325b96de33937bcce168311b006d9d143d5b1835a69d7f33c1b"
+        },
+        {
+          "name": "Documents/Urban Rural (2001) Indicator names and codes UK.csv",
+          "sha256": "c28617ffbf077b6e63295fd8015065c2450c070d7ea175c2186a17ba67be00cc"
+        },
+        {
+          "name": "Documents/Ward names and codes UK as at 12_24.csv",
+          "sha256": "12ea3e9a7c7e717b2c43daa08610da2daf7bbd8930d9649560bdaf90f9c3f766"
+        },
+        {
+          "name": "Documents/Westminster Parliamentary Constituency names and codes UK as at 12_24.csv",
+          "sha256": "a66393c5c3a6916ff6bf40b5558d5d02b1c50323d108b756769ca0aaf10da649"
+        },
+        {
+          "name": "User Guide/ONSPD User Guide May 2025.odt",
+          "sha256": "0e5de86015f4822e2338dbd57251ca499219a158f54ef1e03c760fa87a7bd3ab"
+        },
+        {
+          "name": "User Guide/ONSPD User Guide May 2025.pdf",
+          "sha256": "094f0cd33ea3228b68291191344804dbe28601d04dcd3bb2d8d98f6690b78b0e"
+        }
+      ]
+    },
+    {
+      "publisher": "ONS",
+      "retrievedOn": "2026-09-26",
+      "licence": "Open Government Licence v3.0; Northern Ireland data subject to separate LPS end-user licence",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Contains OS data © Crown copyright and database right 2025",
+        "Contains Royal Mail data © Royal Mail copyright and database right 2025",
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "id": "postcode-directory-item",
+      "localPath": "data/raw/phase1/onspd-may2025-item.json",
+      "downloadUrl": "https://www.arcgis.com/sharing/rest/content/items/3be72478d8454b59bb86ba97b4ee325b?f=json",
+      "referencePeriod": "snapshot 2026-09-26",
+      "geography": "ONSPD May 2025 V2; MSOA 2021 England/Wales; source LAD codes retain pre-change Barnsley/Sheffield codes despite May 2025 administrative geography described by user guide; current and terminated UK and Crown Dependency postcodes",
+      "bytes": 3489,
+      "sha256": "bc23b2829f6d382eb355474f23dfb767a7aa5b24b692e63354bb44d569c71943",
+      "schema": {}
+    },
+    {
+      "publisher": "ONS",
+      "retrievedOn": "2026-09-26",
+      "licence": "Open Government Licence v3.0; Northern Ireland data subject to separate LPS end-user licence",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Contains OS data © Crown copyright and database right 2025",
+        "Contains Royal Mail data © Royal Mail copyright and database right 2025",
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "id": "postcode-licence-guidance",
+      "localPath": "data/raw/phase1/ons-postcode-licences.html",
+      "downloadUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "referencePeriod": "snapshot 2026-09-26",
+      "geography": "ONSPD May 2025 V2; MSOA 2021 England/Wales; source LAD codes retain pre-change Barnsley/Sheffield codes despite May 2025 administrative geography described by user guide; current and terminated UK and Crown Dependency postcodes",
+      "bytes": 35242,
+      "sha256": "a709f3eacf5f6053d2a7c196ed9dbf56d04eb6d6f9975acf25ac0402f6623a2c",
+      "schema": {}
+    },
+    {
+      "publisher": "ONS",
+      "retrievedOn": "2026-09-26",
+      "licence": "Open Government Licence v3.0; Northern Ireland data subject to separate LPS end-user licence",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Contains OS data © Crown copyright and database right 2025",
+        "Contains Royal Mail data © Royal Mail copyright and database right 2025",
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "id": "postcode-ni-licence",
+      "localPath": "data/raw/phase1/ni-postcode-end-user-licence.doc",
+      "downloadUrl": "https://www.ons.gov.uk/file?uri=%2Fmethodology%2Fgeography%2Flicences%2Flpsenduserlicenceoct11_tcm77-278044.doc",
+      "referencePeriod": "snapshot 2026-09-26",
+      "geography": "ONSPD May 2025 V2; MSOA 2021 England/Wales; source LAD codes retain pre-change Barnsley/Sheffield codes despite May 2025 administrative geography described by user guide; current and terminated UK and Crown Dependency postcodes",
+      "bytes": 103424,
+      "sha256": "712db2b0416e9ce9f55c73087e7d73178a8ecd0f94cac1a97eed60a200669a96",
+      "schema": {}
+    }
+  ],
+  "publicationRestrictions": [
+    {
+      "sourceId": "postcode-directory",
+      "geography": "Northern Ireland",
+      "status": "licensing-review-required-before-public-distribution",
+      "detail": "ONS identifies separate LPS terms for Northern Ireland data and a separate licence for commercial use; the supplied End User Licence is for internal business use. This source pin does not assert public redistribution clearance."
+    }
+  ]
+}

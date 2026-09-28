@@ -1,0 +1,537 @@
+{
+  "as_of": "2026-09-06",
+  "scope": "source contract audit; no production dataset built",
+  "hashed_source_count": 13,
+  "england_msoa_count": 6856,
+  "england_lad_count": 296,
+  "price_stock_lookup_boundary_code_sets_equal": true,
+  "price_to_current_lad_disagreements": 0,
+  "missing_current_billing_joins": 0,
+  "stock_parent_group_disagreements": [
+    {
+      "msoa_code": "E02001509",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001510",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001511",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001512",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001513",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001514",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001515",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001516",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001517",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001518",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001519",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001520",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001521",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001522",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001523",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001524",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001525",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001526",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001527",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001528",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001529",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001530",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001531",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001532",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001533",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001534",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001535",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001536",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001537",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001538",
+      "stock_parent_group": "E08000016",
+      "current_lad_code": "E08000038"
+    },
+    {
+      "msoa_code": "E02001611",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001612",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001613",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001614",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001615",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001616",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001617",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001618",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001619",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001620",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001621",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001622",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001623",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001624",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001625",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001626",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001627",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001628",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001629",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001630",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001631",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001632",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001633",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001634",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001635",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001636",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001637",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001638",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001639",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001640",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001642",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001643",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001646",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001647",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001648",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001649",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001650",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001651",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001652",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001653",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001654",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001655",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001656",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001657",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001658",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001659",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001660",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001661",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001662",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001663",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001664",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001665",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001666",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001669",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001670",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001671",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001672",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001673",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001674",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001675",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001676",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001678",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001679",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001680",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02001681",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02004651",
+      "stock_parent_group": "E07000082",
+      "current_lad_code": "E07000081"
+    },
+    {
+      "msoa_code": "E02006803",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02006843",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02006844",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02006868",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    },
+    {
+      "msoa_code": "E02006869",
+      "stock_parent_group": "E08000019",
+      "current_lad_code": "E08000039"
+    }
+  ],
+  "nonnumeric_band_markers": {
+    "-": 5319
+  },
+  "msoas_with_unknown_band_markers": 3843,
+  "msoas_with_numeric_band_counts": 3013,
+  "max_abs_band_sum_minus_published_total": 30,
+  "rounding_tolerance_dwellings": 45,
+  "sample_authorities": 5,
+  "sample_msoas": 198,
+  "sample_complete_band_count_msoas": 91,
+  "sample_unknown_marker_msoas": 107,
+  "worked_example_count": 5,
+  "checks_passed": true,
+  "limitations": [
+    "The CSV dash marker is undocumented in the inspected notes; retain unavailable, never coerce to zero.",
+    "Complete band counts do not establish source accuracy or eliminate local charge variation.",
+    "Stock parent groups are observed row grouping, not an authoritative geographic join.",
+    "Non-nesting areas and changed authority boundaries require explicit treatment before England publication.",
+    "Polygon presence and IDs are checked; detailed topology and postcode coverage are Phase 1 work."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "ruleVersion": "sdlt-england-2025-04-01-v1",
+  "verifiedOn": "2026-09-26",
+  "source": "https://www.gov.uk/stamp-duty-land-tax/residential-property-rates",
+  "examples": [
+    {
+      "id": "govuk-standard-april-2025-295000",
+      "sourceSection": "Rates for a single property — Example",
+      "buyerProfile": "standard",
+      "valuePence": 29500000,
+      "expectedTotalPence": "475000",
+      "expectedBandTaxPence": ["0", "250000", "225000", "0", "0"]
+    },
+    {
+      "id": "govuk-first-home-500000",
+      "sourceSection": "If you’re buying your first home — Example",
+      "buyerProfile": "first-time-buyer",
+      "valuePence": 50000000,
+      "expectedTotalPence": "1000000",
+      "expectedBandTaxPence": ["0", "1000000"]
+    }
+  ]
+}

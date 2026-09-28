@@ -1,0 +1,350 @@
+{
+  "schemaVersion": 1,
+  "releaseId": "phase0-2026-09-06",
+  "status": "source-contract-audit",
+  "sources": [
+    {
+      "id": "ons-msoa-prices",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/ons-msoa-prices-2025-09.xlsx",
+      "downloadUrl": "https://www.ons.gov.uk/file?uri=%2Fpeoplepopulationandcommunity%2Fhousing%2Fdatasets%2Fmedianhousepricesbymiddlelayersuperoutputarea%2Fyearendingseptember2025%2Fmedianpricepaidmsoa.xlsx",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2024-10-01/2025-09-30",
+      "geography": "MSOA 2021; current LAD mapping verified against May 2025 lookup",
+      "bytes": 67967897,
+      "sha256": "68a1ed24fc3f3020d1900fb5182d05639635aabcd02825c01918f792f50bb8e1",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0",
+        "Price statistics adapted by ONS from HM Land Registry data licensed under OGL v3.0."
+      ],
+      "schema": {
+        "sheet": "1a",
+        "headerRow": 3,
+        "codeColumn": "C",
+        "parentCodeColumn": "A",
+        "valueColumn": "DT",
+        "valueHeader": "Year ending Sep 2025",
+        "units": "GBP"
+      }
+    },
+    {
+      "id": "ons-lad-prices",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/ons-lad-prices-2025-09.xlsx",
+      "downloadUrl": "https://www.ons.gov.uk/file?uri=%2Fpeoplepopulationandcommunity%2Fhousing%2Fdatasets%2Fmedianhousepricesforadministrativegeographies%2Fyearendingseptember2025%2Fmedianpricepaidforadministrativegeographies.xlsx",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2024-10-01/2025-09-30",
+      "geography": "LAD 2025",
+      "bytes": 2070809,
+      "sha256": "f87230711afa53feb6e917c14a2f4dc2fd9a2bb0b185081d853dada10086e125",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0",
+        "Price statistics adapted by ONS from HM Land Registry data licensed under OGL v3.0."
+      ],
+      "schema": {
+        "sheet": "2a",
+        "headerRow": 3,
+        "codeColumn": "C",
+        "valueColumn": "DT",
+        "valueHeader": "Year ending Sep 2025",
+        "units": "GBP"
+      }
+    },
+    {
+      "id": "voa-stock-all",
+      "publisher": "VOA/HMRC",
+      "localPath": "data/raw/phase0/voa-ctsop1.1-2025.zip",
+      "downloadUrl": "https://assets.publishing.service.gov.uk/media/6a0ad444c75cc34a8ff8f397/CTSOP1.1.zip",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2025-03-31",
+      "geography": "MSOA 2021; postcode-derived using NSPL February 2025",
+      "bytes": 749909,
+      "sha256": "e1979a4196e23207489a6e049ddb10197cd127ab775be5828ee662743fe4fbe7",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "attribution": [
+        "Source: VOA/HMRC; licensed under the Open Government Licence v3.0."
+      ],
+      "schema": {
+        "member": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+        "geographyFilter": "MSOA",
+        "codeColumn": "ecode",
+        "bandColumns": [
+          "band_a",
+          "band_b",
+          "band_c",
+          "band_d",
+          "band_e",
+          "band_f",
+          "band_g",
+          "band_h"
+        ],
+        "totalColumn": "all_properties",
+        "units": "dwellings rounded to nearest 10",
+        "observedUnknownMarker": "-",
+        "notApplicableMarker": ".."
+      },
+      "members": [
+        {
+          "name": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+          "sha256": "a8091b22f018d63443546fbda522150ff5f2fc2c339b8f6c698e9549f7b62a92"
+        },
+        {
+          "name": "CTSOP1.1/CTSOP1_1_CSV_table_notes.xlsx",
+          "sha256": "6e14be660b75c27a244cc1e3eb04b3df048bf1a0d47e499ff49ff58bf18c47f6"
+        }
+      ]
+    },
+    {
+      "id": "voa-stock-type",
+      "publisher": "VOA/HMRC",
+      "localPath": "data/raw/phase0/voa-ctsop3.1-2025.zip",
+      "downloadUrl": "https://assets.publishing.service.gov.uk/media/6a0ad462229555d0fe8266f4/CTSOP3.1.zip",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2025-03-31",
+      "geography": "MSOA 2021; NSPL February 2025",
+      "bytes": 7899033,
+      "sha256": "c8891afc8f101147354e2a349f8443c7c5ae78d182a75d8a385cbcbeb52d48b9",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "attribution": [
+        "Source: VOA/HMRC; licensed under the Open Government Licence v3.0."
+      ],
+      "schema": {
+        "member": "CTSOP3.1/CTSOP3_1_2025_03_31.csv",
+        "key": [
+          "geography",
+          "ecode",
+          "band"
+        ],
+        "columnsInspected": [
+          "bungalow_total",
+          "flat_mais_total",
+          "house_terraced_total",
+          "house_semi_total",
+          "house_detached_total",
+          "all_properties"
+        ],
+        "status": "schema inspected; property-type calculations deferred"
+      },
+      "members": [
+        {
+          "name": "CTSOP3.1/CTSOP3_1_2025_03_31.csv",
+          "sha256": "56be944b1b349218a72151c5473570e3f7c0854715ec474d2e5e30b0d6024231"
+        },
+        {
+          "name": "CTSOP3.1/CTSOP3_1_CSV_table_notes.xlsx",
+          "sha256": "f0ece8af4ca7cf698465a88f00b77bb19685d43ab5252ce2dc859d23a7f1e557"
+        }
+      ]
+    },
+    {
+      "id": "council-tax",
+      "publisher": "MHCLG",
+      "localPath": "data/raw/phase0/council-tax-2026-27.ods",
+      "downloadUrl": "https://assets.publishing.service.gov.uk/media/6a02eeeccd2e0e8b5b20b449/Table_10_2026-27.ods",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2026-04-01/2027-03-31",
+      "geography": "296 English billing authorities in 2026-27",
+      "bytes": 279362,
+      "sha256": "b5b8345743fb722e48699243d1654a3e35b96c89a14c6eb26888035c3e38feb0",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "attribution": [
+        "Source: MHCLG; licensed under the Open Government Licence v3.0."
+      ],
+      "schema": {
+        "sheet": "Data_Billing",
+        "headerRow": 5,
+        "gssCodeColumn": "B",
+        "notGssCodeColumn": "A",
+        "totalAreaBandDColumn": "AL",
+        "billingWithLocalPreceptsColumn": "Z",
+        "majorPreceptsColumns": [
+          "AH",
+          "AI",
+          "AJ",
+          "AK"
+        ],
+        "units": "GBP/year"
+      }
+    },
+    {
+      "id": "msoa-lad-lookup",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/msoa21-lad25-lookup-v3.csv",
+      "downloadUrl": "https://open-geography-portalx-ons.hub.arcgis.com/api/download/v1/items/aa8baa1d64ea4b419bf59679891b8b1f/csv?layers=0",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2025-05-01",
+      "geography": "MSOA 2021 to LAD 2025; V3 corrected December 2025",
+      "bytes": 603197,
+      "sha256": "160052310547ffbfc572a59e8b9331c46e0fb4ba9257a26f846cbe3f957078c1",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "schema": {
+        "codeColumn": "MSOA21CD",
+        "parentColumn": "LAD25CD",
+        "rows": 7264
+      }
+    },
+    {
+      "id": "msoa-boundaries",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/msoa21-boundaries-v3.geojson",
+      "downloadUrl": "https://geoportal.statistics.gov.uk/api/download/v1/items/61ff711e89ba4c24ae5dc8a487e422a8/geojson?layers=0",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2021-03-21",
+      "geography": "MSOA 2021 BSC V3; 200m generalised clipped",
+      "bytes": 6454269,
+      "sha256": "915a30605fbdba14c919ebd65c73bbb881075b4a483da8d3029ecf256f18aecf",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0",
+        "Contains OS data © Crown copyright and database right 2021"
+      ],
+      "schema": {
+        "featureCode": "MSOA21CD",
+        "crs": "EPSG:27700",
+        "features": 7264
+      }
+    },
+    {
+      "id": "lad-boundaries",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/lad25-boundaries-v2.geojson",
+      "downloadUrl": "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/LAD_MAY_2025_UK_BSC_V2/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=geojson",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "2025-05-01",
+      "geography": "LAD May 2025 BSC V2; 200m generalised clipped",
+      "bytes": 2800775,
+      "sha256": "aec3602ef2abbe7a299e87a66eaeb1417bcb4d986ba2181434a483028901e5ad",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0",
+        "Contains OS data © Crown copyright and database right 2025"
+      ],
+      "schema": {
+        "featureCode": "LAD25CD",
+        "crs": "EPSG:4326",
+        "features": 361,
+        "englishFeatures": 296
+      }
+    },
+    {
+      "id": "msoa-boundary-metadata",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/msoa-boundary-metadata.json",
+      "downloadUrl": "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Middle_layer_Super_Output_Areas_December_2021_Boundaries_EW_BSC_V3/FeatureServer/0?f=pjson",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "snapshot 2026-09-06",
+      "geography": "MSOA 2021 BSC V3",
+      "bytes": 13474,
+      "sha256": "f0f1d599c0e52c926619af296e7e8c97838a4136df13a0926cb7295586d172b9",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "schema": {}
+    },
+    {
+      "id": "lad-boundary-metadata",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/lad-boundary-metadata.json",
+      "downloadUrl": "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/LAD_MAY_2025_UK_BSC_V2/FeatureServer/0?f=pjson",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "snapshot 2026-09-06",
+      "geography": "LAD May 2025 BSC V2",
+      "bytes": 13432,
+      "sha256": "3455a646aece6fc7851c218374b08be7e6426709ba78b2e1f61f0a513a2e59f7",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "schema": {}
+    },
+    {
+      "id": "msoa-boundary-item",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/msoa-boundary-item.json",
+      "downloadUrl": "https://www.arcgis.com/sharing/rest/content/items/61ff711e89ba4c24ae5dc8a487e422a8?f=json",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "snapshot 2026-09-06",
+      "geography": "MSOA 2021 BSC V3",
+      "bytes": 6325,
+      "sha256": "f921643121011fa7d86de57e81051f45d0dfa260d6b88b43c6cde07f43cc2057",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "schema": {}
+    },
+    {
+      "id": "lad-boundary-item",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/lad-boundary-item.json",
+      "downloadUrl": "https://www.arcgis.com/sharing/rest/content/items/3da2689754f449e2a4f6cd901c99dbd9?f=json",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "snapshot 2026-09-06",
+      "geography": "LAD May 2025 BSC V2",
+      "bytes": 3529,
+      "sha256": "278e12f9cdb67556ae7b1de892a16582cb3ec96aec82896cab135a98efed635d",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "schema": {}
+    },
+    {
+      "id": "lookup-item",
+      "publisher": "ONS",
+      "localPath": "data/raw/phase0/msoa-lad-lookup-item.json",
+      "downloadUrl": "https://www.arcgis.com/sharing/rest/content/items/aa8baa1d64ea4b419bf59679891b8b1f?f=json",
+      "retrievedOn": "2026-09-06",
+      "referencePeriod": "snapshot 2026-09-06",
+      "geography": "MSOA 2021 to LAD 2025 V3",
+      "bytes": 18380,
+      "sha256": "15eb5751c50fe9fe6115d5441f898b9ac85b2124fc3e49e298a509087d8fe313",
+      "licence": "Open Government Licence v3.0",
+      "licenceUrl": "https://www.ons.gov.uk/methodology/geography/licences",
+      "attribution": [
+        "Source: Office for National Statistics licensed under the Open Government Licence v.3.0"
+      ],
+      "schema": {}
+    }
+  ],
+  "documentation": [
+    {
+      "url": "https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2025/background-information",
+      "checkedOn": "2026-09-06"
+    },
+    {
+      "url": "https://www.leicester.gov.uk/council-tax/further-council-tax-information-and-notes",
+      "checkedOn": "2026-09-06"
+    },
+    {
+      "url": "https://www.gov.uk/stamp-duty-land-tax/residential-property-rates",
+      "checkedOn": "2026-09-06"
+    }
+  ],
+  "deferredSources": [],
+  "additionalManifests": [
+    {
+      "path": "data/postcode-source-manifest.json",
+      "phase": "P1.4",
+      "reason": "ONSPD source, metadata and reuse terms are pinned separately for the sample pipeline."
+    }
+  ]
+}

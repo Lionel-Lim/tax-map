@@ -1,0 +1,40 @@
+{
+  "name": "tax-map",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.14.0"
+  },
+  "scripts": {
+    "build:domain": "node scripts/domain/build.mjs",
+    "check": "npm run check:domain && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "test": "npm run build:domain && node --test .build/domain/tests/domain/*.test.js",
+    "compare": "npm run build:domain --silent && node .build/domain/scripts/domain/compare.js",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "check:domain": "tsc --noEmit -p tsconfig.domain.json && tsc --noEmit -p tsconfig.domain-browser.json",
+    "test:app": "tsc -p tsconfig.app-tests.json && node --test .build/app-tests/tests/app/*.test.js",
+    "test:browser": "playwright test",
+    "preview:cloudflare": "node scripts/deployment/preview.mjs",
+    "deploy:check": "npm run build && node scripts/deployment/check-assets.mjs && wrangler deploy --dry-run",
+    "build:cloudflare": "npm run check && npm test && npm run test:app && npm run deploy:check",
+    "deploy": "npm run deploy:check && wrangler deploy"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@sveltejs/adapter-static": "3.0.10",
+    "@sveltejs/kit": "2.70.3",
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "@types/node": "22.14.0",
+    "svelte": "5.57.1",
+    "svelte-check": "4.7.6",
+    "typescript": "5.9.3",
+    "vite": "8.3.1",
+    "wrangler": "4.143.0"
+  },
+  "dependencies": {
+    "maplibre-gl": "6.11.2"
+  }
+}

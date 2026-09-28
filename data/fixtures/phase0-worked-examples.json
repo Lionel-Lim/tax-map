@@ -1,0 +1,342 @@
+[
+  {
+    "msoa_code": "E02002830",
+    "msoa_name": "Bradgate Heights & Beaumont Leys",
+    "statistical_name": "Leicester 004",
+    "lad_code": "E06000016",
+    "property_type": "all",
+    "comparison": "ongoing-owner",
+    "policy_version": "illustrative-ppt:1.0.0",
+    "price": {
+      "source_id": "ons-msoa-prices",
+      "code": "E02002830",
+      "name": "Bradgate Heights & Beaumont Leys",
+      "value": 246000,
+      "cell": "1a!DT350",
+      "row": 350,
+      "lad_code": "E06000016"
+    },
+    "stock": {
+      "source_id": "voa-stock-all",
+      "member": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+      "csv_row": 11851,
+      "counts_by_band": {
+        "A": 2570,
+        "B": 820,
+        "C": 460,
+        "D": 140,
+        "E": 210,
+        "F": 180,
+        "G": 30,
+        "H": 10
+      },
+      "reported_total": 4410,
+      "sum_of_bands": 4420,
+      "reconciliation_difference": 10,
+      "weighted_ninths_sum": 31380
+    },
+    "charge": {
+      "source_id": "council-tax",
+      "name": "Leicester",
+      "row": 149,
+      "gss_cell": "Data_Billing!B149",
+      "band_d_cell": "Data_Billing!AL149",
+      "band_d_gbp": "2528.75",
+      "raw_band_d_value": "2528.75",
+      "components_gbp": {
+        "billing_including_local_precepts_Z": "2121.87",
+        "county_or_gla_AH": "0.00",
+        "police_AI": "315.23",
+        "fire_AJ": "91.65",
+        "combined_authority_AK": "0.00"
+      }
+    },
+    "baseline_exact_gbp": {
+      "numerator": 311185,
+      "denominator": 156
+    },
+    "expected": {
+      "baseline_gbp": "1994.78",
+      "scenario_gbp": "1180.80",
+      "annual_change_gbp": "-813.98",
+      "monthly_equivalent_gbp": "-67.83"
+    },
+    "quality_flags": [
+      "rounded-stock-counts",
+      "authority-average-charge-proxy",
+      "mixed-source-periods"
+    ]
+  },
+  {
+    "msoa_code": "E02000923",
+    "msoa_name": "Battersea Park",
+    "statistical_name": "Wandsworth 001",
+    "lad_code": "E09000032",
+    "property_type": "all",
+    "comparison": "ongoing-owner",
+    "policy_version": "illustrative-ppt:1.0.0",
+    "price": {
+      "source_id": "ons-msoa-prices",
+      "code": "E02000923",
+      "name": "Battersea Park",
+      "value": 800000,
+      "cell": "1a!DT6798",
+      "row": 6798,
+      "lad_code": "E09000032"
+    },
+    "stock": {
+      "source_id": "voa-stock-all",
+      "member": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+      "csv_row": 26024,
+      "counts_by_band": {
+        "A": 200,
+        "B": 210,
+        "C": 760,
+        "D": 720,
+        "E": 700,
+        "F": 510,
+        "G": 680,
+        "H": 350
+      },
+      "reported_total": 4130,
+      "sum_of_bands": 4130,
+      "reconciliation_difference": 0,
+      "weighted_ninths_sum": 46060
+    },
+    "charge": {
+      "source_id": "council-tax",
+      "name": "Wandsworth",
+      "row": 278,
+      "gss_cell": "Data_Billing!B278",
+      "band_d_cell": "Data_Billing!AL278",
+      "band_d_gbp": "1028.21",
+      "raw_band_d_value": "1028.21",
+      "components_gbp": {
+        "billing_including_local_precepts_Z": "517.70",
+        "county_or_gla_AH": "510.51",
+        "police_AI": "0.00",
+        "fire_AJ": "0.00",
+        "combined_authority_AK": "0.00"
+      }
+    },
+    "baseline_exact_gbp": {
+      "numerator": 33828109,
+      "denominator": 26550
+    },
+    "expected": {
+      "baseline_gbp": "1274.13",
+      "scenario_gbp": "3840.00",
+      "annual_change_gbp": "2565.87",
+      "monthly_equivalent_gbp": "213.82"
+    },
+    "quality_flags": [
+      "rounded-stock-counts",
+      "authority-average-charge-proxy",
+      "mixed-source-periods"
+    ]
+  },
+  {
+    "msoa_code": "E02005179",
+    "msoa_name": "Padiham",
+    "statistical_name": "Burnley 004",
+    "lad_code": "E07000117",
+    "property_type": "all",
+    "comparison": "ongoing-owner",
+    "policy_version": "illustrative-ppt:1.0.0",
+    "price": {
+      "source_id": "ons-msoa-prices",
+      "code": "E02005179",
+      "name": "Padiham",
+      "value": 105000,
+      "cell": "1a!DT3052",
+      "row": 3052,
+      "lad_code": "E07000117"
+    },
+    "stock": {
+      "source_id": "voa-stock-all",
+      "member": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+      "csv_row": 5561,
+      "counts_by_band": {
+        "A": 3470,
+        "B": 350,
+        "C": 430,
+        "D": 290,
+        "E": 50,
+        "F": 30,
+        "G": 20,
+        "H": 0
+      },
+      "reported_total": 4640,
+      "sum_of_bands": 4640,
+      "reconciliation_difference": 0,
+      "weighted_ninths_sum": 30560
+    },
+    "charge": {
+      "source_id": "council-tax",
+      "name": "Burnley",
+      "row": 49,
+      "gss_cell": "Data_Billing!B49",
+      "band_d_cell": "Data_Billing!AL49",
+      "band_d_gbp": "2549.42",
+      "raw_band_d_value": "2549.42",
+      "components_gbp": {
+        "billing_including_local_precepts_Z": "360.54",
+        "county_or_gla_AH": "1801.75",
+        "police_AI": "292.40",
+        "fire_AJ": "94.73",
+        "combined_authority_AK": "0.00"
+      }
+    },
+    "baseline_exact_gbp": {
+      "numerator": 24346961,
+      "denominator": 13050
+    },
+    "expected": {
+      "baseline_gbp": "1865.67",
+      "scenario_gbp": "504.00",
+      "annual_change_gbp": "-1361.67",
+      "monthly_equivalent_gbp": "-113.47"
+    },
+    "quality_flags": [
+      "rounded-stock-counts",
+      "authority-average-charge-proxy",
+      "mixed-source-periods"
+    ]
+  },
+  {
+    "msoa_code": "E02003967",
+    "msoa_name": "Aspatria & Abbeytown",
+    "statistical_name": "Allerdale 003",
+    "lad_code": "E06000063",
+    "property_type": "all",
+    "comparison": "ongoing-owner",
+    "policy_version": "illustrative-ppt:1.0.0",
+    "price": {
+      "source_id": "ons-msoa-prices",
+      "code": "E02003967",
+      "name": "Aspatria & Abbeytown",
+      "value": 210000,
+      "cell": "1a!DT1792",
+      "row": 1792,
+      "lad_code": "E06000063"
+    },
+    "stock": {
+      "source_id": "voa-stock-all",
+      "member": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+      "csv_row": 2848,
+      "counts_by_band": {
+        "A": 1790,
+        "B": 590,
+        "C": 620,
+        "D": 620,
+        "E": 330,
+        "F": 70,
+        "G": 10,
+        "H": 0
+      },
+      "reported_total": 4020,
+      "sum_of_bands": 4030,
+      "reconciliation_difference": 10,
+      "weighted_ninths_sum": 30100
+    },
+    "charge": {
+      "source_id": "council-tax",
+      "name": "Cumberland",
+      "row": 74,
+      "gss_cell": "Data_Billing!B74",
+      "band_d_cell": "Data_Billing!AL74",
+      "band_d_gbp": "2511.32",
+      "raw_band_d_value": "2511.3200000000002",
+      "components_gbp": {
+        "billing_including_local_precepts_Z": "2069.24",
+        "county_or_gla_AH": "0.00",
+        "police_AI": "338.94",
+        "fire_AJ": "103.14",
+        "combined_authority_AK": "0.00"
+      }
+    },
+    "baseline_exact_gbp": {
+      "numerator": 37795366,
+      "denominator": 18135
+    },
+    "expected": {
+      "baseline_gbp": "2084.11",
+      "scenario_gbp": "1008.00",
+      "annual_change_gbp": "-1076.11",
+      "monthly_equivalent_gbp": "-89.68"
+    },
+    "quality_flags": [
+      "rounded-stock-counts",
+      "authority-average-charge-proxy",
+      "mixed-source-periods"
+    ]
+  },
+  {
+    "msoa_code": "E02005742",
+    "msoa_name": "Ingleton & High Bentham",
+    "statistical_name": "Craven 001",
+    "lad_code": "E06000065",
+    "property_type": "all",
+    "comparison": "ongoing-owner",
+    "policy_version": "illustrative-ppt:1.0.0",
+    "price": {
+      "source_id": "ons-msoa-prices",
+      "code": "E02005742",
+      "name": "Ingleton & High Bentham",
+      "value": 306500,
+      "cell": "1a!DT1854",
+      "row": 1854,
+      "lad_code": "E06000065"
+    },
+    "stock": {
+      "source_id": "voa-stock-all",
+      "member": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+      "csv_row": 8298,
+      "counts_by_band": {
+        "A": 540,
+        "B": 830,
+        "C": 690,
+        "D": 660,
+        "E": 670,
+        "F": 400,
+        "G": 150,
+        "H": 10
+      },
+      "reported_total": 3950,
+      "sum_of_bands": 3950,
+      "reconciliation_difference": 0,
+      "weighted_ninths_sum": 35510
+    },
+    "charge": {
+      "source_id": "council-tax",
+      "name": "North Yorkshire",
+      "row": 187,
+      "gss_cell": "Data_Billing!B187",
+      "band_d_cell": "Data_Billing!AL187",
+      "band_d_gbp": "2544.34",
+      "raw_band_d_value": "2544.34",
+      "components_gbp": {
+        "billing_including_local_precepts_Z": "2091.86",
+        "county_or_gla_AH": "0.00",
+        "police_AI": "335.86",
+        "fire_AJ": "0.00",
+        "combined_authority_AK": "116.62"
+      }
+    },
+    "baseline_exact_gbp": {
+      "numerator": 451747567,
+      "denominator": 177750
+    },
+    "expected": {
+      "baseline_gbp": "2541.48",
+      "scenario_gbp": "1471.20",
+      "annual_change_gbp": "-1070.28",
+      "monthly_equivalent_gbp": "-89.19"
+    },
+    "quality_flags": [
+      "rounded-stock-counts",
+      "authority-average-charge-proxy",
+      "mixed-source-periods"
+    ]
+  }
+]

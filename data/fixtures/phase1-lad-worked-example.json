@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "description": "Independently transcribed Leicester LAD source cells; expected arithmetic checked separately from pipeline.statistics.",
+  "code": "E06000016",
+  "name": "Leicester",
+  "geography": "LAD",
+  "price": {
+    "sourceId": "ons-lad-prices",
+    "cell": "2a!DT67",
+    "rawValue": 244922,
+    "pricePence": 24492200
+  },
+  "stock": {
+    "sourceId": "voa-stock-all",
+    "member": "CTSOP1.1/CTSOP1_1_2025_03_31.csv",
+    "sourceRow": 11832,
+    "geography": "LAUA",
+    "billingAuthorityCode": "2465",
+    "rawCounts": {
+      "A": "86920",
+      "B": "28280",
+      "C": "16980",
+      "D": "7340",
+      "E": "3580",
+      "F": "1590",
+      "G": "610",
+      "H": "60"
+    },
+    "rawReportedTotal": "145350",
+    "sumOfBands": 145360,
+    "weightedNinthsSum": 991660,
+    "reconciliationDifference": 10
+  },
+  "charge": {
+    "sourceId": "council-tax",
+    "cell": "Data_Billing!AL149",
+    "rawBandD": "2528.75",
+    "bandDPence": 252875,
+    "componentsPence": {"Z": 212187, "AH": 0, "AI": 31523, "AJ": 9165, "AK": 0}
+  },
+  "expected": {
+    "councilTaxExactPence": {"numerator": 12538301125, "denominator": 65412},
+    "councilTaxRoundedPence": 191682,
+    "scenarioExactPence": {"numerator": 2939064, "denominator": 25},
+    "annualDifferenceExactPence": {"numerator": -121207473757, "denominator": 1635300},
+    "councilTaxGbp": "1916.82",
+    "scenarioGbp": "1175.63",
+    "annualDifferenceGbp": "-741.19",
+    "monthlyEquivalentGbp": "-61.77"
+  },
+  "sameTableTotalCheck": {
+    "msoaCount": 38,
+    "summedMsoaPublishedTotals": 145390,
+    "ladPublishedTotal": 145350,
+    "difference": 40,
+    "tolerance": 195
+  }
+}

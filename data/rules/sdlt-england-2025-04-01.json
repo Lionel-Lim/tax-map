@@ -1,0 +1,27 @@
+{
+  "version": "sdlt-england-2025-04-01-v1",
+  "jurisdiction": "England",
+  "effectiveFrom": "2025-04-01",
+  "verifiedOn": "2026-09-26",
+  "rounding": "floor-total-to-whole-pound",
+  "considerationRounding": "none",
+  "firstTimeBuyerMaximumPence": 50000000,
+  "standardBands": [
+    { "lowerPence": 0, "upperPence": 12500000, "rateNumerator": 0, "rateDenominator": 100 },
+    { "lowerPence": 12500000, "upperPence": 25000000, "rateNumerator": 2, "rateDenominator": 100 },
+    { "lowerPence": 25000000, "upperPence": 92500000, "rateNumerator": 5, "rateDenominator": 100 },
+    { "lowerPence": 92500000, "upperPence": 150000000, "rateNumerator": 10, "rateDenominator": 100 },
+    { "lowerPence": 150000000, "upperPence": null, "rateNumerator": 12, "rateDenominator": 100 }
+  ],
+  "firstTimeBuyerBands": [
+    { "lowerPence": 0, "upperPence": 30000000, "rateNumerator": 0, "rateDenominator": 100 },
+    { "lowerPence": 30000000, "upperPence": 50000000, "rateNumerator": 5, "rateDenominator": 100 }
+  ],
+  "guidanceUrls": [
+    "https://www.gov.uk/stamp-duty-land-tax/residential-property-rates",
+    "https://www.gov.uk/hmrc-internal-manuals/stamp-duty-land-tax-manual/sdltm29811",
+    "https://www.gov.uk/hmrc-internal-manuals/stamp-duty-land-tax-manual/sdltm29845",
+    "https://www.gov.uk/hmrc-internal-manuals/stamp-duty-land-tax-manual/sdltm00050",
+    "https://www.gov.uk/hmrc-internal-manuals/stamp-duty-land-tax-manual/sdltm03700"
+  ]
+}
