@@ -5,7 +5,7 @@ An interactive map for exploring how an illustrative property-tax reform could a
 Phases 1–3 are complete, and the internal dataset now includes all **296 English councils and 6,856 neighbourhoods (MSOAs)**. The map includes postcode and area search, all three comparison modes, personal inputs, source details and versioned sharing. It opens on the Leicester council estimate, annualised over 20 years.
 
 - [England expansion](docs/england-expansion.md): national coverage, boundary exclusions, validation and remaining publication work.
-- [Cloudflare deployment](docs/deployment.md): store the project in GitHub and automatically publish to `taxmap.limsight.com` on the free plan.
+- [Cloudflare deployment](docs/deployment.md): store the project in GitHub and manually publish to `taxmap.limsight.com` on the free plan.
 - [Phase 3 findings](docs/phase3-findings.md): application guide and original sample acceptance evidence.
 - [Implementation plan](docs/implementation-plan.md): scope, milestones, dependencies, tasks and acceptance criteria.
 - [Source register](docs/source-register.md): official data and technical references, with known source limitations.
@@ -61,4 +61,4 @@ The pipeline CLI still defaults to `--scope sample` for compatibility. The histo
 
 The pinned originals are **internal validation releases**. The website now builds a separate, filtered public preview that excludes Northern Ireland postcode records and keeps coverage limitations visible. Original research files remain in this private repository; never host `static/` directly. The source archive is local; retain and back it up before removing the workspace.
 
-Next: **production deployment and validation**. England expansion and the public data filter are implemented; the restricted Cloudflare credential and live-site checks remain pending. No public deployment has been made. See [audit instructions](scripts/phase0/README.md) for the historical Phase 0 evidence.
+The filtered public preview is live at **[taxmap.limsight.com](https://taxmap.limsight.com/)** on Cloudflare Workers Static Assets. Production page, postcode lookup and shared-link checks passed on 28 September 2026. Updates are deployed manually through Wrangler; pushing to GitHub does not change the live site. See [deployment status](docs/deployment.md) and [audit instructions](scripts/phase0/README.md) for the historical Phase 0 evidence.
