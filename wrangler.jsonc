@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "limsight-taxmap",
+  "account_id": "1c4ef6d41930057ec9ec8b51db2eac11",
   "compatibility_date": "2026-09-28",
   "workers_dev": false,
   "preview_urls": false,

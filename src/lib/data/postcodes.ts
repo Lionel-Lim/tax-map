@@ -32,6 +32,7 @@ function invalid(message: string): never { throw new DataLoadError('invalid-data
 function validateIndex(value: unknown, release: LoadedRelease): PostcodeIndex {
   if (!isRecord(value) || value.schemaVersion !== 1 || !Array.isArray(value.fields) || value.fields.join('|') !== FIELDS.join('|')
     || value.referencePeriod !== '2025-05' || value.sourceId !== 'postcode-directory' || value.publicReleaseReady !== false
+    || value.distribution !== 'public-v1'
     || !isRecord(value.countries) || value.countries[ENGLAND] !== 'England'
     || !Object.values(value.countries).every(label => typeof label === 'string')
     || !isStringList(value.sampleMsoas) || !isStringList(value.sampleLads) || !isRecord(value.shards)) invalid('The postcode index is inconsistent with this release.');
@@ -42,7 +43,7 @@ function validateIndex(value: unknown, release: LoadedRelease): PostcodeIndex {
       || !inventory.every(code => release.searchByCode.get(code)?.geography === geography)) invalid('Postcode coverage does not match the area release.');
   }
   for (const [outward, shard] of Object.entries(value.shards)) {
-    if (!/^[A-Z][A-Z0-9]{1,3}$/.test(outward) || !isRecord(shard) || !isArtifact(shard)
+    if (!/^[A-Z][A-Z0-9]{1,3}$/.test(outward) || /^BT/i.test(outward) || !isRecord(shard) || !isArtifact(shard)
       || shard.path !== `postcodes/${outward}.json` || !Number.isSafeInteger(shard.records) || Number(shard.records) < 1) invalid('The postcode index contains an invalid shard.');
     const manifestEntry = release.manifest.artifacts[shard.path as string];
     if (!manifestEntry || manifestEntry.sha256 !== shard.sha256 || manifestEntry.bytes !== shard.bytes) invalid('The postcode shard metadata does not match the release manifest.');
@@ -95,6 +96,10 @@ export function createPostcodeLookup(release: LoadedRelease, options: { fetcher?
   return { async lookup(input: string): Promise<PostcodeResult> {
     const postcode = normalisePostcode(input);
     if (!postcode) return { status: 'malformed', message: 'Enter a full postcode, for example LE1 1RE.' };
+    // A scope exclusion, not a claim that this postcode exists. No restricted
+    // directory records are needed to explain why BT inputs are unsupported.
+    if (/^BT\d/.test(postcode)) return { status: 'outside-england',
+      message: 'BT postcodes are outside this England-only lookup. Northern Ireland postcode data is not included.' };
     try {
       const index = await getIndex(), outward = postcode.split(' ')[0]!;
       const unknown = (): PostcodeResult => ({ status: 'unknown', message: 'This postcode is not in the May 2025 directory. It may be newer; try searching for an area instead.' });

@@ -19,8 +19,13 @@
     "test:browser": "playwright test",
     "preview:cloudflare": "node scripts/deployment/preview.mjs",
     "deploy:check": "npm run build && node scripts/deployment/check-assets.mjs && wrangler deploy --dry-run",
-    "build:cloudflare": "npm run check && npm test && npm run test:app && npm run deploy:check",
-    "deploy": "npm run deploy:check && wrangler deploy"
+    "build:cloudflare": "npm run check && npm test && npm run test:app && npm run test:deployment && npm run deploy:check",
+    "deploy": "npm run deploy:check && wrangler deploy",
+    "prepare:public": "node scripts/deployment/prepare-public-assets.mjs",
+    "predev": "npm run prepare:public",
+    "prebuild": "npm run prepare:public",
+    "pretest:app": "npm run prepare:public",
+    "test:deployment": "node --test tests/deployment/*.test.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

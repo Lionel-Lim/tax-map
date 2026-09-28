@@ -143,8 +143,8 @@
     </p>
   </details>
   <p>
-    This application is an internal England data preview. See <a href="/data-sources">data sources and
-    coverage</a> for the pinned editions, credits and remaining publication constraints, or
+    This application is an England data preview with incomplete coverage. See <a href="/data-sources">data sources and
+    coverage</a> for the pinned editions, credits and data limitations, or
     <a href="/map">return to the map</a>.
   </p>
 </article>

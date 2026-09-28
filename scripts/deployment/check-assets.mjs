@@ -1,6 +1,7 @@
 import { readdir, stat, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
+import { verifyPublicData } from './verify-public-data.mjs';
 
 const root = fileURLToPath(new URL('../../build/', import.meta.url));
 const maxFiles = 20_000;
@@ -17,6 +18,7 @@ async function visit(directory) {
 }
 
 await visit(root);
+await verifyPublicData(root);
 for (const required of ['index.html', 'map/index.html', 'methodology/index.html', 'data-sources/index.html', '_headers', 'data/manifest.json']) {
   await access(path.join(root, required));
 }

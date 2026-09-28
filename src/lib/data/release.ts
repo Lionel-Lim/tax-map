@@ -19,6 +19,7 @@ export interface ReleaseManifest {
   geographyVintages: Record<Geography, string>;
   sources: { id: string; referencePeriod: string; downloadUrl: string; sha256: string; bytes: number }[];
   initialAreasPath?: 'councils.json';
+  distribution: { id: string; excludedPostcodeCountry: string; excludedPostcodeRecords: number };
   areaShards?: Record<string, AreaShard>;
 }
 export interface SearchRecord {
@@ -66,6 +67,9 @@ function validateManifest(value: unknown, dataVersion: string): ReleaseManifest 
     throw new DataLoadError('unsupported-policy-version', 'The data release declares an unsupported policy.');
   }
   const national = dataVersion === ENGLAND_DATA_VERSION;
+  if (!isRecord(value.distribution) || value.distribution.id !== 'public-v1'
+    || value.distribution.excludedPostcodeCountry !== 'N92000002'
+    || value.distribution.excludedPostcodeRecords !== 63023) invalid('The public data distribution is missing its publication filter.');
   if (value.methodologyVersion !== 'phase0-v1' || value.scope !== (national ? 'england' : 'five-authority-sample')
     || value.publicReleaseReady !== false || value.defaultComparison !== 'ongoing-owner' || value.sdltRuleVersion !== null
     || !Array.isArray(value.propertyTypes) || value.propertyTypes.length !== 1 || value.propertyTypes[0] !== 'all'
@@ -174,7 +178,7 @@ function validateSearch(value: unknown, manifest: ReleaseManifest): SearchRecord
 export async function loadRelease(options: { dataVersion?: string; fetcher?: Fetcher } = {}): Promise<LoadedRelease> {
   const dataVersion = options.dataVersion ?? ENGLAND_DATA_VERSION, fetcher = options.fetcher ?? browserFetch;
   assertSupportedDataVersion(dataVersion);
-  const basePath = `/data/${dataVersion}`;
+  const basePath = `/data/public-v1/${dataVersion}`;
   const manifest = validateManifest(await fetchJson(`${basePath}/manifest.json`, fetcher), dataVersion);
   const [rawAreas, rawSearch, rawPolicy] = await Promise.all([
     fetchJson(`${basePath}/${manifest.initialAreasPath ?? 'areas.json'}`, fetcher), fetchJson(`${basePath}/search.json`, fetcher), fetchJson(`${basePath}/policy.json`, fetcher),

@@ -2,10 +2,10 @@
 /_app/immutable/*
   Cache-Control: public, max-age=31536000, immutable
 
-/data/england-2026-09-26-v1/*
+/data/public-v1/england-2026-09-26-v1/*
   Cache-Control: public, max-age=31536000, immutable
 
-/data/sample-2026-09-26-v1/*
+/data/public-v1/sample-2026-09-26-v1/*
   Cache-Control: public, max-age=31536000, immutable
 
 # The active release pointer must be checked for updates.

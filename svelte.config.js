@@ -3,5 +3,5 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 export default {
   preprocess: vitePreprocess(),
-  kit: { adapter: adapter({ strict: true }) },
+  kit: { files: { assets: '.build/public-static' }, adapter: adapter({ strict: true }) },
 };

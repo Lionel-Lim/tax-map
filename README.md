@@ -59,6 +59,6 @@ The [active release](static/data/manifest.json) selects `england-2026-09-26-v1`.
 
 The pipeline CLI still defaults to `--scope sample` for compatibility. The historical sample release is immutable: current implementation hashes differ, so rebuilding that original ID requires its historical code. Use a fresh release ID and a separate output directory for a current-code sample compatibility build; the [pipeline instructions](pipeline/README.md) give commands.
 
-This is an **internal validation release**. Northern Ireland postcode reuse and usable coverage must be reviewed before public launch. The source archive is local; retain and back it up before removing the workspace.
+The pinned originals are **internal validation releases**. The website now builds a separate, filtered public preview that excludes Northern Ireland postcode records and keeps coverage limitations visible. Original research files remain in this private repository; never host `static/` directly. The source archive is local; retain and back it up before removing the workspace.
 
-Next: **production validation and public-release preparation**. England expansion is implemented; usable coverage, postcode reuse and hosting decisions remain publication gates. No public deployment has been made. See [audit instructions](scripts/phase0/README.md) for the historical Phase 0 evidence.
+Next: **production deployment and validation**. England expansion and the public data filter are implemented; the restricted Cloudflare credential and live-site checks remain pending. No public deployment has been made. See [audit instructions](scripts/phase0/README.md) for the historical Phase 0 evidence.

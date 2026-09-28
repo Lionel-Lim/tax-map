@@ -13,7 +13,7 @@
   <p class="lead">
     The map accounts for all {data.coverage.LAD.total} councils and {data.coverage.MSOA.total.toLocaleString('en-GB')} neighbourhoods in the pinned England inventory.
     An area is shown as unavailable when its inputs or boundaries cannot support a consistent estimate.
-    This remains an internal data preview, with no missing input treated as zero.
+    This is a preview with incomplete coverage; no missing input is treated as zero.
   </p>
 
   <h2>England coverage</h2>
@@ -79,8 +79,8 @@
 
   <h2>Postcode coverage and privacy</h2>
   <p>
-    The lookup contains 2,714,963 current and terminated postcode records across 3,121 outward-code
-    files. Its country and status fields distinguish unsupported or terminated postcodes from unknown records. A match only establishes presence in the May 2025 edition; newer postcodes may be absent.
+    The lookup contains {data.publicPostcodes.postcodeRecords.toLocaleString('en-GB')} current and terminated postcode records across {data.publicPostcodes.postcodeShards.toLocaleString('en-GB')} outward-code
+    files, excluding Northern Ireland. Its country and status fields distinguish unsupported or terminated postcodes from unknown records. BT inputs are outside the lookup; their existence is not checked. A match only establishes presence in the May 2025 edition; newer postcodes may be absent.
     Source coordinates can be approximate or unavailable.
   </p>
   <p>{data.postcodeCoverage.withAvailableMsoa.toLocaleString('en-GB')} of {data.postcodeCoverage.currentEnglishPostcodes.toLocaleString('en-GB')} current English postcodes in that edition lead to an available neighbourhood estimate (about 49.1%). Other matched postcodes show the relevant data limitation instead.</p>
@@ -106,10 +106,9 @@
   </ul>
   <p>
     See <a href="https://www.ons.gov.uk/methodology/geography/licences">ONS geographical licensing guidance</a>.
-    Northern Ireland postcode data has separate LPS terms, including restrictions on public
-    redistribution and commercial use. The manifest declares <strong>public release ready:
-    false</strong>. Postcode reuse clearance and a review of usable coverage are required before
-    publication.
+    Northern Ireland postcode data has separate LPS terms and is excluded from this website,
+    including its downloadable data files. The map remains a preview with the coverage gaps
+    described above; it is not an individual property valuation or tax bill.
   </p>
 
   <details>
@@ -121,8 +120,8 @@
       workbooks and source archives are kept outside the browser data bundle.
     </p>
     <p>
-      Inspect the <a href="/data/england-2026-09-26-v1/manifest.json">release manifest</a>
-      and <a href="/data/england-2026-09-26-v1/sources.json">source register</a>.
+      Inspect the <a href="/data/public-v1/england-2026-09-26-v1/manifest.json">release manifest</a>
+      and <a href="/data/public-v1/england-2026-09-26-v1/sources.json">source register</a>.
       The application combines these pinned statistics with
       rule version <code>sdlt-england-2025-04-01-v1</code>.
     </p>

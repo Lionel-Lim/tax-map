@@ -97,7 +97,7 @@ test('postcode to ongoing-owner estimate works from the keyboard and exposes sou
   await expect(panel).toContainText('31 March 2025');
   await expect(panel).toContainText('2026–27');
   await expect(panel).toContainText('Council-average charges');
-  expect(shards).toEqual([`/data/${DATA}/postcodes/LE4.json`]);
+  expect(shards).toEqual([`/data/public-v1/${DATA}/postcodes/LE4.json`]);
 });
 
 for (const entry of [
@@ -337,7 +337,7 @@ for (const key of ['data', 'policy', 'rule']) {
 }
 
 test('a failed postcode shard is a recoverable network error, not an unknown postcode', async ({ page }) => {
-  const shard = `**/data/${DATA}/postcodes/LE4.json`;
+  const shard = `**/data/public-v1/${DATA}/postcodes/LE4.json`;
   await page.route(shard, route => route.abort('failed'));
   await page.goto(sharedPath({ area: 'E06000016', geography: 'LAD' }));
   await findPostcode(page, 'LE4 0DD');
@@ -359,7 +359,8 @@ test('methodology and data credits remain readable without JavaScript', async ({
     await expect(page.getByRole('heading', { name: 'Data sources & coverage' })).toBeVisible();
     await expect(page.getByRole('table')).toContainText('3,895');
     await expect(page.locator('article')).toContainText('107 unavailable');
-    await expect(page.locator('article')).toContainText('public release ready: false');
+    await expect(page.locator('article')).toContainText('2,651,940');
+    await expect(page.locator('article')).toContainText('Northern Ireland postcode data has separate LPS terms and is excluded');
     await expect(page.getByRole('link', { name: 'Open Government Licence v.3.0' })).toBeVisible();
   } finally {
     await context.close();

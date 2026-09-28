@@ -5,13 +5,13 @@ import { createPostcodeLookup, DataLoadError, loadRelease, normalisePostcode, se
 import type { Fetcher } from '../../src/lib/data/index.js';
 
 const SAMPLE = 'sample-2026-09-26-v1';
-const BASE = `/data/${SAMPLE}`;
+const BASE = `/data/public-v1/${SAMPLE}`;
 function fixtureFetcher(change?: (url: string, value: unknown) => unknown): { fetcher: Fetcher; requests: string[] } {
   const requests: string[] = [];
   const fetcher: Fetcher = async (url) => {
     requests.push(url);
     assert.ok(url.startsWith(`${BASE}/`), 'all data requests must stay in the explicitly pinned local release');
-    const value: unknown = JSON.parse(await readFile(`static${url}`, 'utf8'));
+    const value: unknown = JSON.parse(await readFile(`.build/public-static${url}`, 'utf8'));
     return { ok: true, status: 200, json: async () => change ? change(url, value) : value };
   };
   return { fetcher, requests };
@@ -44,6 +44,7 @@ test('incompatible release schemas, identities and policies fail closed', async 
   for (const [file, patch, expected] of [
     ['manifest.json', { schemaVersion: '2.0.0' }, 'unsupported-data-schema'],
     ['manifest.json', { releaseId: 'another-release' }, 'invalid-data'],
+    ['manifest.json', { distribution: undefined }, 'invalid-data'],
     ['manifest.json', { policyVersions: ['unknown:1'] }, 'unsupported-policy-version'],
     ['areas.json', { releaseId: 'another-release' }, 'invalid-data'],
     ['policy.json', { annualRate: { numerator: 480, denominator: 10000 } }, 'unsupported-policy-version'],
@@ -83,6 +84,18 @@ test('postcode normalisation accepts casing and whitespace, rejects incomplete a
   assert.equal(normalisePostcode('GIR 0AA'), 'GIR 0AA');
   assert.equal(normalisePostcode('NPT 0VA'), 'NPT 0VA');
   for (const input of ['', 'SW11', 'SW11 1A', 'London', '../LE1', 'LE1?7RH', '💥']) assert.equal(normalisePostcode(input), null);
+});
+
+test('BT inputs are excluded without fetching or exposing a postcode record', async () => {
+  const { fetcher, requests } = fixtureFetcher();
+  const lookup = createPostcodeLookup(await loaded, { fetcher });
+  for (const postcode of ['BT1 1AA', 'BT99 9ZZ']) {
+    const result = await lookup.lookup(postcode);
+    assert.equal(result.status, 'outside-england');
+    assert.equal(result.record, undefined);
+    assert.match(result.message, /not included/);
+  }
+  assert.deepEqual(requests, []);
 });
 
 test('postcode index and shards load only on demand, deduplicate concurrent requests, and stay local', async () => {

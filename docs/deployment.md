@@ -12,6 +12,28 @@ are disabled. No Worker script, database or external map-tile service is needed.
 
 ## Prepare and check locally
 
+The website serves only the generated `.build/public-static/` assets. Run
+`npm run prepare:public` to generate them; `npm run dev`, `npm run build` and
+`npm run test:app` do this automatically. Do not deploy `static/` directly.
+That directory retains the original research releases, including restricted
+Northern Ireland data, in the private repository.
+
+The public distribution lives at `/data/public-v1/<release-id>/`. It removes all
+63,023 Northern Ireland postcode rows from each release, both JSON and gzip
+shards, and omits the internal validation report. The generator checks source
+checksums, updates public index and manifest hashes, and records the source
+manifest hash. Unchanged statistics and retained postcode shards are copied
+byte-for-byte. Share-link data versions stay the same because tax data is
+unchanged; the new distribution path separates the filtered files from the
+original immutable research artifacts. BT inputs return an out-of-scope message
+without looking up or asserting the existence of that postcode.
+
+The final asset check rejects raw release directories, unexpected releases,
+checksum/inventory mismatches and Northern Ireland rows in JSON or gzip files.
+The original `publicReleaseReady: false` research metadata is retained as source
+provenance, not relabelled as complete coverage. `distribution` records the
+publication filter. The website visibly describes the remaining coverage gaps.
+
 Use Node 22.14.0 or newer and the pinned npm dependencies:
 
 ```sh
@@ -33,9 +55,9 @@ created share link opened in a new tab. Refresh the shared page as well. An
 unknown URL or missing data file should return HTTP 404, rather than the home
 page. Page URLs use a trailing slash, matching SvelteKit's generated folders.
 
-The build includes both the England release and the original sample so old
-versioned share links continue to work. The `.gz` data companions remain in the
-bundle because they are part of the versioned artifact inventory.
+The build includes filtered distributions of both the England release and the
+original sample so old versioned share links continue to work. Retained `.gz`
+companions are checked as part of the public artifact inventory.
 
 ## GitHub and automatic Cloudflare publishing
 
@@ -83,15 +105,24 @@ automatically. Work on other branches until changes are ready to publish.
 
 A separate GitHub Actions deployment workflow and Cloudflare token stored in
 GitHub are not needed for this integration. Cloudflare handles deployment
-credentials within its own build service. Browser tests remain part of local
+credentials within its own build service. Use a custom user token instead of the
+broad automatically created token: Workers Scripts Edit for account
+`1c4ef6d41930057ec9ec8b51db2eac11`, and Zone Read plus Workers Routes Edit scoped
+only to `limsight.com`. The account ID is pinned in Wrangler to avoid needing
+account-discovery permissions. This still permits editing Workers within the
+selected account; it is not a per-Worker credential. No KV, R2, D1, AI, container,
+general DNS editing, or access to other zones is needed by this application.
+The custom token must be created and selected in Cloudflare before deployment;
+never copy its value into the repository. Browser tests remain part of local
 release verification; the raw-data Python pipeline runs separately.
 
 ## First publication
 
-The current data is still labelled an internal validation release. The existing
-publication decisions on postcode reuse and usable neighbourhood coverage are
-recorded in [the README](../README.md) and [England expansion](england-expansion.md).
-Local hosting checks do not resolve those decisions.
+The user approved preparing the filtered public preview after the security and
+licensing review on 28 September 2026. Northern Ireland data is excluded rather
+than relying on permission to redistribute it. Coverage gaps remain clearly
+labelled and unavailable estimates stay unavailable. Production verification is
+still required after deployment.
 
 When the release is ready to publish:
 
@@ -176,3 +207,22 @@ References (checked 28 September 2026):
 Cloudflare account connection, DNS changes and public-site verification remain
 outstanding, along with production checks and the existing data publication
 decisions.
+
+### Filtered public preview verification — 28 September 2026
+
+The filtered distribution passed type checks, 99 domain tests, 33 app tests,
+2 publication-boundary tests, and 39 browser tests. The final build has 12,797
+regular files (Wrangler reports 12,818 asset-directory entries), below the free
+20,000-file limit; its largest file is 11.21 MiB. Wrangler dry run passed.
+The credential-pattern scan found no matches across all 12,797 built files.
+
+Cloudflare's local runtime returned 200 for the pages and an England postcode
+shard, and 404 for Northern Ireland JSON/gzip, original unfiltered release URLs,
+and `/.env`. Each filtered release contains 2,651,940 postcode records in 3,039
+shards. Original files and tax statistics were not changed. These are local
+checks; the production deployment has not yet been performed.
+
+The dashboard is signed in and the GitHub repository is selected. A custom
+`taxmap-deploy` token is prepared for review with the three permissions documented
+above, restricted to the selected account and `limsight.com`; creation and
+selection for the build are still pending. Do not use the broad default token.

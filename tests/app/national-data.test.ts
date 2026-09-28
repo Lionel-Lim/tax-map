@@ -6,7 +6,7 @@ import type { Fetcher, ReleaseManifest } from '../../src/lib/data/index.js';
 import { AREA_SCHEMA_VERSION, ENGLAND_DATA_VERSION, POLICY_VERSION, SAMPLE_DATA_VERSION, SDLT_RULE_VERSION, STANDARD_BUYER, compareArea } from '../../src/lib/domain/tax/index.js';
 import type { AreaRecord } from '../../src/lib/domain/tax/index.js';
 
-const BASE = `/data/${ENGLAND_DATA_VERSION}`;
+const BASE = `/data/public-v1/${ENGLAND_DATA_VERSION}`;
 const LEICESTER = 'E06000016';
 const BRADGATE = 'E02002830';
 const hasError = (code: string) => (error: unknown) => error instanceof DataLoadError && error.code === code;
@@ -15,7 +15,7 @@ const object = (value: unknown) => value as Record<string, unknown>;
 // Keep corruption/cache cases small: these use the England shard format with
 // genuine pinned sample records. Full national inventory is checked separately.
 async function nationalFixture(change?: (path: string, value: unknown) => unknown) {
-  const original = async (path: string) => JSON.parse(await readFile(`static/data/${SAMPLE_DATA_VERSION}/${path}`, 'utf8')) as unknown;
+  const original = async (path: string) => JSON.parse(await readFile(`.build/public-static/data/public-v1/${SAMPLE_DATA_VERSION}/${path}`, 'utf8')) as unknown;
   const manifest = await original('manifest.json') as ReleaseManifest;
   const all = (object(await original('areas.json')).areas as AreaRecord[]);
   const councils = all.filter(area => area.geography === 'LAD');
@@ -171,7 +171,7 @@ function realEnglandFetcher() {
   const fetcher: Fetcher = async url => {
     assert.ok(url.startsWith(`${BASE}/`), 'the real national integration must not substitute another release');
     requests.push(url);
-    const value: unknown = JSON.parse(await readFile(`static${url}`, 'utf8'));
+    const value: unknown = JSON.parse(await readFile(`.build/public-static${url}`, 'utf8'));
     return { ok: true, status: 200, json: async () => value };
   };
   return { fetcher, requests };

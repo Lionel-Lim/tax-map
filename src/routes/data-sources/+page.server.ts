@@ -4,7 +4,7 @@ import type { AreaRecord } from '$lib/domain/tax/area.js';
 
 /** Prerender a compact coverage report; never ship the full provenance dataset to this page. */
 export async function load() {
-  const root = `static/data/${ENGLAND_DATA_VERSION}`;
+  const root = `.build/public-static/data/public-v1/${ENGLAND_DATA_VERSION}`;
   const [manifest, dataset] = await Promise.all([
     readFile(`${root}/manifest.json`, 'utf8').then(JSON.parse),
     readFile(`${root}/areas.json`, 'utf8').then(JSON.parse),
@@ -16,6 +16,7 @@ export async function load() {
       available: neighbourhoods.filter(area => area.availability === 'available').length, total: neighbourhoods.length };
   }).sort((a,b) => a.name.localeCompare(b.name));
   return { releaseId: ENGLAND_DATA_VERSION, councils,
+    publicPostcodes: manifest.distribution as { postcodeRecords: number; postcodeShards: number },
     coverage: manifest.coverage as Record<'LAD' | 'MSOA', { total: number; available: number; unavailable: number }>,
     postcodeCoverage: manifest.postcodeCoverage as { currentEnglishPostcodes: number; withAvailableMsoa: number },
     dwellingCoverage: manifest.dwellingCoverage.MSOA as { reportedDwellingsInAvailableAreas: number; totalReportedDwellings: number },

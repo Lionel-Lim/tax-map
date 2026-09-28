@@ -48,7 +48,7 @@ test('sample mobile payload and interaction budget', async ({ page }) => {
   expect(postcodeMilliseconds).toBeLessThan(report.budgets.postcodeMilliseconds);
   expect(scenarioMilliseconds).toBeLessThan(report.budgets.scenarioMilliseconds);
   expect(lookup.map(row => row.path)).toEqual([
-    '/data/sample-2026-09-26-v1/postcodes/index.json', '/data/sample-2026-09-26-v1/postcodes/LE4.json',
+    '/data/public-v1/sample-2026-09-26-v1/postcodes/index.json', '/data/public-v1/sample-2026-09-26-v1/postcodes/LE4.json',
   ]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
 });
