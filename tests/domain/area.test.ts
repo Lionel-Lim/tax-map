@@ -68,6 +68,20 @@ test('value-only overrides cannot supply missing Council Tax, and zero is an exp
   assert.equal(result.percentageDifference, null);
 });
 
+test('custom rates apply to area estimates and personal values without changing source data', () => {
+  const before = JSON.stringify(available);
+  const options = { ...settings, propertyTaxRatePercent: 1 };
+  const area = success(available, options);
+  assert.equal(area.scenario.total.displayPrecise, '£2,460.00');
+  assert.equal(area.classification.kind, 'higher');
+  const personal = success(available, { ...options, overrides: { propertyValuePence: 30000000, annualCouncilTaxPence: 180000 } });
+  assert.equal(personal.difference.displayPrecise, '+£1,200.00');
+  assert.equal(personal.estimateKind, 'personal-comparison');
+  assert.equal(JSON.stringify(available), before);
+  assert.equal(compareArea(unavailable, options).status, 'unavailable');
+  assert.equal(compareArea(available, { ...options, propertyTaxRatePercent: NaN }).status, 'invalid-input');
+});
+
 test('each missing source dependency needs an override; unknown reasons stay unavailable', () => {
   const missing: AreaRecord = { ...unavailable, pricePence: null,
     unavailableReasons: ['stock-marker-unverified', 'price-unavailable'] };

@@ -62,6 +62,35 @@ test('fractional property-tax pennies survive the exact 48/10000 rate', () => {
   assert.equal(result.direction, 'higher');
 });
 
+test('custom rates use exact arithmetic and update totals, displays and classification in every mode', () => {
+  const result = available(input({ propertyTaxRatePercent: 1 }));
+  assert.equal(result.propertyTaxRatePercent, 1);
+  assert.equal(result.scenario.total.displayPrecise, '£3,000.00');
+  assert.equal(result.difference.displayPrecise, '+£1,200.00');
+  assert.equal(result.monthlyEquivalent?.displayPrecise, '+£100.00');
+  assert.equal(result.classification.kind, 'higher');
+  assert.ok(result.assumptions.includes('Illustrative 1% property tax — uncapped (custom rate).'));
+  assert.ok(result.assumptions.every(value => !value.includes('0.48%')));
+  const fractional = available(input({ propertyValuePence: 1, propertyTaxRatePercent: 0.1234 }));
+  assert.deepEqual(fractional.scenario.propertyTax.exactPence, { numerator: '617', denominator: '500000' });
+  for (const mode of ['annualised-ownership', 'purchase-year'] as const) {
+    const custom = available(purchase(mode, { propertyTaxRatePercent: 0.6, ownershipYears: 10 }));
+    assert.equal(custom.scenario.total.displayPrecise, '£3,000.00');
+    assert.equal(custom.current.sdltUpfront.displayPrecise, '£15,000.00');
+    assert.equal(custom.difference.displayPrecise, mode === 'annualised-ownership' ? '-£300.00' : '-£13,800.00');
+  }
+  assert.equal(available(input({ propertyTaxRatePercent: 0 })).scenario.total.roundedPence, '0');
+  assert.equal(available(input({ propertyTaxRatePercent: 100 })).scenario.total.roundedPence, '30000000');
+  assert.equal(available(input()).propertyTaxRatePercent, 0.48);
+  assert.deepEqual(ILLUSTRATIVE_POLICY.annualRate, { numerator: 48, denominator: 10000 });
+});
+
+test('invalid custom rates never produce a numeric result or fall back to the default', () => {
+  for (const propertyTaxRatePercent of [-1, 100.0001, 0.12345, NaN, Infinity, null, '', '0.48', [], {}]) {
+    failure(input({ propertyTaxRatePercent }), 'invalid-input', 'invalid-property-tax-rate');
+  }
+});
+
 test('annualised and purchase-year examples account for independently expected £15,000 SDLT', () => {
   const annualised = available(purchase('annualised-ownership'));
   assert.equal(annualised.current.sdltUpfront.roundedPence, '1500000');

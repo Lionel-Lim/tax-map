@@ -69,9 +69,10 @@ main { max-width: 1600px; margin: auto; padding: 0 4% 48px; }
 .scenario-controls { display: flex; align-items: start; gap: 12px 16px; flex-wrap: wrap; padding: 20px 0; }
 .scenario-controls .control-field { flex: 1; min-width: 0; }
 .scenario-controls select { width: 100%; font-weight: 400; font-size: .87rem; padding-right: 24px; }
-.scenario-controls .basis-control { flex: 1.45; }
+.scenario-controls .basis-control { flex: 1.6; min-width: 270px; }
+.scenario-controls .rate-control { flex: 0 0 210px; }
 .scenario-controls .years-control { flex: 0 0 176px; }
-.years-control input { width: 100%; font-size: .87rem; }
+.years-control input, .rate-control input { width: 100%; font-size: .87rem; }
 .control-note { font-size: .75rem; color: var(--muted); flex-basis: 100%; margin: 0; }
 .buyer-scope { font-size: .75rem; color: var(--muted); flex-basis: 100%; margin-top: -6px; }
 .buyer-scope summary { width: fit-content; padding: 4px 0; }
@@ -321,17 +322,17 @@ pre { max-height: 300px; overflow: auto; background: #f4f4ec; padding: 12px; fon
 .personal-inputs > p { margin-bottom: 0; }
 @media (min-width: 961px) and (max-width: 1150px) {
   .scenario-controls .control-field { flex-basis: calc(50% - 8px); }
-  .scenario-controls .years-control { flex: 1; }
+  .scenario-controls .years-control, .scenario-controls .rate-control { flex: 1; }
 }
 @media (max-width: 960px) {
-  .scenario-controls .years-control { min-width: 0; }
+  .scenario-controls .years-control, .scenario-controls .rate-control, .scenario-controls .basis-control { min-width: 0; }
   .info-trigger { width: 32px; height: 32px; min-height: 32px; }
   .field-label { gap: 2px; }
 }
 @media (max-width: 600px) {
   .scenario-controls { grid-template-columns: minmax(104px, .7fr) minmax(0, 1.3fr); }
   .scenario-controls .control-field { align-self: end; }
-  .scenario-controls:not(:has(.years-control)) .display-control { grid-column: 1 / -1; }
+  .scenario-controls .rate-control, .scenario-controls:not(:has(.years-control)) .display-control { grid-column: 1 / -1; }
   .years-control .field-label { align-items: center; }
   .years-control .field-label label { max-width: 104px; }
   .scope-strip > strong { white-space: normal; }

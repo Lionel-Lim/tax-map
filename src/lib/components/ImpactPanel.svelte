@@ -72,7 +72,7 @@
           </dt><dd title={result.current.sdltIncluded.displayPrecise}>{result.current.sdltIncluded.displayPounds}</dd></div>
         {/if}
       </dl>
-      <div class="bar-label"><span>Illustrative 0.48% tax</span><strong>{result.scenario.total.displayPounds}</strong></div>
+      <div class="bar-label"><span>Illustrative {result.propertyTaxRatePercent}% tax</span><strong>{result.scenario.total.displayPounds}</strong></div>
       <div class="bar-track" aria-hidden="true"><div class="bar scenario" style:width={`${chartPence(result.scenario.total) / maximum * 100}%`}></div></div>
     </figure>
     <dl class="input-summary">
@@ -84,7 +84,7 @@
     <div class="detail-action">
       <HelpPopover title="How this is calculated" text="How this is calculated" fallback="/methodology/#precision">
         <ol class="calculation-steps">
-          <li><strong>Illustrative yearly tax:</strong> {result.propertyValue.displayPrecise} × 0.48% = {result.scenario.propertyTax.displayPrecise}.</li>
+          <li><strong>Illustrative yearly tax:</strong> {result.propertyValue.displayPrecise} × {result.propertyTaxRatePercent}% = {result.scenario.propertyTax.displayPrecise}.</li>
           <li><strong>Current comparison cost:</strong> {result.current.total.displayPrecise}.
             <p>{result.mode === 'annualised-ownership' ? `Council Tax plus ${result.current.sdltIncluded.displayPrecise} in Stamp Duty per year, spread over ${result.ownershipYears} years.` : isPurchase ? 'Council Tax plus the full one-off Stamp Duty payment.' : 'Council Tax only.'}</p>
           </li>

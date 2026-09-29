@@ -10,27 +10,32 @@ function parse(query: string): SharedState {
   return parsed.state;
 }
 
-test('the application landing view explicitly selects Leicester with annualisation over twenty years', () => {
+test('the landing view compares Leicester Council Tax only with a default 0.48% property tax', () => {
   assert.deepEqual(parse(''), {
     dataVersion: ENGLAND_DATA_VERSION, policyVersion: POLICY_VERSION, sdltRuleVersion: SDLT_RULE_VERSION,
-    areaCode: 'E06000016', geography: 'LAD', mode: 'annualised-ownership', buyer: 'standard', ownershipYears: 20,
+    areaCode: 'E06000016', geography: 'LAD', mode: 'ongoing-owner', buyer: 'standard', ownershipYears: 20, propertyTaxRatePercent: 0.48,
     display: 'annual', propertyType: 'all', postcode: null,
   });
-  assert.equal(DEFAULT_STATE.mode, 'annualised-ownership');
+  assert.equal(DEFAULT_STATE.mode, 'ongoing-owner');
   const options = stateToComparisonOptions(parse(''));
   assert.equal(options.ownershipYears, 20);
-  assert.deepEqual(options.buyer, STANDARD_BUYER);
+  assert.equal(options.buyer, undefined);
+  assert.equal(options.sdltRuleVersion, undefined);
+  assert.equal(options.propertyTaxRatePercent, 0.48);
+  assert.deepEqual(stateToComparisonOptions({ ...DEFAULT_STATE, mode: 'annualised-ownership' }).buyer, STANDARD_BUYER);
 });
 
 test('supported explicit shared settings override every landing preference', () => {
-  const state: SharedState = { ...DEFAULT_STATE, areaCode: 'E02002856', geography: 'MSOA', mode: 'ongoing-owner',
-    buyer: 'first-time-buyer', ownershipYears: 7, display: 'monthly' };
+  const state: SharedState = { ...DEFAULT_STATE, areaCode: 'E02002856', geography: 'MSOA', mode: 'annualised-ownership',
+    buyer: 'first-time-buyer', ownershipYears: 7, propertyTaxRatePercent: 0.625, display: 'monthly' };
   assert.deepEqual(parse(serializeSharedState(state)), state);
   assert.deepEqual(stateToComparisonOptions(state).buyer, FIRST_TIME_BUYER);
   const params = new URLSearchParams(serializeSharedState(state));
   assert.equal(params.get('data'), ENGLAND_DATA_VERSION);
   assert.equal(params.get('policy'), POLICY_VERSION);
   assert.equal(params.get('rule'), SDLT_RULE_VERSION);
+  assert.equal(params.get('rate'), '0.625');
+  assert.equal(stateToComparisonOptions(state).propertyTaxRatePercent, 0.625);
 });
 
 test('old sample links retain their explicit data release after the England default changes', () => {
@@ -67,6 +72,7 @@ test('invalid settings, ambiguous duplicate keys and unsafe area IDs are rejecte
     'years=9007199254740992', 'years=', 'years=20e0', 'years=01', 'geography=country',
     'type=flat', 'display=unknown', 'area=../../etc', 'area=S02002856', 'postcode=LE1',
     'mode=purchase-year&display=monthly', 'mode=ongoing-owner&mode=purchase-year', 'area=E06000016&area=E06000065',
+    'rate=', 'rate=-1', 'rate=100.0001', 'rate=0.12345', 'rate=NaN', 'rate=Infinity', 'rate=1e-2', 'rate=0.48&rate=1',
   ]) assert.equal(parseSharedState(query).ok, false, query);
 });
 
@@ -90,6 +96,7 @@ test('serialization validates settings and never emits a share link that will us
   assert.throws(() => serializeSharedState({ ...DEFAULT_STATE, ownershipYears: NaN }), /positive whole number/);
   assert.throws(() => serializeSharedState({ ...DEFAULT_STATE, policyVersion: 'unknown' }), /unsupported/);
   assert.throws(() => serializeSharedState({ ...DEFAULT_STATE, mode: 'purchase-year', display: 'monthly' }), /monthly/);
+  assert.throws(() => serializeSharedState({ ...DEFAULT_STATE, propertyTaxRatePercent: NaN }), /Property tax rate/);
 });
 
 test('an explicitly cleared area remains cleared after reload, rather than selecting the landing example', () => {
@@ -103,6 +110,16 @@ test('replaying earlier history restores its selections without changing the lan
   const entries = [serializeSharedState(first), serializeSharedState(second)];
   assert.deepEqual(parse(entries[1]!), second);
   assert.deepEqual(parse(entries[0]!), first);
-  assert.equal(DEFAULT_STATE.mode, 'annualised-ownership');
+  assert.equal(DEFAULT_STATE.mode, 'ongoing-owner');
   assert.equal(DEFAULT_STATE.areaCode, 'E06000016');
+});
+
+test('legacy purchase links keep their chosen period and the default rate; zero is an explicit custom rate', () => {
+  const legacy = parse('mode=annualised-ownership&years=7');
+  assert.equal(legacy.mode, 'annualised-ownership');
+  assert.equal(legacy.ownershipYears, 7);
+  assert.equal(legacy.propertyTaxRatePercent, 0.48);
+  for (const propertyTaxRatePercent of [0, 0.0001, 0.1234, 100]) {
+    assert.equal(parse(serializeSharedState({ ...DEFAULT_STATE, propertyTaxRatePercent })).propertyTaxRatePercent, propertyTaxRatePercent);
+  }
 });

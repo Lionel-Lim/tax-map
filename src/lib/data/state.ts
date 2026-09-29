@@ -2,6 +2,7 @@ import { AREA_SCHEMA_VERSION, ENGLAND_DATA_VERSION, SUPPORTED_DATA_VERSIONS } fr
 import type { AreaComparisonOptions } from '../domain/tax/area.js';
 import type { ComparisonMode } from '../domain/tax/types.js';
 import { POLICY_VERSION } from '../domain/tax/policy.js';
+import { DEFAULT_PROPERTY_TAX_RATE_PERCENT, isPropertyTaxRatePercent, PROPERTY_TAX_RATE_ERROR } from '../domain/tax/property-tax.js';
 import { FIRST_TIME_BUYER, SDLT_RULE_VERSION, STANDARD_BUYER } from '../domain/tax/sdlt.js';
 import type { Geography } from './release.js';
 import { normalisePostcode } from './postcodes.js';
@@ -10,16 +11,18 @@ export type DisplayPreference = 'annual' | 'monthly' | 'percentage';
 export interface SharedState {
   dataVersion: string; policyVersion: string; sdltRuleVersion: string;
   mode: ComparisonMode; buyer: 'standard' | 'first-time-buyer'; ownershipYears: number;
+  propertyTaxRatePercent: number;
   areaCode: string | null; geography: Geography; display: DisplayPreference; propertyType: 'all';
   postcode: string | null;
 }
 /** Application landing defaults; the immutable Phase 1 bundle retains its original M1 defaults. */
 export const DEFAULT_STATE: Readonly<SharedState> = Object.freeze({
   dataVersion: ENGLAND_DATA_VERSION, policyVersion: POLICY_VERSION, sdltRuleVersion: SDLT_RULE_VERSION,
-  mode: 'annualised-ownership', buyer: 'standard', ownershipYears: 20,
+  mode: 'ongoing-owner', buyer: 'standard', ownershipYears: 20,
+  propertyTaxRatePercent: DEFAULT_PROPERTY_TAX_RATE_PERCENT,
   areaCode: 'E06000016', geography: 'LAD', display: 'annual', propertyType: 'all', postcode: null,
 });
-const KEYS = ['data', 'policy', 'rule', 'mode', 'buyer', 'years', 'area', 'geography', 'display', 'type', 'postcode'];
+const KEYS = ['data', 'policy', 'rule', 'mode', 'buyer', 'years', 'rate', 'area', 'geography', 'display', 'type', 'postcode'];
 export type ParsedSharedState = { ok: true; state: SharedState } | { ok: false; errors: string[] };
 
 export function parseSharedState(input: URLSearchParams | string): ParsedSharedState {
@@ -49,6 +52,11 @@ export function parseSharedState(input: URLSearchParams | string): ParsedSharedS
   select('geography', 'geography', ['LAD', 'MSOA']);
   select('display', 'display', ['annual', 'monthly', 'percentage']);
   select('type', 'propertyType', ['all']);
+  const rate = params.get('rate');
+  if (rate !== null) {
+    if (!/^\d+(?:\.\d{1,4})?$/.test(rate) || !isPropertyTaxRatePercent(Number(rate))) errors.push(PROPERTY_TAX_RATE_ERROR);
+    else state.propertyTaxRatePercent = Number(rate);
+  }
   const years = params.get('years');
   if (years !== null) {
     if (!/^[1-9]\d*$/.test(years) || !Number.isSafeInteger(Number(years))) errors.push('Ownership years must be a positive whole number.');
@@ -73,7 +81,7 @@ export function parseSharedState(input: URLSearchParams | string): ParsedSharedS
 /** A whitelist prevents personal amounts or unknown state fields from entering a share URL. */
 export function serializeSharedState(state: SharedState, options: { includePostcode?: boolean; postcode?: string } = {}): string {
   const params = new URLSearchParams({ data: state.dataVersion, policy: state.policyVersion, rule: state.sdltRuleVersion,
-    mode: state.mode, buyer: state.buyer, years: String(state.ownershipYears), geography: state.geography,
+    mode: state.mode, buyer: state.buyer, years: String(state.ownershipYears), rate: String(state.propertyTaxRatePercent), geography: state.geography,
     display: state.display, type: state.propertyType });
   params.set('area', state.areaCode ?? '');
   if (options.includePostcode) {
@@ -89,6 +97,9 @@ export function serializeSharedState(state: SharedState, options: { includePostc
 export function stateToComparisonOptions(state: SharedState): AreaComparisonOptions {
   return { dataVersion: state.dataVersion, dataSchemaVersion: AREA_SCHEMA_VERSION, policyVersion: state.policyVersion,
     mode: state.mode, jurisdiction: 'England', residenceScope: 'primary-residence', ownershipYears: state.ownershipYears,
-    buyer: state.buyer === 'first-time-buyer' ? FIRST_TIME_BUYER : state.buyer === 'standard' ? STANDARD_BUYER : { profile: state.buyer },
-    sdltRuleVersion: state.sdltRuleVersion };
+    propertyTaxRatePercent: state.propertyTaxRatePercent,
+    ...(state.mode !== 'ongoing-owner' ? {
+      buyer: state.buyer === 'first-time-buyer' ? FIRST_TIME_BUYER : state.buyer === 'standard' ? STANDARD_BUYER : { profile: state.buyer },
+      sdltRuleVersion: state.sdltRuleVersion,
+    } : {}) };
 }

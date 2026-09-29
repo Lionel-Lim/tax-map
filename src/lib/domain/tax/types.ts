@@ -25,6 +25,7 @@ export interface ComparisonInput {
   residenceScope: 'primary-residence';
   propertyValuePence: number | null;
   annualCouncilTaxPence: number | ExactPenceInput | null;
+  propertyTaxRatePercent?: number;
   ownershipYears?: number;
   buyer?: unknown;
   sdltRuleVersion?: string;
@@ -57,6 +58,7 @@ export interface AvailableComparison extends ResultContext {
   basis: 'annual' | 'first-year-cash-cost';
   estimateKind: 'area-estimate' | 'personal-comparison' | 'fixture';
   ownershipYears: number | null;
+  propertyTaxRatePercent: number;
   propertyValue: MoneyAmount;
   current: { councilTax: MoneyAmount; sdltUpfront: MoneyAmount; sdltIncluded: MoneyAmount; total: MoneyAmount };
   scenario: { propertyTax: MoneyAmount; councilTax: MoneyAmount; sdlt: MoneyAmount; total: MoneyAmount };

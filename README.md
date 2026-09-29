@@ -2,7 +2,7 @@
 
 An interactive map for exploring how an illustrative property-tax reform could affect a typical home in England. The static SvelteKit application uses pinned official data and browser-side calculations.
 
-Phases 1–3 are complete, and the internal dataset now includes all **296 English councils and 6,856 neighbourhoods (MSOAs)**. The map includes postcode and area search, all three comparison modes, personal inputs, source details and versioned sharing. It opens on the Leicester council estimate, annualised over 20 years.
+Phases 1–3 are complete, and the internal dataset now includes all **296 English councils and 6,856 neighbourhoods (MSOAs)**. The map includes postcode and area search, all three comparison modes, personal inputs, source details and versioned sharing. It opens on the Leicester council estimate, comparing Council Tax with an annual property tax. Users can change the property tax percentage and optionally include Stamp Duty, spread over a custom ownership period (initially 20 years) or included in full in the purchase year. Shared links retain these settings.
 
 - [England expansion](docs/england-expansion.md): national coverage, boundary exclusions, validation and remaining publication work.
 - [Cloudflare deployment](docs/deployment.md): store the project in GitHub and manually publish to `taxmap.limsight.com` on the free plan.

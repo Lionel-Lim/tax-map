@@ -1,6 +1,6 @@
 <svelte:head>
   <title>How it works · Tax Map</title>
-  <meta name="description" content="How the illustrative 0.48% property tax comparison works, what its estimates mean, and which assumptions and data limits apply." />
+  <meta name="description" content="How the customisable property tax comparison works, what its estimates mean, and which assumptions and data limits apply." />
 </svelte:head>
 
 <article class="prose">
@@ -16,25 +16,28 @@
 
   <h2 id="scenario">The scenario</h2>
   <p>
-    <strong>Illustrative 0.48% property tax — uncapped</strong> applies an annual charge of 0.48% to
-    the selected property value. It assumes this replaces Council Tax for an owner-occupied primary
+    The <strong>illustrative property tax — uncapped</strong> applies your chosen annual percentage to
+    the selected property value, starting at <strong>0.48%</strong>. You can change the rate in the comparison settings.
+    It assumes this replaces Council Tax for an owner-occupied primary
     residence and, in supported purchase comparisons, also replaces Stamp Duty Land Tax (SDLT).
     It does not estimate a tenant's change in personal costs.
   </p>
   <p>
-    The rate is informed by <a href="https://fairershare.org.uk/proportional-property-tax/">Fairer Share's proposal</a>.
+    The default rate is informed by <a href="https://fairershare.org.uk/proportional-property-tax/">Fairer Share's proposal</a>.
     Transition caps, deferral, second-home rules and changes in owner/occupier liability are excluded.
     This illustration is neither an enacted tax nor a complete implementation of that proposal.
   </p>
 
   <h2 id="comparisons">Three ways to compare</h2>
+  <p>The default compares Council Tax with property tax, excluding Stamp Duty. Choose an “Include Stamp Duty” option to include purchase costs.</p>
   <dl>
     <dt><strong>Yearly costs without a purchase</strong></dt>
     <dd>Compare one year of Council Tax with one year of the illustrative property tax.</dd>
     <dt><strong>Spread purchase costs over time</strong></dt>
     <dd>
       Compare Council Tax plus purchase SDLT divided by the chosen ownership period with the annual
-      scenario bill. The initial assumption is <strong>20 years</strong>. This is a simple allocation,
+      scenario bill. The initial assumption is <strong>20 years</strong>; change “Years of ownership” to any positive whole number.
+      Stamp Duty is still paid once when buying. This is a simple allocation,
       excluding growth, future tax changes, financing and discounting.
     </dd>
     <dt><strong>Costs in the purchase year</strong></dt>
@@ -143,6 +146,7 @@
       The current release uses methodology <code>phase0-v1</code>, policy <code>illustrative-ppt:1.0.0</code>,
       data <code>england-2026-09-26-v1</code> (with the original <code>sample-2026-09-26-v1</code> retained for old links) and purchase rules <code>sdlt-england-2025-04-01-v1</code>.
       Source references, dates and availability reasons remain attached to the results.
+      Shared links also retain your property tax rate, comparison mode and ownership period. Links without a rate use 0.48%.
     </p>
   </details>
   <p>

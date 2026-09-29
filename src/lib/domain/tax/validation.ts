@@ -1,5 +1,6 @@
 import { parseRational } from './rational.js';
 import { INPUT_SCHEMA_VERSION } from './types.js';
+import { isPropertyTaxRatePercent, PROPERTY_TAX_RATE_ERROR } from './property-tax.js';
 import type { ComparisonInput, Issue, JsonValue, Provenance } from './types.js';
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
@@ -57,13 +58,16 @@ export function validateComparisonInput(value: unknown):
   const add = (code: string, field: string, message: string) => issues.push({ code, field, message });
   if (!isRecord(value)) return { valid: false, status: 'invalid-input', issues: [{ code: 'invalid-input-schema', field: '', message: 'Expected a comparison input object.' }] };
   const keys = new Set(['schemaVersion', 'policyVersion', 'mode', 'jurisdiction', 'residenceScope', 'propertyValuePence',
-    'annualCouncilTaxPence', 'ownershipYears', 'buyer', 'sdltRuleVersion', 'provenance', 'unavailableReasons', 'qualityFlags']);
+    'annualCouncilTaxPence', 'propertyTaxRatePercent', 'ownershipYears', 'buyer', 'sdltRuleVersion', 'provenance', 'unavailableReasons', 'qualityFlags']);
   for (const key of Object.keys(value)) if (!keys.has(key)) add('unknown-input-field', key, 'Unrecognised input field.');
   if (value.schemaVersion !== INPUT_SCHEMA_VERSION) add('unsupported-input-schema', 'schemaVersion', 'Unsupported input schema version.');
   if (typeof value.policyVersion !== 'string' || !value.policyVersion) add('invalid-policy-version', 'policyVersion', 'An explicit policy version is required.');
   if (typeof value.mode !== 'string' || !['ongoing-owner', 'annualised-ownership', 'purchase-year'].includes(value.mode)) add('unsupported-comparison-mode', 'mode', 'Unknown comparison mode.');
   if (value.propertyValuePence !== null && !isMoneyInput(value.propertyValuePence)) add('invalid-property-value', 'propertyValuePence', 'Use non-negative safe integer pence, or null for unavailable.');
   const bill = value.annualCouncilTaxPence;
+  if (value.propertyTaxRatePercent !== undefined && !isPropertyTaxRatePercent(value.propertyTaxRatePercent)) {
+    add('invalid-property-tax-rate', 'propertyTaxRatePercent', PROPERTY_TAX_RATE_ERROR);
+  }
   if (bill !== null && !isMoneyInput(bill)) {
     if (!validExactPence(bill)) add('invalid-council-tax', 'annualCouncilTaxPence', 'Use non-negative pence or a valid exact fraction.');
   }

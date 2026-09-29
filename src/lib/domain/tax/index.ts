@@ -5,5 +5,6 @@ export * from './council-tax.js';
 export * from './policy.js';
 export * from './sdlt.js';
 export * from './comparison.js';
+export * from './property-tax.js';
 export * from './area.js';
 export { validateComparisonInput } from './validation.js';

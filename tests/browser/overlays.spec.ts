@@ -14,9 +14,9 @@ for (const width of [390, 1440]) {
   test(`help overlays at ${width}px preserve layout, switch cleanly and return keyboard focus`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
-    await expect(page.getByTestId('primary-difference')).toContainText('£861');
+    await expect(page.getByTestId('primary-difference')).toContainText('£741');
     const before = await geometry(page);
-    const trigger = page.getByRole('button', { name: 'About the 0.48% scenario', exact: true });
+    const trigger = page.getByRole('button', { name: 'About the property tax scenario', exact: true });
     await trigger.focus();
     await page.keyboard.press('Enter');
     const help = page.getByRole('dialog', { name: 'About this scenario', exact: true });
@@ -48,6 +48,7 @@ for (const width of [390, 1440]) {
 test('help dismisses outside, stays within the resized viewport and uses live ownership years', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByTestId('primary-difference')).toBeVisible();
+  await page.getByLabel('Compare costs', { exact: true }).selectOption('annualised-ownership');
   await page.getByLabel('Years of ownership', { exact: true }).fill('30');
   await page.getByLabel('Years of ownership', { exact: true }).press('Tab');
   await page.getByRole('button', { name: 'Why the number of years matters', exact: true }).click();

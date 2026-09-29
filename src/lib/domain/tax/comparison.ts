@@ -2,6 +2,7 @@ import { add, subtract, multiply, divide, compare, rational, parseRational, seri
 import type { Rational } from './rational.js';
 import { moneyAmount } from './money.js';
 import { ILLUSTRATIVE_POLICY, POLICY_VERSION, validatePolicy } from './policy.js';
+import { DEFAULT_PROPERTY_TAX_RATE_PERCENT, propertyTaxRateFraction } from './property-tax.js';
 import { calculateSdlt } from './sdlt.js';
 import type { SdltResult } from './sdlt.js';
 import { isRecord, validProvenance, validateComparisonInput } from './validation.js';
@@ -54,7 +55,8 @@ export function compareTaxes(raw: unknown, policy: unknown = ILLUSTRATIVE_POLICY
   const sdltIncluded = input.mode === 'annualised-ownership'
     ? divide(upfront, rational(BigInt(input.ownershipYears!))) : upfront;
   const current = add(councilTax, sdltIncluded);
-  const propertyTax = multiply(value, rational(BigInt(selected.policy.annualRate.numerator), BigInt(selected.policy.annualRate.denominator)));
+  const propertyTaxRatePercent = input.propertyTaxRatePercent ?? DEFAULT_PROPERTY_TAX_RATE_PERCENT;
+  const propertyTax = multiply(value, propertyTaxRateFraction(propertyTaxRatePercent));
   const difference = subtract(propertyTax, current);
   const basis = input.mode === 'purchase-year' ? 'first-year-cash-cost' : 'annual';
   const percentage = current.numerator === 0n ? null : multiply(divide(difference, current), rational(100n));
@@ -67,6 +69,7 @@ export function compareTaxes(raw: unknown, policy: unknown = ILLUSTRATIVE_POLICY
     estimateKind: [provenance.valueSource, provenance.councilTaxSource].includes('personal-input') ? 'personal-comparison'
       : provenance.valueSource === 'fixture' && provenance.councilTaxSource === 'fixture' ? 'fixture' : 'area-estimate',
     ownershipYears: input.mode === 'annualised-ownership' ? input.ownershipYears! : null,
+    propertyTaxRatePercent,
     propertyValue: moneyAmount(value),
     current: { councilTax: moneyAmount(councilTax), sdltUpfront: moneyAmount(upfront), sdltIncluded: moneyAmount(sdltIncluded), total: moneyAmount(current) },
     scenario: { propertyTax: moneyAmount(propertyTax), councilTax: moneyAmount(ZERO), sdlt: moneyAmount(ZERO), total: moneyAmount(propertyTax) },
@@ -76,7 +79,8 @@ export function compareTaxes(raw: unknown, policy: unknown = ILLUSTRATIVE_POLICY
     direction: difference.numerator > 0n ? 'higher' : difference.numerator < 0n ? 'lower' : 'unchanged',
     classification: { kind: classification, basis, thresholdPence: '10000' },
     qualityFlags: [...new Set(input.qualityFlags ?? [])],
-    assumptions: [selected.policy.label, 'Owner-occupied primary residence in England.',
+    assumptions: [propertyTaxRatePercent === DEFAULT_PROPERTY_TAX_RATE_PERCENT ? selected.policy.label
+      : `Illustrative ${propertyTaxRatePercent}% property tax — uncapped (custom rate).`, 'Owner-occupied primary residence in England.',
       'The scenario replaces Council Tax and SDLT for the supported purchase cases.',
       'No transition cap, deferral, personal discounts or exemptions are modelled.',
       ...(provenance.valueSource === 'area-estimate' ? ['The area median transaction price is a proxy, not an individual property valuation.'] : []),

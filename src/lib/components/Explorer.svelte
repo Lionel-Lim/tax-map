@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { AreaComparisonOptions, ComparisonResult } from '$lib/domain/tax/index.js';
-  import { compareArea } from '$lib/domain/tax/index.js';
+  import { compareArea, isPropertyTaxRatePercent } from '$lib/domain/tax/index.js';
   import { loadRelease, createPostcodeLookup, parseSharedState, serializeSharedState, DEFAULT_STATE, stateToComparisonOptions } from '$lib/data/index.js';
   import type { SharedState } from '$lib/data/index.js';
   import TaxMap from '$lib/map/TaxMap.svelte';
@@ -46,6 +46,8 @@
   let detailGeneration = 0;
 
   let options = $derived(stateToComparisonOptions(scenario));
+  let rateValid = $derived(isPropertyTaxRatePercent(scenario.propertyTaxRatePercent));
+  let yearsValid = $derived(Number.isSafeInteger(scenario.ownershipYears) && scenario.ownershipYears > 0);
   let areaResults = $derived.by(() => {
     const result: Record<string, ComparisonResult> = {};
     if (!linkError) for (const area of release?.areas ?? []) result[area.code] = compareArea(area, options);
@@ -92,7 +94,7 @@
     } catch (error) { settingsError = (error as Error).message; }
   }
   function changeSetting() {
-    if (scenario.mode !== 'annualised-ownership' && (!Number.isSafeInteger(scenario.ownershipYears) || scenario.ownershipYears < 1)) scenario.ownershipYears = 20;
+    if (scenario.mode !== 'annualised-ownership' && !yearsValid) scenario.ownershipYears = DEFAULT_STATE.ownershipYears;
     if (scenario.mode === 'purchase-year' && scenario.display === 'monthly') scenario.display = 'annual';
     remember();
   }
@@ -231,9 +233,9 @@
 <section class="explorer-heading">
   <div>
     <h1>See how property tax could change</h1>
-    <div class="lead">Compare a typical home’s Council Tax and relevant Stamp Duty with an illustrative <strong>0.48% annual property tax.</strong>
-      <HelpPopover title="About this scenario" label="About the 0.48% scenario" fallback="/methodology/#scenario">
-        <p>The annual tax is 0.48% of the property value.</p>
+    <div class="lead">Compare a typical home’s Council Tax with an illustrative <strong>annual property tax.</strong> Set your own rate and optionally include Stamp Duty below.
+      <HelpPopover title="About this scenario" label="About the property tax scenario" fallback="/methodology/#scenario">
+        <p>The annual tax is the property value multiplied by your chosen rate. The default rate is 0.48%.</p>
         <p>This illustration assumes it replaces Council Tax and, for the purchase comparisons, Stamp Duty. It has no transition cap.</p>
         <p>It is not an enacted tax. The estimate covers an owner-occupied main home.</p>
         <a href="/methodology/#scenario">Read how the estimate works →</a>
@@ -261,10 +263,18 @@
 
 {#if release && !linkError}
   <section class="scenario-controls" aria-label="Comparison settings">
-    {#if settingsError}<p class="error-text" role="alert">{settingsError}</p>{/if}
+    {#if settingsError}<p id="settings-error" class="error-text" role="alert">{settingsError}</p>{/if}
+    <div class="control-field rate-control">
+      <div class="field-label"><label for="property-tax-rate">Annual property tax (%)</label><HelpPopover title="Choose a property tax rate" fallback="/methodology/#scenario">
+        <p>The annual property tax is your chosen percentage of the property value. For example, 0.48% of £300,000 is £1,440 per year.</p>
+        <p>The default is 0.48%. Enter a rate from 0% to 100%, with up to four decimal places.</p>
+        <p>Changing the rate updates all area estimates and your selected comparison.</p>
+      </HelpPopover></div>
+      <input id="property-tax-rate" type="number" min="0" max="100" step="0.0001" bind:value={() => scenario.propertyTaxRatePercent, value => scenario.propertyTaxRatePercent = value ?? NaN} onchange={changeSetting} aria-invalid={!rateValid} aria-describedby={!rateValid && settingsError ? 'settings-error' : undefined} />
+    </div>
     <div class="control-field basis-control">
       <div class="field-label"><label for="comparison-mode">Compare costs</label><HelpPopover title="Choose a comparison" fallback="/methodology/#comparisons"><ComparisonHelp /></HelpPopover></div>
-      <select id="comparison-mode" bind:value={scenario.mode} onchange={changeSetting}><option value="annualised-ownership">Spread purchase costs over time</option><option value="ongoing-owner">Yearly costs without a purchase</option><option value="purchase-year">Costs in the purchase year</option></select>
+      <select id="comparison-mode" bind:value={scenario.mode} onchange={changeSetting}><option value="ongoing-owner">Council Tax only</option><option value="annualised-ownership">Include Stamp Duty · spread over years</option><option value="purchase-year">Include Stamp Duty · purchase year</option></select>
     </div>
     {#if scenario.mode !== 'ongoing-owner'}
       <div class="control-field buyer-control">
@@ -278,7 +288,7 @@
             <p>Here, its cost is divided by <strong>{scenario.ownershipYears} years</strong> to show a yearly comparison. Changing the number changes this comparison; it does not change how Stamp Duty is paid.</p>
             <p>The illustration assumes no price growth and does not discount future costs.</p>
           </HelpPopover></div>
-          <input id="ownership-years" type="number" min="1" step="1" bind:value={scenario.ownershipYears} onchange={changeSetting} />
+          <input id="ownership-years" type="number" min="1" step="1" bind:value={() => scenario.ownershipYears, value => scenario.ownershipYears = value ?? NaN} onchange={changeSetting} aria-invalid={!yearsValid} aria-describedby={!yearsValid && settingsError ? 'settings-error' : undefined} />
         </div>
       {/if}
     {/if}
@@ -290,7 +300,7 @@
       </HelpPopover></div>
       <select id="display-result" bind:value={scenario.display} onchange={changeSetting}><option value="annual">{scenario.mode === 'purchase-year' ? 'Pounds in purchase year' : 'Pounds per year'}</option>{#if scenario.mode !== 'purchase-year'}<option value="monthly">Monthly equivalent</option>{/if}<option value="percentage">Percentage</option></select>
     </div>
-    <p class="control-note">All property types combined.</p>
+    <p class="control-note">All property types combined. {scenario.mode === 'ongoing-owner' ? 'Stamp Duty is excluded. Choose “Include Stamp Duty” to add purchase costs.' : scenario.mode === 'annualised-ownership' ? 'Stamp Duty is paid once; its cost is divided by your chosen years of ownership.' : 'Includes the full one-off Stamp Duty payment in the purchase year.'}</p>
     {#if scenario.mode !== 'ongoing-owner' && scenario.buyer === 'first-time-buyer'}
       <div class="buyer-eligibility">All buyers must qualify. Supported up to <strong>£500,000</strong>. <HelpPopover title="Buyer assumptions" label="About first-time-buyer eligibility" fallback="/methodology/#buyers">{@render buyerHelp()}</HelpPopover></div>
     {/if}

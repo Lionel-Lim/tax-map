@@ -13,7 +13,7 @@ test('England mobile overview and lazy detail stay within measured delivery budg
     .map(entry => { const r = entry as PerformanceResourceTiming; return { path: new URL(r.name).pathname, encodedBytes: r.encodedBodySize, decodedBytes: r.decodedBodySize }; }));
   const started = Date.now();
   await page.goto('/map/');
-  await expect(page.getByTestId('primary-difference')).toContainText('£861');
+  await expect(page.getByTestId('primary-difference')).toContainText('£741');
   await expect(page.getByRole('button', { name: 'Show all England councils', exact: true })).toBeVisible();
   await expect.poll(() => page.locator('.area-map-label').count()).toBeGreaterThan(0);
   const overviewMilliseconds = Date.now() - started;
@@ -28,9 +28,9 @@ test('England mobile overview and lazy detail stay within measured delivery budg
   const afterLookup = await resources();
   const detail = afterLookup.filter(row => /\/postcodes\/|\/areas\/msoa\/|\/boundaries\/msoa\//.test(row.path));
   const changeStarted = Date.now();
-  await page.getByLabel('Compare costs', { exact: true }).selectOption('ongoing-owner');
-  await expect(page.getByLabel('Compare costs', { exact: true })).toHaveValue('ongoing-owner');
-  await expect(page.getByTestId('impact-panel')).toContainText('Ongoing-owner comparison');
+  await page.getByLabel('Compare costs', { exact: true }).selectOption('annualised-ownership');
+  await expect(page.getByLabel('Compare costs', { exact: true })).toHaveValue('annualised-ownership');
+  await expect(page.getByTestId('impact-panel')).toContainText('Purchase costs spread over 20 years');
   const scenarioMilliseconds = Date.now() - changeStarted;
   const sum = (rows: typeof initial, field: 'encodedBytes' | 'decodedBytes') => rows.reduce((total, row) => total + row[field], 0);
   const report = {

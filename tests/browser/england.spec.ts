@@ -14,7 +14,7 @@ test('England landing loads councils and global search without national neighbou
   const requests: string[] = [];
   page.on('request', request => requests.push(new URL(request.url()).pathname));
   await page.goto('/map/');
-  await expect(page.getByTestId('primary-difference')).toContainText('£861');
+  await expect(page.getByTestId('primary-difference')).toContainText('£741');
   await expect(page.locator('.coverage-stamp')).toContainText('296');
   await expect(page.locator('.coverage-stamp')).toContainText('6,856');
   await expect(page.getByRole('button', { name: 'Show all England councils', exact: true })).toBeVisible();
@@ -111,6 +111,6 @@ test('a failed shared neighbourhood can recover through a new area selection', a
   await expect(page.getByRole('heading', { name: 'Data could not be loaded' })).toBeVisible();
   await page.getByLabel('Area name or code').fill('Leicester');
   await page.locator('button[data-area-code="E06000016"]').click();
-  await expect(page.getByTestId('primary-difference')).toContainText('£861');
+  await expect(page.getByTestId('primary-difference')).toContainText('£741');
   await expect(page.getByRole('heading', { name: 'Data could not be loaded' })).toHaveCount(0);
 });

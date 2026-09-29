@@ -12,7 +12,7 @@ test('sample mobile payload and interaction budget', async ({ page }) => {
   page.on('request', request => requests.push(new URL(request.url()).pathname));
   const started = Date.now();
   await page.goto('/map/?data=sample-2026-09-26-v1');
-  await expect(page.getByTestId('primary-difference')).toContainText('£861');
+  await expect(page.getByTestId('primary-difference')).toContainText('£741');
   await expect(page.locator('.area-map-label')).toHaveCount(5);
   await expect(page.getByRole('button', { name: 'Show all sample councils', exact: true })).toBeVisible();
   const overviewMilliseconds = Date.now() - started;
@@ -26,8 +26,8 @@ test('sample mobile payload and interaction budget', async ({ page }) => {
   await expect(page.getByTestId('postcode-status')).toContainText('Bradgate');
   const postcodeMilliseconds = Date.now() - lookupStarted;
   const changeStarted = Date.now();
-  await page.getByLabel('Compare costs', { exact: true }).selectOption('ongoing-owner');
-  await expect(page.getByTestId('primary-difference')).toContainText('£814');
+  await page.getByLabel('Compare costs', { exact: true }).selectOption('annualised-ownership');
+  await expect(page.getByTestId('primary-difference')).toContainText('£935');
   const scenarioMilliseconds = Date.now() - changeStarted;
   const lookup = await page.evaluate(() => performance.getEntriesByType('resource')
     .filter(entry => entry.name.includes('/postcodes/'))

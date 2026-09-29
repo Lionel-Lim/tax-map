@@ -20,6 +20,7 @@ export interface AreaComparisonOptions {
   policyVersion: string; mode: ComparisonMode;
   jurisdiction: 'England'; residenceScope: 'primary-residence';
   ownershipYears?: number; buyer?: unknown; sdltRuleVersion?: string;
+  propertyTaxRatePercent?: number;
   overrides?: { propertyValuePence?: number; annualCouncilTaxPence?: number };
 }
 
@@ -43,7 +44,7 @@ export function compareArea(areaValue: unknown, optionsValue: unknown, policy?: 
   const bad = (code: string, field: string, message: string, status: 'unavailable' | 'invalid-input' = 'invalid-input') =>
     failure(optionsValue, status, [{ code, field, message }]);
   if (!isRecord(optionsValue)) return bad('invalid-area-options', 'options', 'Area comparison options are required.');
-  const allowed = new Set(['dataVersion', 'dataSchemaVersion', 'policyVersion', 'mode', 'jurisdiction', 'residenceScope', 'ownershipYears', 'buyer', 'sdltRuleVersion', 'overrides']);
+  const allowed = new Set(['dataVersion', 'dataSchemaVersion', 'policyVersion', 'mode', 'jurisdiction', 'residenceScope', 'propertyTaxRatePercent', 'ownershipYears', 'buyer', 'sdltRuleVersion', 'overrides']);
   if (Object.keys(optionsValue).some(k => !allowed.has(k))) return bad('unknown-area-option', 'options', 'Unrecognised area option.');
   if (typeof optionsValue.dataVersion !== 'string' || !SUPPORTED_DATA_VERSIONS.includes(optionsValue.dataVersion)) return bad('unsupported-data-version', 'dataVersion', 'Load the explicitly requested supported data release.', 'unavailable');
   if (optionsValue.dataSchemaVersion !== AREA_SCHEMA_VERSION) return bad('unsupported-data-schema', 'dataSchemaVersion', 'Unsupported area data schema.', 'unavailable');
@@ -103,6 +104,7 @@ export function compareArea(areaValue: unknown, optionsValue: unknown, policy?: 
     residenceScope: optionsValue.residenceScope,
     propertyValuePence: valueOverride ? overrides.propertyValuePence : area.pricePence,
     annualCouncilTaxPence: billOverride ? overrides.annualCouncilTaxPence : area.councilTaxExactPence,
+    ...(optionsValue.propertyTaxRatePercent !== undefined ? { propertyTaxRatePercent: optionsValue.propertyTaxRatePercent } : {}),
     ...(optionsValue.ownershipYears !== undefined ? { ownershipYears: optionsValue.ownershipYears } : {}),
     ...(optionsValue.buyer !== undefined ? { buyer: optionsValue.buyer } : {}),
     ...(optionsValue.sdltRuleVersion !== undefined ? { sdltRuleVersion: optionsValue.sdltRuleVersion } : {}),
