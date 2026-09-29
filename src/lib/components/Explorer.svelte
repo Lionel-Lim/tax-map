@@ -8,6 +8,9 @@
   import MapLegend from '$lib/map/MapLegend.svelte';
   import { resultPresentation, geographyLabel } from '$lib/map/presentation.js';
   import ImpactPanel from './ImpactPanel.svelte';
+  import HelpPopover from './HelpPopover.svelte';
+  import OverlayDialog from './OverlayDialog.svelte';
+  import ComparisonHelp from './ComparisonHelp.svelte';
 
   let scenario = $state<SharedState>({ ...DEFAULT_STATE });
   let release = $state<Awaited<ReturnType<typeof loadRelease>> | null>(null);
@@ -26,7 +29,9 @@
   let listLimit = $state(12);
   let valueInput = $state('');
   let billInput = $state('');
-  let personalError = $state('');
+  let personalErrors = $state({ value: '', bill: '' });
+  let personalOpen = $state(false);
+  let shareOpen = $state(false);
   let overrides = $state<AreaComparisonOptions['overrides']>({});
   let shareUrl = $state('');
   let shareMessage = $state('');
@@ -76,8 +81,8 @@
     if (scenario.geography === 'MSOA' && selected) void requestDistrict(selected.parentCode ?? selected.code);
   }
 
-  function resetPersonal() { overrides = {}; valueInput = ''; billInput = ''; personalError = ''; }
-  function clearShared() { shareUrl = ''; shareMessage = ''; }
+  function resetPersonal() { overrides = {}; valueInput = ''; billInput = ''; personalErrors = { value: '', bill: '' }; personalOpen = false; }
+  function clearShared() { shareUrl = ''; shareMessage = ''; shareOpen = false; }
   function remember() {
     clearShared();
     try {
@@ -144,22 +149,24 @@
     return amount;
   }
   function applyPersonal() {
-    try {
-      const value = moneyInput(valueInput), bill = moneyInput(billInput);
-      overrides = { ...(value !== undefined ? { propertyValuePence: value } : {}), ...(bill !== undefined ? { annualCouncilTaxPence: bill } : {}) };
-      personalError = ''; clearShared();
-    } catch (error) { personalError = (error as Error).message; }
+    personalErrors = { value: '', bill: '' };
+    let value: number | undefined, bill: number | undefined;
+    try { value = moneyInput(valueInput); } catch (error) { personalErrors.value = (error as Error).message; }
+    try { bill = moneyInput(billInput); } catch (error) { personalErrors.bill = (error as Error).message; }
+    if (personalErrors.value || personalErrors.bill) return;
+    overrides = { ...(value !== undefined ? { propertyValuePence: value } : {}), ...(bill !== undefined ? { annualCouncilTaxPence: bill } : {}) };
+    clearShared(); personalOpen = false;
   }
   function createShare() {
     try {
       const query = serializeSharedState(scenario, { includePostcode, postcode: matchedPostcode ?? undefined });
       shareUrl = `${window.location.origin}/map/?${query}`;
-      shareMessage = 'Area-estimate link ready. Personal amounts are excluded.';
+      shareMessage = 'Link ready. Your entered figures are excluded.'; shareOpen = true;
     } catch (error) { shareMessage = (error as Error).message; }
   }
   async function copyShare() {
-    try { await navigator.clipboard.writeText(shareUrl); shareMessage = 'Link copied. Personal amounts are excluded.'; }
-    catch { shareMessage = 'Select and copy the link below.'; }
+    try { await navigator.clipboard.writeText(shareUrl); shareMessage = 'Link copied. Your entered figures are excluded.'; }
+    catch { shareMessage = 'Copy this link manually.'; }
   }
   async function readLocation() {
     const generation = ++lookupGeneration;
@@ -214,11 +221,38 @@
   });
 </script>
 
+{#snippet buyerHelp()}
+  <p>This model assumes UK-resident individuals buying one main home as a freehold purchase.</p>
+  <p>It excludes additional-property surcharges, shared ownership, linked transactions and new lease rent.</p>
+  <p>For the first-time-buyer option, every purchaser must meet HMRC’s eligibility rules.</p>
+  <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates" target="_blank" rel="noreferrer">Check official Stamp Duty guidance ↗</a>
+{/snippet}
+
 <section class="explorer-heading">
-  <div><p class="eyebrow">A DIFFERENT WAY TO TAX PROPERTY</p><h1>What would change<br class="mobile-break" /> for a typical home?</h1><p class="lead">Explore an illustrative <strong>0.48% annual property tax</strong>, compared with Council Tax and Stamp Duty.</p></div>
+  <div>
+    <h1>See how property tax could change</h1>
+    <div class="lead">Compare a typical home’s Council Tax and relevant Stamp Duty with an illustrative <strong>0.48% annual property tax.</strong>
+      <HelpPopover title="About this scenario" label="About the 0.48% scenario" fallback="/methodology/#scenario">
+        <p>The annual tax is 0.48% of the property value.</p>
+        <p>This illustration assumes it replaces Council Tax and, for the purchase comparisons, Stamp Duty. It has no transition cap.</p>
+        <p>It is not an enacted tax. The estimate covers an owner-occupied main home.</p>
+        <a href="/methodology/#scenario">Read how the estimate works →</a>
+      </HelpPopover>
+    </div>
+    <p class="first-action">Enter a postcode to explore your area.</p>
+  </div>
   <div class="coverage-stamp"><strong>{release?.manifest.coverage.LAD.total ?? 296}</strong><span>{isEngland || !release ? 'English councils' : 'sample councils'}<br />{(release?.manifest.coverage.MSOA.total ?? 6856).toLocaleString('en-GB')} neighbourhoods</span></div>
 </section>
-<div class="scope-strip"><span class="status-dot"></span><strong>{isEngland || !release ? 'Explore England' : 'Archived five-council sample'}</strong><span>{release ? `${release.manifest.coverage.LAD.available} council estimates · ${release.manifest.coverage.MSOA.available.toLocaleString('en-GB')} neighbourhood estimates · data gaps stay visible` : 'Council and neighbourhood estimates from pinned official data'}</span><a href="/data-sources/">Coverage & limitations ↗</a></div>
+<div class="scope-strip">
+  <span class="status-dot"></span><strong>{isEngland || !release ? 'England · some estimates unavailable' : 'Archived sample · some estimates unavailable'}</strong>
+  <HelpPopover title="Where estimates are available" fallback="/data-sources/#coverage">
+    <p>Council estimates: <strong>{release?.manifest.coverage.LAD.available ?? 293} of {release?.manifest.coverage.LAD.total ?? 296}</strong>.</p>
+    <p>Neighbourhood estimates: <strong>{(release?.manifest.coverage.MSOA.available ?? 2961).toLocaleString('en-GB')} of {(release?.manifest.coverage.MSOA.total ?? 6856).toLocaleString('en-GB')}</strong>.</p>
+    <p>Some areas lack the data or valid boundaries needed for an estimate. Missing data is never counted as zero.</p>
+    <a href="/data-sources/#coverage">See coverage and sources →</a>
+  </HelpPopover>
+  <a href="/data-sources/">Data & coverage →</a>
+</div>
 {#if release && !isEngland}<p class="archive-notice">This shared link uses the original five-council release. <a href="/map/" onclick={(event) => { if (!event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) { event.preventDefault(); useCurrentData(); } }}>Explore the new England-wide data →</a></p>{/if}
 <noscript><p class="notice">Enable JavaScript to search and calculate. The <a href="/methodology/">methodology</a> and <a href="/data-sources/">source pages</a> remain available.</p></noscript>
 {#if loading}<div class="loading-state" role="status">Loading the verified data…</div>{/if}
@@ -228,43 +262,113 @@
 {#if release && !linkError}
   <section class="scenario-controls" aria-label="Comparison settings">
     {#if settingsError}<p class="error-text" role="alert">{settingsError}</p>{/if}
-    <label class="basis-control">Comparison basis<select aria-label="Comparison basis" bind:value={scenario.mode} onchange={changeSetting}><option value="annualised-ownership">Annualised ownership</option><option value="ongoing-owner">Ongoing owner</option><option value="purchase-year">Purchase year</option></select></label>
+    <div class="control-field basis-control">
+      <div class="field-label"><label for="comparison-mode">Compare costs</label><HelpPopover title="Choose a comparison" fallback="/methodology/#comparisons"><ComparisonHelp /></HelpPopover></div>
+      <select id="comparison-mode" bind:value={scenario.mode} onchange={changeSetting}><option value="annualised-ownership">Spread purchase costs over time</option><option value="ongoing-owner">Yearly costs without a purchase</option><option value="purchase-year">Costs in the purchase year</option></select>
+    </div>
     {#if scenario.mode !== 'ongoing-owner'}
-      <label>Buyer profile<select aria-label="Buyer profile" bind:value={scenario.buyer} onchange={changeSetting}><option value="standard">Standard single-home buyer</option><option value="first-time-buyer">Eligible first-time buyer</option></select></label>
-      {#if scenario.mode === 'annualised-ownership'}<label class="years-control">Ownership years<input aria-label="Ownership years" type="number" min="1" step="1" bind:value={scenario.ownershipYears} onchange={changeSetting} /></label>{/if}
+      <div class="control-field buyer-control">
+        <div class="field-label"><label for="buyer-type">Buyer type</label><HelpPopover title="Buyer assumptions" fallback="/methodology/#buyers">{@render buyerHelp()}</HelpPopover></div>
+        <select id="buyer-type" bind:value={scenario.buyer} onchange={changeSetting}><option value="standard">Standard main-home buyer</option><option value="first-time-buyer">Eligible first-time buyer</option></select>
+      </div>
+      {#if scenario.mode === 'annualised-ownership'}
+        <div class="control-field years-control">
+          <div class="field-label"><label for="ownership-years">Years of ownership</label><HelpPopover title="Why the number of years matters" fallback="/methodology/#comparisons">
+            <p>Stamp Duty is normally paid once when buying.</p>
+            <p>Here, its cost is divided by <strong>{scenario.ownershipYears} years</strong> to show a yearly comparison. Changing the number changes this comparison; it does not change how Stamp Duty is paid.</p>
+            <p>The illustration assumes no price growth and does not discount future costs.</p>
+          </HelpPopover></div>
+          <input id="ownership-years" type="number" min="1" step="1" bind:value={scenario.ownershipYears} onchange={changeSetting} />
+        </div>
+      {/if}
     {/if}
-    <label>Display result<select aria-label="Display result" bind:value={scenario.display} onchange={changeSetting}><option value="annual">{scenario.mode === 'purchase-year' ? 'Purchase-year £' : 'Annual £'}</option>{#if scenario.mode !== 'purchase-year'}<option value="monthly">Monthly £ equivalent</option>{/if}<option value="percentage">Percentage change</option></select></label>
-    <label>Property type<select aria-label="Property type" disabled><option>All properties</option></select></label>
-    <p class="control-note">Only all-property inputs are supported by this release. {scenario.mode === 'annualised-ownership' ? `One-off Stamp Duty is spread over ${scenario.ownershipYears} years, with no price growth or discounting.` : ''}</p>
-    {#if scenario.mode !== 'ongoing-owner'}<details class="buyer-scope"><summary>Buyer assumptions & unsupported cases</summary><p>UK-resident individuals buying a single primary residence; no additional-property surcharge, shared ownership, linked transaction or new lease rent. The model assumes a freehold purchase. {scenario.buyer === 'first-time-buyer' ? 'All purchasers are assumed eligible first-time buyers under HMRC’s worldwide ownership definition. Above £500,000 the first-time-buyer model is unavailable; it does not silently switch profiles.' : ''} <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates" target="_blank" rel="noreferrer">Check official SDLT guidance ↗</a></p></details>{/if}
+    <div class="control-field display-control">
+      <div class="field-label"><label for="display-result">Show change as</label><HelpPopover title="Result units" fallback="/methodology/#comparisons">
+        {#if scenario.mode === 'purchase-year'}<p><strong>Pounds in purchase year:</strong> the difference in first-year costs, including the one-off purchase tax. There is no monthly equivalent in this mode.</p>
+        {:else}<p><strong>Pounds per year:</strong> the estimated yearly difference.</p><p><strong>Monthly equivalent:</strong> the yearly difference divided by 12, not a monthly bill.</p>{/if}
+        <p><strong>Percentage:</strong> the difference compared with current costs. It is unavailable when current costs are zero.</p>
+      </HelpPopover></div>
+      <select id="display-result" bind:value={scenario.display} onchange={changeSetting}><option value="annual">{scenario.mode === 'purchase-year' ? 'Pounds in purchase year' : 'Pounds per year'}</option>{#if scenario.mode !== 'purchase-year'}<option value="monthly">Monthly equivalent</option>{/if}<option value="percentage">Percentage</option></select>
+    </div>
+    <p class="control-note">All property types combined.</p>
+    {#if scenario.mode !== 'ongoing-owner' && scenario.buyer === 'first-time-buyer'}
+      <div class="buyer-eligibility">All buyers must qualify. Supported up to <strong>£500,000</strong>. <HelpPopover title="Buyer assumptions" label="About first-time-buyer eligibility" fallback="/methodology/#buyers">{@render buyerHelp()}</HelpPopover></div>
+    {/if}
   </section>
   <div class="sr-only" role="status" aria-live="polite">{selected ? `${selected.name}, ${geographyLabel(selected.geography)}. ${selectedResult?.status === 'available' ? `${selectedResult.difference.displayPounds} ${scenario.mode === 'purchase-year' ? 'in the purchase year' : 'per year'}.` : 'Estimate unavailable.'}` : 'Choose an area to compare.'}</div>
   <div class="explorer-grid">
     <section class="map-column" aria-label="Explore areas">
-      <div class="search-toolbar"><form onsubmit={(event) => { event.preventDefault(); void findPostcode(); }}><label for="postcode">Find your neighbourhood</label><div class="input-button"><input id="postcode" aria-label="Postcode" autocomplete="postal-code" placeholder="Enter a postcode" bind:value={postcodeInput} /><button class="primary" disabled={postcodeBusy} type="submit">{postcodeBusy ? 'Finding…' : 'Find postcode'}<span aria-hidden="true"> →</span></button></div></form><label class="geography-control">Map geography<select aria-label="Map geography" bind:value={scenario.geography} onchange={changeGeography}><option value="LAD">Council areas</option><option value="MSOA">Neighbourhoods</option></select></label></div>
-      <p class="lookup-privacy">Lookup uses the May 2025 directory. Only an outward-code file is requested; full postcodes are matched in your browser.</p>
+      <div class="search-toolbar">
+        <form onsubmit={(event) => { event.preventDefault(); void findPostcode(); }}>
+          <div class="field-label"><label for="postcode">Find your area</label><HelpPopover title="About postcode search" fallback="/data-sources/#postcodes">
+            <p>Search uses the May 2025 postcode directory. Newer postcodes may be missing.</p>
+            <p>The first part of your postcode selects a data file to download. Your browser then matches the full postcode locally.</p>
+            <p>Search finds a neighbourhood estimate, not a bill for your address. Some neighbourhoods have no estimate.</p>
+          </HelpPopover></div>
+          <div class="input-button"><input id="postcode" aria-label="Postcode" autocomplete="postal-code" placeholder="Enter a postcode" bind:value={postcodeInput} /><button class="primary" disabled={postcodeBusy} type="submit">{postcodeBusy ? 'Finding…' : 'Find area'}<span aria-hidden="true">→</span></button></div>
+        </form>
+        <div class="control-field geography-control">
+          <div class="field-label"><label for="map-geography">Map areas</label><HelpPopover title="Council or neighbourhood?" fallback="/methodology/#area-estimates">
+            <p>Council estimates cover a local authority. Neighbourhood estimates cover a smaller statistical area, called an MSOA.</p>
+            <p>Each uses its own price and Council Tax data. A council estimate does not replace a missing neighbourhood estimate.</p>
+            <p>Zooming can change the map layer. Your selected result changes when you choose another area.</p>
+          </HelpPopover></div>
+          <select id="map-geography" bind:value={scenario.geography} onchange={changeGeography}><option value="LAD">Council areas</option><option value="MSOA">Neighbourhoods</option></select>
+        </div>
+      </div>
       {#if postcodeMessage}<p class="postcode-status" class:warning={postcodeStatus !== 'found'} role="status" data-testid="postcode-status">{postcodeMessage}</p>{/if}
       <TaxMap scope={release.manifest.scope === 'england' ? 'england' : 'five-authority-sample'} {detailParent} {detailLoading} ondetailrequest={requestDistrict} areas={release.areas} results={areaResults} selectedCode={scenario.areaCode} geography={scenario.geography} onselect={selectArea} ongeographychange={(geography) => { scenario.geography = geography; listLimit = 12; clearShared(); try { window.history.replaceState({}, '', `${window.location.pathname}?${serializeSharedState(scenario)}`); } catch { /* Invalid draft inputs do not enter history. */ } }} {postcodeLocation} releaseBase={release.basePath} />
       {#if detailLoading}<p class="postcode-status" role="status">Loading neighbourhood estimates…</p>{/if}
       {#if detailError}<div class="postcode-status warning" role="alert"><p>{detailError}</p><button onclick={() => { if (failedDetailParent) void requestDistrict(failedDetailParent); }}>Retry neighbourhood data</button></div>{/if}
       <MapLegend mode={scenario.mode} />
-      {#if selected}<a class="selected-jump" href="#impact-heading">View selected home result ↓</a>{/if}
-      <p class="map-note">Showing {scenario.geography === 'LAD' ? 'independent council' : 'neighbourhood (MSOA 2021)'} estimates. {selected ? `Selected result: ${geographyLabel(selected.geography)}.` : ''} Zooming changes the map layer, not the selected estimate. Colours always use {scenario.mode === 'purchase-year' ? 'first-year' : 'annual'} pounds.</p>
+      {#if selected}<div class="mobile-explorer-links"><a href="#impact-heading">View selected result ↓</a><a href="#area-browser-title">Browse areas ↓</a></div>{/if}
+
       {#if areaLoading}<p class="postcode-status" role="status">Loading the selected area…</p>{/if}
       {#if areaError}<p class="postcode-status warning" role="alert">{areaError} Select the area to retry.</p>{/if}
-      <section class="area-browser" aria-labelledby="area-browser-title"><div class="section-heading"><h2 id="area-browser-title">Explore by area</h2><span>{filteredAreas.length} {scenario.geography === 'LAD' ? 'councils' : 'neighbourhoods'}</span></div><label class="sr-only" for="area-search">Area name or code</label><input id="area-search" placeholder="Search area name or code…" bind:value={search} oninput={() => listLimit = 12} />
-        {#if isEngland && scenario.geography === 'MSOA'}<p class="area-search-note">{detailParent && !search ? `Browsing ${release.searchByCode.get(detailParent)?.name ?? 'this council'}. ` : ''}Search any neighbourhood name or code across England. Select an area to load its estimate.</p>{/if}
-        <ul class="area-list">{#each filteredAreas.slice(0, listLimit) as area}{@const result = areaResults[area.code]}{@const presentation = result || area.availability === 'unavailable' ? resultPresentation(result) : {kind: 'unloaded', colour: '#bcc8be', label: 'Select to calculate'}}<li><button data-area-code={area.code} data-kind={presentation.kind} class:selected={scenario.areaCode === area.code} aria-pressed={scenario.areaCode === area.code} onclick={() => selectArea(area.code)}><span class="list-dot" style:background={presentation.colour}></span><span class="area-name">{area.name}<small>{geographyLabel(area.geography)} · {area.code}</small></span><span class="area-impact">{result?.status === 'available' ? scenario.display === 'percentage' ? result.percentageDifference?.display ?? 'Not defined' : scenario.display === 'monthly' && result.monthlyEquivalent ? result.monthlyEquivalent.displayPounds : result.difference.displayPounds : !result && area.availability === 'available' ? 'View estimate' : 'Unavailable'}<small>{presentation.label}</small></span><span aria-hidden="true">↗</span></button></li>{/each}</ul>
-        {#if !filteredAreas.length}<p role="status">No matching areas in this map layer. Try switching map geography or searching a postcode.</p>{/if}
-        {#if filteredAreas.length > listLimit}<button class="show-more" onclick={() => listLimit += 24}>Show more areas</button>{/if}
-      </section>
     </section>
     <aside class="result-column" aria-label="Selected home comparison">
       {#if selected && selectedResult}<ImpactPanel area={selected} result={selectedResult} display={scenario.display} />{:else}<div class="impact-panel"><h2>Select an area</h2><p>Search a postcode, choose an area from the list, or select a map shape.</p></div>{/if}
       {#if selected}
-        <section class="personal-inputs"><details><summary>Use your own property value or bill</summary><p>Optional, in pounds. Blank fields retain the area input. Missing dependencies must each be replaced; the original unavailable estimate stays on the map.</p><form onsubmit={(event) => { event.preventDefault(); applyPersonal(); }}><label>Property value (£)<input aria-label="Property value (£)" inputmode="decimal" placeholder="Keep area value" bind:value={valueInput} /></label><label>Annual Council Tax bill (£)<input aria-label="Annual Council Tax bill (£)" inputmode="decimal" placeholder="Keep area estimate" bind:value={billInput} /></label>{#if personalError}<p role="alert" class="error-text">{personalError}</p>{/if}<div class="button-row"><button class="primary" type="submit" disabled={postcodeBusy || areaLoading}>Apply personal inputs</button><button type="button" onclick={resetPersonal}>Reset to area estimate</button></div></form></details></section>
-        <section class="share-box"><div class="section-heading"><h3>Share this comparison</h3><span aria-hidden="true">↗</span></div><p>Share the area estimate and assumptions. Personal amounts are excluded.</p>{#if matchedPostcode}<label class="checkbox-label"><input type="checkbox" bind:checked={includePostcode} onchange={clearShared} />Include full postcode in link</label>{/if}<p class="small">Shared URLs and static-host requests may be logged.</p><button onclick={createShare}>Create share link</button>{#if shareUrl}<label>Share link<input aria-label="Share link" value={shareUrl} readonly onclick={(event) => event.currentTarget.select()} /></label><button onclick={copyShare}>Copy link</button>{/if}<p role="status">{shareMessage}</p></section>
+        <section class="personal-inputs">
+          <div class="section-heading"><button type="button" class="text-action" aria-haspopup="dialog" onclick={(event) => { event.currentTarget.focus({ preventScroll: true }); personalOpen = true; }}>Use your own figures</button><HelpPopover title="About your figures" fallback="/methodology/#your-figures">
+            <p>Your entries update this comparison only. They do not change the map’s area estimates.</p>
+            <p>If an area estimate is unavailable, you must supply every missing value before a personal comparison can be calculated.</p>
+            <p>Personal values are excluded from share links.</p>
+          </HelpPopover></div>
+          <p>Enter pounds. Leave a field blank to keep the area value.</p>
+        </section>
+        <OverlayDialog bind:open={personalOpen} title="Use your own figures">
+          <p>Enter pounds. Leave a field blank to keep the area value.</p>
+          <form class="overlay-form" onsubmit={(event) => { event.preventDefault(); applyPersonal(); }}>
+            <label for="personal-value">Property value (£)</label><input id="personal-value" inputmode="decimal" placeholder="Use area value" bind:value={valueInput} aria-invalid={Boolean(personalErrors.value)} aria-describedby={personalErrors.value ? 'personal-value-error' : undefined} />
+            {#if personalErrors.value}<p id="personal-value-error" role="alert" class="error-text">{personalErrors.value}</p>{/if}
+            <label for="personal-bill">Annual Council Tax bill (£)</label><input id="personal-bill" inputmode="decimal" placeholder="Use area bill" bind:value={billInput} aria-invalid={Boolean(personalErrors.bill)} aria-describedby={personalErrors.bill ? 'personal-bill-error' : undefined} />
+            {#if personalErrors.bill}<p id="personal-bill-error" role="alert" class="error-text">{personalErrors.bill}</p>{/if}
+            <div class="button-row"><button class="primary" type="submit" disabled={postcodeBusy || areaLoading}>Update comparison</button><button type="button" onclick={resetPersonal}>Use area figures</button></div>
+          </form>
+        </OverlayDialog>
+        <section class="share-box">
+          <div class="section-heading"><h3>Share this comparison</h3><HelpPopover title="What the link includes" fallback="/data-sources/#postcodes">
+            <p>The link includes the area, comparison settings and data version.</p>
+            <p>Your entered property value and Council Tax bill are excluded. A full postcode is included only if you choose to add it.</p>
+            <p>Shared URLs and requests for website files may be logged by the hosting service. Anyone with a link containing a postcode can read that postcode.</p>
+          </HelpPopover></div>
+          <p>Shares the area estimate and settings. Your entered figures are excluded.</p>
+          {#if matchedPostcode}<label class="checkbox-label"><input type="checkbox" bind:checked={includePostcode} onchange={clearShared} />Include full postcode in link</label>{/if}
+          <button onclick={(event) => { event.currentTarget.focus({ preventScroll: true }); createShare(); }} aria-haspopup="dialog">Create link</button>
+          {#if shareMessage && !shareUrl}<p role="status">{shareMessage}</p>{/if}
+        </section>
+        <OverlayDialog bind:open={shareOpen} title="Share this comparison">
+          <p>Shares the area estimate and settings. Your entered figures are excluded.</p>
+          <div class="overlay-form"><label for="share-link">Share link</label><input id="share-link" value={shareUrl} readonly onclick={(event) => event.currentTarget.select()} /><button class="primary" onclick={copyShare}>Copy link</button><p role="status">{shareMessage}</p></div>
+        </OverlayDialog>
       {/if}
     </aside>
+    <section class="area-browser" aria-labelledby="area-browser-title"><div class="section-heading"><h2 id="area-browser-title" tabindex="-1">Search by area name</h2><span>{filteredAreas.length} {scenario.geography === 'LAD' ? 'councils' : 'neighbourhoods'}</span></div><label class="sr-only" for="area-search">Area name or code</label><input id="area-search" placeholder="Enter an area name or code" bind:value={search} oninput={() => listLimit = 12} />
+      {#if isEngland && scenario.geography === 'MSOA'}<p class="area-search-note">{#if detailParent && !search}Browsing <strong>{release.searchByCode.get(detailParent)?.name ?? 'this council'}</strong>. {/if}Search any neighbourhood in England.</p>{/if}
+      <ul class="area-list">{#each filteredAreas.slice(0, listLimit) as area}{@const result = areaResults[area.code]}{@const presentation = result || area.availability === 'unavailable' ? resultPresentation(result) : {kind: 'unloaded', colour: '#bcc8be', label: 'Select to calculate'}}<li><button data-area-code={area.code} data-kind={presentation.kind} class:selected={scenario.areaCode === area.code} aria-pressed={scenario.areaCode === area.code} onclick={() => selectArea(area.code)}><span class="list-dot" style:background={presentation.colour}></span><span class="area-name">{area.name}<small>{geographyLabel(area.geography)} · {area.code}</small></span><span class="area-impact">{result?.status === 'available' ? scenario.display === 'percentage' ? result.percentageDifference?.display ?? 'Not defined' : scenario.display === 'monthly' && result.monthlyEquivalent ? result.monthlyEquivalent.displayPounds : result.difference.displayPounds : !result && area.availability === 'available' ? 'View estimate' : 'Unavailable'}<small>{presentation.label}</small></span><span aria-hidden="true">↗</span></button></li>{/each}</ul>
+      {#if !filteredAreas.length}<p role="status">No matching areas in this map layer. Try switching map geography or searching a postcode.</p>{/if}
+      {#if filteredAreas.length > listLimit}<button class="show-more" onclick={() => listLimit += 24}>Show more areas</button>{/if}
+    </section>
   </div>
 {/if}

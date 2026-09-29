@@ -5,9 +5,9 @@ const SAMPLE = 'sample-2026-09-26-v1';
 
 async function lookup(page: import('@playwright/test').Page, postcode: string) {
   await page.getByLabel('Postcode', { exact: true }).fill(postcode);
-  await page.getByRole('button', { name: 'Find postcode', exact: true }).click();
+  await page.getByRole('button', { name: 'Find area', exact: true }).click();
   await expect(page.getByTestId('postcode-status')).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Find postcode', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Find area', exact: true })).toBeEnabled();
 }
 
 test('England landing loads councils and global search without national neighbourhood data', async ({ page }) => {
@@ -32,7 +32,7 @@ test('Manchester council and neighbourhoods use separate inputs and lazy shards'
   await expect(page.getByTestId('impact-panel').getByRole('heading', { name: 'Manchester', exact: true })).toBeVisible();
   await expect(page.getByTestId('primary-difference')).toBeVisible();
   await page.getByLabel('Area name or code').fill('');
-  await page.getByLabel('Map geography').selectOption('MSOA');
+  await page.getByLabel('Map areas', { exact: true }).selectOption('MSOA');
   await expect.poll(() => requests.includes(`/data/public-v1/${DATA}/areas/msoa/E08000003.json`)).toBe(true);
   await expect.poll(() => requests.includes(`/data/public-v1/${DATA}/boundaries/msoa/E08000003.geojson`)).toBe(true);
   await expect(page.getByTestId('impact-panel').getByRole('heading', { name: 'Manchester', exact: true })).toBeVisible();
@@ -48,19 +48,19 @@ for (const [postcode, code] of [['B1 1AY', 'E02006899'], ['BS1 1AD', 'E02006887'
     await lookup(page, postcode!);
     await expect(page.getByTestId('impact-panel')).toContainText(code!);
     await expect(page.getByTestId('postcode-status')).not.toContainText('outside');
-    await expect(page.getByLabel('Map geography')).toHaveValue('MSOA');
+    await expect(page.getByLabel('Map areas', { exact: true })).toHaveValue('MSOA');
   });
 }
 
 test('all-England neighbourhood name/code search loads an uncached council', async ({ page }) => {
   await page.goto('/map/');
-  await page.getByLabel('Map geography').selectOption('MSOA');
+  await page.getByLabel('Map areas', { exact: true }).selectOption('MSOA');
   await page.getByLabel('Area name or code').fill('E02003728');
   const button = page.locator('button[data-area-code="E02003728"]');
   await expect(button).toBeVisible();
   await button.click();
   await expect(page.getByTestId('impact-panel')).toContainText('E02003728');
-  await page.getByRole('button', { name: 'Create share link', exact: true }).click();
+  await page.getByRole('button', { name: 'Create link', exact: true }).click();
   const link = await page.getByLabel('Share link', { exact: true }).inputValue();
   expect(new URL(link).searchParams.get('data')).toBe(DATA);
   await page.goto(link);

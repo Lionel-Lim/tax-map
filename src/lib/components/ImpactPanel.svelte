@@ -1,7 +1,11 @@
 <script lang="ts">
+  import HelpPopover from './HelpPopover.svelte';
+  import OverlayDialog from './OverlayDialog.svelte';
+  import ComparisonHelp from './ComparisonHelp.svelte';
   import type { AreaRecord, ComparisonResult, MoneyAmount } from '$lib/domain/tax/index.js';
-  import { geographyLabel, resultPresentation } from '$lib/map/presentation.js';
+  import { resultPresentation } from '$lib/map/presentation.js';
   let { area, result, display = 'annual' }: { area: AreaRecord; result: ComparisonResult; display?: 'annual' | 'monthly' | 'percentage' } = $props();
+  let sourcesOpen = $state(false);
   const quality: Record<string,string> = {
     'authority-average-charge-proxy': 'Council-average charges; local parish bills may differ.',
     'mixed-source-periods': 'Price, stock and tax inputs refer to different dates.',
@@ -21,18 +25,23 @@
 </script>
 
 <section class="impact-panel" aria-labelledby="impact-heading" data-testid="impact-panel">
-  <div class="panel-eyebrow"><span>TYPICAL HOME IMPACT</span><span class="live-dot" aria-hidden="true"></span></div>
-  <h2 id="impact-heading">{area.name}</h2>
-  <p class="area-subtitle">{geographyLabel(area.geography)} estimate <span>· {area.code}</span></p>
+  <div class="panel-eyebrow"><span>ESTIMATED TAX CHANGE</span><span class="live-dot" aria-hidden="true"></span></div>
+  <h2 id="impact-heading" tabindex="-1">{area.name}</h2>
+  <div class="area-subtitle">{area.geography === 'LAD' ? 'Council' : 'Neighbourhood'} estimate
+    <HelpPopover title="About this estimate" fallback="/methodology/#area-estimates">
+      <p>This result uses the area’s median sale price and estimated average Council Tax bill. It is not a bill for a specific address.</p>
+      <p>You can use your own property value and Council Tax bill below.</p>
+    </HelpPopover>
+  </div>
   {#if result.status === 'available'}
     {#if result.estimateKind === 'personal-comparison'}
-      <p class="notice personal-label">Personal calculation · entered values apply only to this home.</p>
+      <p class="notice personal-label">Using your entered values. Area estimates on the map are unchanged.</p>
     {/if}
     {#if area.availability === 'unavailable'}
-      <p class="notice">The original area estimate is unavailable. Its map colour remains unavailable.</p>
+      <p class="notice">The area estimate is still unavailable on the map.</p>
     {/if}
     <div class="impact-number" class:lower={style.kind === 'lower'} class:higher={style.kind === 'higher'}>
-      <span class="direction-label">{result.direction === 'unchanged' ? 'No estimated change' : `${result.direction === 'lower' ? '↓ Lower' : '↑ Higher'} estimated cost`}</span>
+      <span class="direction-label">{result.direction === 'unchanged' ? 'No estimated change' : `${result.direction === 'lower' ? '↓ Estimated decrease' : '↑ Estimated increase'}`}</span>
       <div class="big-number" data-testid="primary-difference">
         {#if display === 'percentage'}
           {result.percentageDifference ? result.percentageDifference.display.replace(/^[+-]/, '') : 'Not defined'}
@@ -43,9 +52,11 @@
         {/if}
         <span>{display === 'percentage' ? 'vs current cost' : isPurchase ? 'in the purchase year' : display === 'monthly' ? '/ month equivalent' : '/ year'}</span>
       </div>
-      <p>{isPurchase ? 'First-year cash-cost comparison; this is not a recurring saving.' : `${result.monthlyEquivalent?.displayPounds} / month equivalent · ${result.difference.displayPounds} / year`}</p>
+      <p>{isPurchase ? 'First-year costs only. This is not a recurring yearly change.' : `${result.monthlyEquivalent?.displayPounds} / month equivalent · ${result.difference.displayPounds} / year`}</p>
     </div>
-    <div class="basis-note"><strong>{result.mode === 'annualised-ownership' ? `Annualised over ${result.ownershipYears} years` : isPurchase ? 'Purchase-year comparison' : 'Ongoing-owner comparison'}</strong><br />{result.mode === 'annualised-ownership' ? 'Council Tax + one-off Stamp Duty spread evenly over ownership.' : isPurchase ? 'Annual Council Tax + one-off Stamp Duty in the current system.' : 'Annual Council Tax compared with the illustrative annual property tax.'}</div>
+    <div class="basis-note"><strong>{result.mode === 'annualised-ownership' ? `Purchase costs spread over ${result.ownershipYears} years` : isPurchase ? 'Costs in the purchase year' : 'Yearly costs without a purchase'}</strong>
+      <HelpPopover title="About this comparison" fallback="/methodology/#comparisons"><ComparisonHelp mode={result.mode} /></HelpPopover>
+    </div>
     <figure class="comparison-chart" aria-label="Current and illustrative tax cost comparison">
       <figcaption>{isPurchase ? 'First-year tax cost' : 'Annual tax cost'} <span>GBP</span></figcaption>
       <div class="bar-label"><span>Current system</span><strong>{result.current.total.displayPounds}</strong></div>
@@ -56,11 +67,12 @@
       <dl class="current-components" aria-label="Current system breakdown">
         <div><dt><span class="component-swatch council-tax" aria-hidden="true"></span>Council Tax</dt><dd title={result.current.councilTax.displayPrecise}>{result.current.councilTax.displayPounds}</dd></div>
         {#if result.mode !== 'ongoing-owner'}
-          <div><dt><span class="component-swatch stamp-duty" aria-hidden="true"></span>{isPurchase ? 'Stamp Duty · paid once' : `Stamp Duty ÷ ${result.ownershipYears} years`}</dt><dd title={result.current.sdltIncluded.displayPrecise}>{result.current.sdltIncluded.displayPounds}</dd></div>
+          <div><dt><span class="component-swatch stamp-duty" aria-hidden="true"></span>{isPurchase ? 'Stamp Duty · paid once' : `Stamp Duty ÷ ${result.ownershipYears} years`}
+            {#if result.mode === 'annualised-ownership'}<HelpPopover title="Stamp Duty over time" fallback="/methodology/#comparisons"><p>{result.current.sdltUpfront.displayPounds} one-off Stamp Duty, spread over {result.ownershipYears} years.</p></HelpPopover>{/if}
+          </dt><dd title={result.current.sdltIncluded.displayPrecise}>{result.current.sdltIncluded.displayPounds}</dd></div>
         {/if}
       </dl>
-      {#if result.mode === 'annualised-ownership'}<p class="chart-note">{result.current.sdltUpfront.displayPounds} one-off Stamp Duty, spread over {result.ownershipYears} years.</p>{/if}
-      <div class="bar-label"><span>0.48% scenario</span><strong>{result.scenario.total.displayPounds}</strong></div>
+      <div class="bar-label"><span>Illustrative 0.48% tax</span><strong>{result.scenario.total.displayPounds}</strong></div>
       <div class="bar-track" aria-hidden="true"><div class="bar scenario" style:width={`${chartPence(result.scenario.total) / maximum * 100}%`}></div></div>
     </figure>
     <dl class="input-summary">
@@ -69,31 +81,50 @@
       {#if result.mode !== 'ongoing-owner'}<div><dt>Stamp Duty, paid once</dt><dd>{result.current.sdltUpfront.displayPounds}</dd></div>{/if}
       <div><dt>Illustrative annual property tax</dt><dd>{result.scenario.propertyTax.displayPounds}</dd></div>
     </dl>
-    <details class="breakdown"><summary>Calculation & precise figures</summary>
-      <p>Property value × 0.0048 = {result.scenario.propertyTax.displayPrecise} per year.</p>
-      <p>Current comparison cost: {result.current.total.displayPrecise}. {result.mode === 'annualised-ownership' ? `Includes ${result.current.sdltIncluded.displayPrecise} in annualised Stamp Duty.` : ''}</p>
-      <p>Scenario − current = {result.difference.displayPrecise}{isPurchase ? ' in year one' : ' per year'}.</p>
-      {#if result.monthlyEquivalent}<p>Monthly equivalent: {result.monthlyEquivalent.displayPrecise}. Calculated before rounding, not a billing schedule.</p>{/if}
-      <p>Map class: {style.label}. A neutral colour means within £100 of current cost; it is not a confidence interval.</p>
-      {#each result.assumptions as assumption}<p>{assumption}</p>{/each}
-    </details>
+    <div class="detail-action">
+      <HelpPopover title="How this is calculated" text="How this is calculated" fallback="/methodology/#precision">
+        <ol class="calculation-steps">
+          <li><strong>Illustrative yearly tax:</strong> {result.propertyValue.displayPrecise} × 0.48% = {result.scenario.propertyTax.displayPrecise}.</li>
+          <li><strong>Current comparison cost:</strong> {result.current.total.displayPrecise}.
+            <p>{result.mode === 'annualised-ownership' ? `Council Tax plus ${result.current.sdltIncluded.displayPrecise} in Stamp Duty per year, spread over ${result.ownershipYears} years.` : isPurchase ? 'Council Tax plus the full one-off Stamp Duty payment.' : 'Council Tax only.'}</p>
+          </li>
+          <li><strong>Estimated change:</strong> {result.scenario.total.displayPrecise} − {result.current.total.displayPrecise} = {result.difference.displayPrecise} {isPurchase ? 'in year one' : 'per year'}.</li>
+        </ol>
+        {#if result.monthlyEquivalent}<p>Monthly equivalent: {result.monthlyEquivalent.displayPrecise}. Calculated before rounding; this is not a monthly bill.</p>{/if}
+        {#each result.assumptions as assumption}<p>{assumption}</p>{/each}
+        <a href="/methodology/#precision">Read the full calculation method →</a>
+      </HelpPopover>
+    </div>
   {:else}
-    <div class="unavailable-panel" role="status"><h3>{result.status === 'invalid-input' ? 'Check the comparison inputs' : 'Area estimate unavailable'}</h3>
+    <div class="unavailable-panel" role="status"><h3>{result.status === 'invalid-input' ? 'Check your inputs' : 'Area estimate unavailable'}</h3>
       {#each result.issues as issue}<p>{quality[issue.code] ?? issue.message}</p>{/each}
       {#each result.reasons.filter(reason => !result.issues.some(issue => issue.code === reason)) as reason}<p>{quality[reason] ?? reason.replaceAll('-', ' ')}</p>{/each}
-      <p>Missing data is never treated as zero. A council estimate is not substituted.</p>
+      <p>Missing data is not counted as zero. We do not substitute a council estimate.</p>
       {#each result.guidanceUrls as url}<a href={url} target="_blank" rel="noreferrer">Read official SDLT guidance ↗</a>{/each}
     </div>
   {/if}
-  <div class="source-note"><strong>Owner-occupied primary residence only.</strong> Illustrative, uncapped replacement of Council Tax and supported purchase SDLT. This does not estimate a tenant’s personal costs.</div>
-  <details class="breakdown"><summary>Source dates & estimate quality</summary>
-    <dl class="source-dates"><div><dt>Sale prices</dt><dd>Year ending September 2025</dd></div><div><dt>Housing stock</dt><dd>31 March 2025</dd></div><div><dt>Council Tax</dt><dd>2026–27</dd></div><div><dt>Postcode directory</dt><dd>May 2025</dd></div></dl>
-    {#each [...new Set([...area.qualityFlags, ...area.unavailableReasons])] as flag}<p>{quality[flag] ?? flag.replaceAll('-', ' ')}</p>{/each}
-    <p>The median sale value and stock-weighted gross bill describe different populations. Neither identifies the Council Tax band of a particular home.</p>
+  <div class="source-note"><strong>Illustrative estimate · owner-occupied main home only.</strong>
+    <HelpPopover title="Who this covers" fallback="/methodology/#scenario">
+      <p>This illustration covers a main home lived in by its owner. It does not estimate a tenant’s personal costs.</p>
+      <p>It assumes an uncapped property tax replacing Council Tax and, in the supported purchase comparisons, Stamp Duty.</p>
+    </HelpPopover>
+  </div>
+  <div class="detail-action">
+    <HelpPopover title="Data behind this estimate" text="Data behind this estimate" fallback="/data-sources/">
+      <p><strong>Area:</strong> {area.name} · {area.code}</p>
+      <dl class="source-dates"><div><dt>Sale prices</dt><dd>Year ending September 2025</dd></div><div><dt>Housing stock</dt><dd>31 March 2025</dd></div><div><dt>Council Tax</dt><dd>2026–27</dd></div><div><dt>Postcode directory</dt><dd>May 2025</dd></div></dl>
+      <p>These sources cover different dates and groups of homes. They do not identify an individual home’s Council Tax band.</p>
+      {#each [...new Set([...area.qualityFlags, ...area.unavailableReasons])] as flag}<p>{quality[flag] ?? flag.replaceAll('-', ' ')}</p>{/each}
+      <button type="button" class="text-action" aria-haspopup="dialog" onclick={(event) => { event.currentTarget.focus({ preventScroll: true }); sourcesOpen = true; }}>View source records →</button>
+    </HelpPopover>
+  </div>
+  <OverlayDialog bind:open={sourcesOpen} title="Source records">
+    <p><strong>{area.name}</strong> · {area.code}</p>
     <p>Data: {result.provenance?.dataVersion ?? 'sample-2026-09-26-v1'}<br />Policy: {result.requestedPolicyVersion}<br />{result.status === 'available' && result.sdltRuleVersion ? `SDLT: ${result.sdltRuleVersion}` : ''}</p>
-    <details><summary>Area source references</summary><pre>{JSON.stringify(area.sourceRefs, null, 2)}</pre></details>
-    <a href="/methodology/">Read the methodology →</a>
-  </details>
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard focus allows scrolling the source records.) -->
+    <pre aria-label="Area source references" tabindex="0">{JSON.stringify(area.sourceRefs, null, 2)}</pre>
+    <a href="/data-sources/">Data & coverage →</a>
+  </OverlayDialog>
 </section>
 
 <style>
@@ -102,10 +133,9 @@
   .current-stack .bar { flex: 0 0 auto; border-radius: 0; }
   .council-tax { background: #8b9786; }
   .stamp-duty { background: #bc965a; }
-  .current-components { margin: 9px 0 0; font-size: .66rem; }
+  .current-components { margin: 9px 0 0; font-size: .78rem; }
   .current-components > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; margin-top: 5px; }
   .current-components dt { display: flex; align-items: baseline; gap: 6px; color: var(--muted); }
   .current-components dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
   .component-swatch { display: inline-block; width: 9px; height: 9px; flex-shrink: 0; border-radius: 2px; }
-  .chart-note { margin: 8px 0 0; font-size: .62rem; line-height: 1.5; color: var(--muted); }
 </style>

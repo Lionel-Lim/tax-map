@@ -1,4 +1,5 @@
 <script lang="ts">
+  import HelpPopover from '../components/HelpPopover.svelte';
   import { onMount } from 'svelte';
   import type { Feature, FeatureCollection, Geometry } from 'geojson';
   import type { GeoJSONSource, Map as LibreMap, Marker, LngLatBoundsLike } from 'maplibre-gl';
@@ -32,7 +33,6 @@
   let hoverResult = $state('');
   let loading = $state(true);
   let londonView = $state(false);
-  let informationOpen = $state(true);
   let allFeatures: Feature<Geometry>[] = [];
   let ladFeatures: Feature<Geometry>[] = [];
   let MarkerClass: typeof import('maplibre-gl').Marker;
@@ -180,8 +180,8 @@
         const centre: [number,number] = [(w+e)/2,(s+n)/2];
         if (!bounds.contains(centre)) return false;
         const p = map!.project(centre);
-        if (p.x < 55 || p.x > width-55 || p.y < 85 || p.y > height-100
-          || positions.length >= 7 || positions.some(q => Math.abs(q.x-p.x) < 135 && Math.abs(q.y-p.y) < 52)) return false;
+        if (p.x < 85 || p.x > width-85 || p.y < 85 || p.y > height-100
+          || positions.length >= 7 || positions.some(q => Math.abs(q.x-p.x) < 155 && Math.abs(q.y-p.y) < 44)) return false;
         positions.push(p); return true;
       });
     }
@@ -297,7 +297,6 @@
       [Math.max(...bounds.map(b => b[1][0])), Math.max(...bounds.map(b => b[1][1]))],
     ];
     londonView = true;
-    if (container.clientWidth <= 600) informationOpen = false;
     ongeographychange('LAD');
     map.fitBounds(londonBounds, {
       padding: container.clientWidth > 600
@@ -478,14 +477,14 @@
 <div class="map-shell" data-testid="tax-map">
   <div class="map-canvas" bind:this={container}></div>
   <div class="map-information">
-    <details class="map-context" bind:open={informationOpen}>
-      <summary aria-label="Map information and selected area">
-        <span class="context-heading"><span class="context-dot"></span><strong>{londonView ? geography === 'MSOA' ? 'London neighbourhood estimates' : 'London borough estimates' : `${geographyLabel(geography)} estimates`}</strong><svg class="context-chevron" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <div class="map-context">
+      <div class="map-selection">
+        <span class="context-heading"><span class="context-dot"></span><strong>{londonView ? geography === 'MSOA' ? 'London neighbourhood estimates' : 'London borough estimates' : `${geographyLabel(geography)} estimates`}</strong></span>
         {#if selectedArea}
           <span class="context-selection" aria-live="polite" data-testid="map-selection-summary">
             <strong class="selected-name">{selectedArea.name}</strong>
             {#if selectedResult?.status === 'available'}
-              <span class="selected-amount" style:color={selectedPresentation.colour}>{selectedResult.scenario.total.displayPounds} <span>({selectedResult.difference.displayPounds})</span></span>
+              <span class="selected-amount" class:lower={selectedPresentation.kind === 'lower'} class:higher={selectedPresentation.kind === 'higher'}>{selectedResult.scenario.total.displayPounds} <span>({selectedResult.difference.displayPounds})</span></span>
               <span class="selected-basis">Scenario cost (change) · {selectedResult.mode === 'purchase-year' ? 'purchase year' : 'per year'}</span>
             {:else}
               <span class="selected-basis">{selectedResult?.status === 'invalid-input' ? 'Check comparison inputs' : 'Estimate unavailable'}</span>
@@ -494,13 +493,16 @@
             {#if londonView && !selectedInLondon}<span class="selected-basis">This selection is outside London. Choose an area on the map to compare.</span>{/if}
           </span>
         {/if}
-      </summary>
-      <div class="context-guidance">
-        <p>{londonView && geography === 'LAD' ? 'London borough comparisons' : geography === 'LAD' ? 'Zoom in for neighbourhood estimates' : scope === 'england' ? `Neighbourhoods for ${detailName}` : 'Neighbourhoods use their own price and tax inputs'}</p>
-        {#if londonView}<p class="london-guidance">Zoom to the 2 km scale for neighbourhood estimates. Zoom back out to compare boroughs.</p>{/if}
-        <span>{scope === 'england' ? geography === 'MSOA' ? 'Pan or click another council to load its neighbourhoods.' : 'Blue is lower cost · orange is higher · hatched is unavailable.' : 'Uncoloured land is outside the sample.'}</span>
       </div>
-    </details>
+      <div class="context-guidance">Select an area to see its estimate.
+        <HelpPopover title="Using the map" fallback="/methodology/#using-the-map">
+          <ol><li>Select an area to update the result.</li><li>Zoom in to explore neighbourhoods.</li><li>Pan or select another council to load its neighbourhoods.</li></ol>
+          <p>Changing the map layer does not change your selected result.</p>
+          {#if londonView}<p>Zoom to the 2 km scale for neighbourhood estimates. Zoom out to compare boroughs.</p>{/if}
+          {#if scope !== 'england'}<p>Uncoloured land is outside the sample.</p>{/if}
+        </HelpPopover>
+      </div>
+    </div>
     {#if ready && geography === 'MSOA' && (detailPending || boundaryError)}
       <div class="detail-status" role="status">
         {#if boundaryError}
@@ -535,28 +537,24 @@
 </div>
 
 <style>
-  .map-shell { position: relative; height: 100%; min-height: 550px; overflow: hidden; background: #e4ece9; border-radius: inherit; isolation: isolate; }
+  .map-shell { position: relative; height: 100%; min-height: 550px; overflow: hidden; background: #e4ece9; border-inline: 1px solid var(--border); isolation: isolate; container-type: inline-size; }
   .map-canvas { position: absolute; inset: 0; }
   .map-information { position: absolute; top: 20px; left: 20px; width: min(260px, calc(100% - 80px)); color: #233c34; }
-  .map-context { background: #fffffff2; border: 1px solid #d7ded5; border-radius: 7px; box-shadow: 0 2px 6px #263b3410; }
-  .map-context summary { padding: 11px 14px; cursor: pointer; list-style: none; border-radius: 7px; }
-  .map-context summary::-webkit-details-marker { display: none; }
-  .map-context summary:focus-visible { outline: 3px solid #19789e; outline-offset: 2px; }
-  .context-heading { display: flex; align-items: center; gap: 8px; font-size: .72rem; }
+  .map-context { background: #fffef9; border: 1px solid #d7ded5; border-radius: 7px; box-shadow: 0 2px 6px #263b3410; }
+  .map-selection { padding: 11px 14px; }
+  .context-heading { display: flex; align-items: center; gap: 8px; font-size: .75rem; }
   .context-heading strong { font-weight: 650; }
   .context-dot { width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%; background: #367358; }
-  .context-chevron { width: 16px; height: 16px; flex-shrink: 0; margin-left: auto; }
-  .map-context[open] .context-chevron { transform: rotate(180deg); }
   .context-selection { display: block; padding-top: 9px; }
   .selected-name { display: block; font-size: .83rem; font-weight: 650; line-height: 1.35; overflow-wrap: anywhere; }
   .selected-amount { display: block; margin-top: 4px; font-size: .95rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .selected-amount.lower { color: #226081; }
+  .selected-amount.higher { color: #994b1c; }
   .selected-amount span { font-size: .8rem; font-weight: 550; }
-  .selected-basis { display: block; margin-top: 3px; color: #5e7066; font-size: .62rem; line-height: 1.4; }
-  .context-guidance { border-top: 1px solid #e2e7df; padding: 9px 14px 11px; color: #5e7066; font-size: .64rem; line-height: 1.5; }
-  .context-guidance p { margin: 0 0 3px; color: #385447; font-weight: 600; }
-  .context-guidance .london-guidance { font-weight: 400; margin-bottom: 5px; }
-  .overview-controls { position: absolute; top: 20px; right: 54px; display: flex; gap: 6px; }
-  .overview-button { min-height: 34px; display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #d7ded5; border-radius: 6px; color: #344d43; padding: 6px 9px; font: inherit; font-size: .65rem; cursor: pointer; }
+  .selected-basis { display: block; margin-top: 3px; color: #5e7066; font-size: .72rem; line-height: 1.4; }
+  .context-guidance { border-top: 1px solid #e2e7df; padding: 9px 14px 11px; color: #5e7066; font-size: .72rem; line-height: 1.5; }
+  .overview-controls { position: absolute; top: 20px; right: 66px; display: flex; gap: 6px; }
+  .overview-button { min-height: 44px; display: flex; align-items: center; gap: 6px; background: #fff; border: 1px solid #d7ded5; border-radius: 6px; color: #344d43; padding: 6px 10px; font: inherit; font-size: .75rem; cursor: pointer; }
   .overview-button svg { width: 16px; height: 16px; }
   .overview-button:hover { background: #f4f6f2; }
   .overview-button.active { background: #e4ede3; border-color: #52745a; color: #254e3b; }
@@ -570,26 +568,30 @@
   .loading-ring { width: 24px; height: 24px; border: 2px solid #d4ded6; border-top-color: #476d59; border-radius: 50%; animation: spin 1s linear infinite; }
   .map-hover { position: absolute; bottom: 40px; left: 20px; min-width: 150px; max-width: min(260px, calc(100% - 40px)); border-radius: 7px; padding: 11px 16px; color: #254033; background: #fffffff5; box-shadow: 0 3px 15px #1d3a331a; pointer-events: none; text-align: center; font-size: .75rem; overflow-wrap: anywhere; }
   .map-hover span { display: block; margin-top: 3px; color: #738078; font-size: .7rem; }
-  :global(.area-map-label) { border: 1px solid #d0d9d1; border-radius: 5px; padding: 6px 9px 6px 19px; color: #283f36; background: #fffffff0; box-shadow: 0 2px 7px #29453814; font: 600 11px/1.2 system-ui, sans-serif; white-space: nowrap; cursor: pointer; }
-  :global(.area-map-label::before) { content: ''; position: absolute; left: 7px; top: 10px; width: 6px; height: 6px; border-radius: 50%; background: var(--area-colour); }
+  :global(.area-map-label) { border: 1px solid #d0d9d1; border-radius: 5px; min-height: 32px; max-width: 150px; overflow: hidden; text-overflow: ellipsis; padding: 7px 9px 7px 19px; color: #283f36; background: #fffffff0; box-shadow: 0 2px 7px #29453814; font: 600 11px/1.2 system-ui, sans-serif; white-space: nowrap; cursor: pointer; }
+  :global(.area-map-label::before) { content: ''; position: absolute; left: 7px; top: 50%; transform: translateY(-50%); width: 6px; height: 6px; border-radius: 50%; background: var(--area-colour); }
   :global(.area-map-label:hover), :global(.area-map-label.is-selected) { border-color: #426953; box-shadow: 0 0 0 2px #42695320; }
   :global(.area-map-label:focus-visible) { outline: 3px solid #19789e; outline-offset: 3px; }
   :global(.area-map-label[hidden]) { display: none; }
   :global(.postcode-map-pin) { display: block; width: 14px; height: 14px; border: 3px solid white; border-radius: 50%; background: #163d38; box-shadow: 0 0 0 6px #173b3529, 0 2px 6px #173b3550; }
   :global(.maplibregl-ctrl-top-right) { top: 12px; right: 10px; }
   :global(.maplibregl-ctrl-group) { box-shadow: none !important; border: 1px solid #ccd7ce; }
-  :global(.maplibregl-ctrl-group button) { width: 32px; height: 32px; }
+  :global(.maplibregl-ctrl-group button) { width: 40px; height: 44px; }
+  :global(.maplibregl-ctrl-attrib-button) { min-height: 24px; }
   :global(.maplibregl-ctrl-attrib) { font-size: 9px !important; }
   :global(.maplibregl-ctrl-scale) { border-color: #728078 !important; color: #5e7367 !important; font-size: 9px !important; background: #ffffff70 !important; }
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .loading-ring { animation: none; } }
-  @media (max-width: 700px) {
-    .map-shell { min-height: 430px; }
+  @container (max-width: 620px) {
+    .overview-controls { top: auto; bottom: 54px; right: 12px; }
+  }
+  @media (max-width: 960px) {
+    .map-shell { min-height: 470px; }
     .map-information { top: 13px; left: 12px; width: min(240px, calc(100% - 70px)); }
-    .map-context summary { padding: 9px 11px; }
+    .map-selection { padding: 9px 11px; }
     .context-guidance { padding: 8px 11px 9px; }
-    .context-heading { font-size: .67rem; }
+    .context-heading { font-size: .75rem; }
     .map-hover { left: 12px; bottom: 65px; min-width: 0; max-width: calc(100% - 140px); }
-    .overview-controls { top: auto; bottom: 65px; right: 10px; flex-direction: column; align-items: stretch; }
+    .overview-controls { top: auto; bottom: 65px; right: 12px; align-items: stretch; }
   }
 </style>

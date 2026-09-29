@@ -21,15 +21,15 @@ test('England mobile overview and lazy detail stay within measured delivery budg
   expect(initial.some(row => /\/postcodes\/|\/areas\/msoa\/|\/boundaries\/msoa\/|\/areas.json$|\/msoa.geojson$/.test(row.path))).toBe(false);
   await page.getByLabel('Postcode', { exact: true }).fill('M1 1AD');
   const lookupStarted = Date.now();
-  await page.getByRole('button', { name: 'Find postcode', exact: true }).click();
+  await page.getByRole('button', { name: 'Find area', exact: true }).click();
   await expect(page.getByTestId('impact-panel')).toContainText('E02006902');
   await expect.poll(async () => (await resources()).some(row => row.path.endsWith('/boundaries/msoa/E08000003.geojson'))).toBe(true);
   const postcodeMilliseconds = Date.now() - lookupStarted;
   const afterLookup = await resources();
   const detail = afterLookup.filter(row => /\/postcodes\/|\/areas\/msoa\/|\/boundaries\/msoa\//.test(row.path));
   const changeStarted = Date.now();
-  await page.getByLabel('Comparison basis').selectOption('ongoing-owner');
-  await expect(page.getByLabel('Comparison basis')).toHaveValue('ongoing-owner');
+  await page.getByLabel('Compare costs', { exact: true }).selectOption('ongoing-owner');
+  await expect(page.getByLabel('Compare costs', { exact: true })).toHaveValue('ongoing-owner');
   await expect(page.getByTestId('impact-panel')).toContainText('Ongoing-owner comparison');
   const scenarioMilliseconds = Date.now() - changeStarted;
   const sum = (rows: typeof initial, field: 'encodedBytes' | 'decodedBytes') => rows.reduce((total, row) => total + row[field], 0);

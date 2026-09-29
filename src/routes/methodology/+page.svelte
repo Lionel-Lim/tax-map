@@ -1,17 +1,20 @@
 <svelte:head>
-  <title>Methodology · Property Tax Map</title>
+  <title>How it works · Tax Map</title>
   <meta name="description" content="How the illustrative 0.48% property tax comparison works, what its estimates mean, and which assumptions and data limits apply." />
 </svelte:head>
 
 <article class="prose">
   <p class="eyebrow">Understanding the estimate</p>
-  <h1>Methodology</h1>
-  <p class="lead">
-    Typical Home Impact compares an area's median sale price with an estimated gross Council Tax
-    bill. It is a representative-area comparison, not a bill for a particular address.
-  </p>
+  <h1>How it works</h1>
+  <p class="lead">Tax Map uses an area’s median sale price and estimated Council Tax bill to compare tax costs for a typical home. It does not calculate the bill for a specific address.</p>
+  <ol><li>Choose an area.</li><li>Choose how to compare costs.</li><li>Read the estimated change and its assumptions.</li></ol>
 
-  <h2>The scenario</h2>
+  <h2 id="using-the-map">Using the map</h2>
+  <ol><li>Select an area to update the result.</li><li>Zoom in to explore neighbourhoods.</li><li>Pan or select another council to load its neighbourhoods.</li></ol>
+  <p>Changing the map layer does not change your selected result.</p>
+  <p>In London view, zoom to the 2 km scale for neighbourhood estimates. Zoom out to compare boroughs.</p>
+
+  <h2 id="scenario">The scenario</h2>
   <p>
     <strong>Illustrative 0.48% property tax — uncapped</strong> applies an annual charge of 0.48% to
     the selected property value. It assumes this replaces Council Tax for an owner-occupied primary
@@ -24,17 +27,17 @@
     This illustration is neither an enacted tax nor a complete implementation of that proposal.
   </p>
 
-  <h2>Three ways to compare</h2>
+  <h2 id="comparisons">Three ways to compare</h2>
   <dl>
-    <dt><strong>Ongoing owner</strong></dt>
+    <dt><strong>Yearly costs without a purchase</strong></dt>
     <dd>Compare one year of Council Tax with one year of the illustrative property tax.</dd>
-    <dt><strong>Annualised ownership</strong></dt>
+    <dt><strong>Spread purchase costs over time</strong></dt>
     <dd>
       Compare Council Tax plus purchase SDLT divided by the chosen ownership period with the annual
       scenario bill. The initial assumption is <strong>20 years</strong>. This is a simple allocation,
       excluding growth, future tax changes, financing and discounting.
     </dd>
-    <dt><strong>Purchase year</strong></dt>
+    <dt><strong>Costs in the purchase year</strong></dt>
     <dd>
       Compare Council Tax plus the whole purchase SDLT payment with the scenario's annual bill.
       This describes first-year cash cost; it has no recurring monthly equivalent.
@@ -47,7 +50,7 @@
     that cost is zero.
   </p>
 
-  <h2>How the area baseline is estimated</h2>
+  <h2 id="area-estimates">How the area baseline is estimated</h2>
   <p>
     The all-property median price is a proxy for value. It describes homes sold during the published
     period, while Council Tax stock describes a different population. The median is not revalued to
@@ -85,7 +88,7 @@
     postcode's taxing authority.
   </p>
 
-  <h2>Unavailable means unavailable</h2>
+  <h2 id="unavailable">Unavailable means unavailable</h2>
   <p>
     An unexplained dash in a required VOA stock cell withholds the area estimate. Missing or suppressed
     prices, missing charges and unresolved geography also prevent a numeric comparison. We preserve
@@ -104,7 +107,7 @@
     amount and direction within the neutral band.
   </p>
 
-  <h2>Your own value and bill</h2>
+  <h2 id="your-figures">Your own value and bill</h2>
   <p>
     Optional personal inputs replace the selected-home value or annual Council Tax baseline only.
     They do not change the area estimate or map colours. An unavailable area can support a separate
@@ -112,7 +115,7 @@
     returns to the original area estimate, including its unavailable state.
   </p>
 
-  <h2>Purchase-tax scope</h2>
+  <h2 id="buyers">Purchase-tax scope</h2>
   <p>
     Purchase comparisons use the reviewed England SDLT rules effective <strong>1 April 2025</strong>,
     checked on 26 September 2026. The selected property value is assumed to be the entire chargeable
@@ -128,7 +131,7 @@
     and <a href="https://www.gov.uk/hmrc-internal-manuals/stamp-duty-land-tax-manual/sdltm29811">first-time-buyer conditions</a>.
   </p>
 
-  <details>
+  <details id="precision">
     <summary>Precision and reproducibility</summary>
     <p>
       Source money is stored in pence; weighted values and intermediate results retain exact

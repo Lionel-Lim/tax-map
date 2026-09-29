@@ -22,11 +22,11 @@ test('sample mobile payload and interaction budget', async ({ page }) => {
     .map(entry => { const r = entry as PerformanceResourceTiming; return { path: new URL(r.name).pathname, encodedBytes: r.encodedBodySize, decodedBytes: r.decodedBodySize }; }));
   await page.getByLabel('Postcode', { exact: true }).fill('LE4 0DD');
   const lookupStarted = Date.now();
-  await page.getByRole('button', { name: 'Find postcode', exact: true }).click();
+  await page.getByRole('button', { name: 'Find area', exact: true }).click();
   await expect(page.getByTestId('postcode-status')).toContainText('Bradgate');
   const postcodeMilliseconds = Date.now() - lookupStarted;
   const changeStarted = Date.now();
-  await page.getByLabel('Comparison basis').selectOption('ongoing-owner');
+  await page.getByLabel('Compare costs', { exact: true }).selectOption('ongoing-owner');
   await expect(page.getByTestId('primary-difference')).toContainText('£814');
   const scenarioMilliseconds = Date.now() - changeStarted;
   const lookup = await page.evaluate(() => performance.getEntriesByType('resource')

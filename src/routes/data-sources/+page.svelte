@@ -3,28 +3,28 @@
   let { data }: { data: PageData } = $props();
 </script>
 <svelte:head>
-  <title>Data sources &amp; coverage · Property Tax Map</title>
-  <meta name="description" content="Pinned official data, England coverage, source periods and reuse credits for the Property Tax Map." />
+  <title>Data &amp; coverage · Tax Map</title>
+  <meta name="description" content="Pinned official data, England coverage, source periods and reuse credits for Tax Map." />
 </svelte:head>
 
 <article class="prose">
   <p class="eyebrow">Evidence behind the map</p>
-  <h1>Data sources &amp; coverage</h1>
-  <p class="lead">
-    The map accounts for all {data.coverage.LAD.total} councils and {data.coverage.MSOA.total.toLocaleString('en-GB')} neighbourhoods in the pinned England inventory.
-    An area is shown as unavailable when its inputs or boundaries cannot support a consistent estimate.
-    This is a preview with incomplete coverage; no missing input is treated as zero.
-  </p>
+  <h1>Data &amp; coverage</h1>
+  <p class="lead">The map includes {data.coverage.LAD.total} English councils and {data.coverage.MSOA.total.toLocaleString('en-GB')} neighbourhoods. Some have no estimate because data or valid boundaries are missing.</p>
+  <p><strong>Coverage is incomplete. Missing data is not counted as zero.</strong></p>
 
-  <h2>England coverage</h2>
-  <div class="table-wrap"><table><caption>Coverage of area estimates</caption><thead><tr><th scope="col">Geography</th><th scope="col">Available</th><th scope="col">Unavailable</th><th scope="col">Total</th></tr></thead><tbody>
+  <h2 id="coverage">England coverage</h2>
+  <p class="table-hint">Scroll sideways to see all columns →</p>
+  <!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard focus lets users scroll the table with arrow keys.) -->
+  <div class="table-wrap" role="region" aria-label="Coverage of area estimates" tabindex="0"><table><caption>Coverage of area estimates</caption><thead><tr><th scope="col">Geography</th><th scope="col">Available</th><th scope="col">Unavailable</th><th scope="col">Total</th></tr></thead><tbody>
     <tr><th scope="row">Councils</th><td>{data.coverage.LAD.available}</td><td>{data.coverage.LAD.unavailable}</td><td>{data.coverage.LAD.total}</td></tr>
     <tr><th scope="row">Neighbourhoods</th><td>{data.coverage.MSOA.available.toLocaleString('en-GB')}</td><td>{data.coverage.MSOA.unavailable.toLocaleString('en-GB')}</td><td>{data.coverage.MSOA.total.toLocaleString('en-GB')}</td></tr>
   </tbody></table></div>
   <p>Most neighbourhood gaps come from unverified markers in VOA housing-stock counts. Other gaps reflect incompatible geography or invalid source boundaries. Barnsley and Sheffield have no compatible stock totals for their current boundaries; City of London's stock contains an unverified marker. Their council estimates remain unavailable.</p>
   <p>These counts measure area-record coverage. They do not measure the number of households that benefit or provide an individual home's tax bill. Council estimates use independent council inputs and are never substituted for an unavailable neighbourhood.</p>
   <p>Available neighbourhoods contain {data.dwellingCoverage.reportedDwellingsInAvailableAreas.toLocaleString('en-GB')} of {data.dwellingCoverage.totalReportedDwellings.toLocaleString('en-GB')} dwellings in the rounded published stock totals (about 43.9%). This describes where estimates are supported, not how many households benefit.</p>
-  <details><summary>Neighbourhood coverage for every council</summary><div class="table-wrap"><table><thead><tr><th scope="col">Council</th><th scope="col">Council estimate</th><th scope="col">Available neighbourhoods</th><th scope="col">Total neighbourhoods</th></tr></thead><tbody>
+  <details><summary>Neighbourhood coverage for every council</summary><p class="table-hint">Scroll sideways to see all columns →</p><!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard focus lets users scroll the table with arrow keys.) -->
+  <div class="table-wrap" role="region" aria-label="Neighbourhood coverage for every council" tabindex="0"><table><thead><tr><th scope="col">Council</th><th scope="col">Council estimate</th><th scope="col">Available neighbourhoods</th><th scope="col">Total neighbourhoods</th></tr></thead><tbody>
     {#each data.councils as council}<tr><th scope="row"><a href={`/map/?data=${data.releaseId}&area=${council.code}&geography=LAD`}>{council.name}</a></th><td>{council.availability}</td><td>{council.available}</td><td>{council.total}</td></tr>{/each}
   </tbody></table></div></details>
   <details><summary>Boundaries withheld pending source review</summary><p>These source shapes fail polygon or shared-edge validation. No automatic repairs are applied. Their area records remain searchable, but their shapes and estimates are withheld.</p><ul>{#each data.boundaryExclusions as area}<li>{area.name} · {area.code}</li>{/each}</ul></details>
@@ -77,7 +77,7 @@
     a current valuation or a single common observation date.
   </p>
 
-  <h2>Postcode coverage and privacy</h2>
+  <h2 id="postcodes">Postcode coverage and privacy</h2>
   <p>
     The lookup contains {data.publicPostcodes.postcodeRecords.toLocaleString('en-GB')} current and terminated postcode records across {data.publicPostcodes.postcodeShards.toLocaleString('en-GB')} outward-code
     files, excluding Northern Ireland. Its country and status fields distinguish unsupported or terminated postcodes from unknown records. BT inputs are outside the lookup; their existence is not checked. A match only establishes presence in the May 2025 edition; newer postcodes may be absent.
