@@ -12,7 +12,6 @@
     <a href="/methodology/" aria-current={page.url.pathname.startsWith('/methodology') ? 'page' : undefined}>How it works</a>
     <a href="/data-sources/" aria-current={page.url.pathname.startsWith('/data-sources') ? 'page' : undefined}>Data & coverage</a>
   </nav>
-  <span class="sample-tag">ENGLAND · EXPLORER</span>
 </header>
 <main id="main" tabindex="-1">{@render children()}</main>
 <footer class="site-footer"><span><strong>Tax Map</strong> · An illustration of change, grounded in open data.</span><span>Data preview · 26 September 2026</span></footer>
