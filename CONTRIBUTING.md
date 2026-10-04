@@ -3,7 +3,7 @@
 **Open an issue for a bug or data correction, or a pull request for a focused change.** For a larger feature, discuss the idea in an issue first.
 
 1. Fork the repository and create a branch for your change.
-2. Follow the [README](README.md) to run the app and check your changes. Run browser tests for changes to the interface.
+2. Follow the [README](README.md) to run the app, then run the checks below.
 3. Open a pull request describing the change and the checks you ran. Include a screenshot for a visible change.
 
 For data corrections, include the area code, source URL and relevant date. Follow the [pipeline guide](pipeline/README.md) when changing data generation. Published release IDs are immutable: use a new ID for changed data.
@@ -11,3 +11,17 @@ For data corrections, include the area code, source URL and relevant date. Follo
 Keep credentials, raw downloads and private archives out of commits. Preserve the [data licences and attribution](DATA-LICENSES.md). Contributions to original code and documentation use the project's [MIT licence](LICENSE).
 
 For security issues, follow [SECURITY.md](SECURITY.md).
+
+## Checks
+
+```sh
+npm run check
+npm test
+npm run test:app
+npm run test:deployment
+npm run build
+```
+
+For interface changes, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser` after building. Preview the build with `npm run preview`.
+
+Pull requests and pushes to `main` run these checks automatically. Publishing is manual; see the [deployment guide](docs/deployment.md).

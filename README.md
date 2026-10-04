@@ -1,53 +1,44 @@
-# Property Tax Reform Map
+# Tax Map
 
-**[Open the live map](https://taxmap.limsight.com/)** to explore how an illustrative property-tax reform could affect a typical home in England.
+Explore how an illustrative property-tax reform could affect a typical home in England. Compare Council Tax with an annual property tax, adjust the rate, and optionally include Stamp Duty.
 
-Compare Council Tax with an annual property tax, starting at **0.48%**. Change the rate, include Stamp Duty, enter your own figures, or share a result. Calculations run in your browser using pinned official data.
+**[Try the live demo](https://taxmap.limsight.com/)**
 
 ![Tax Map showing the England map and a Leicester comparison](docs/images/tax-map.png)
 
-## Run locally
+## Stack
 
-1. Install Node.js **22.14.0 or newer**.
-2. Install dependencies and start the app:
+- SvelteKit (static build)
+- MapLibre GL JS
+- Python (offline data pipeline)
 
-   ```sh
-   npm ci
-   npm run dev
-   ```
+## Development
 
-3. Open the local URL printed by Vite. Try postcode **LE4 0DD**.
+Use Node.js **22.14.0 or newer**:
 
-The website uses the data committed to this repository. No API keys, Python setup or private source archive are needed to run it.
+```sh
+npm ci
+npm run dev
+```
 
-## Check your changes
+Open the local URL printed by Vite. The data is included; no API keys are needed.
+
+Useful commands:
 
 ```sh
 npm run check
 npm test
-npm run test:app
-npm run test:deployment
 npm run build
 ```
 
-For browser tests, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser` after building. Preview the production build with `npm run preview`.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full checks and [pipeline/README.md](pipeline/README.md) to rebuild datasets.
 
-Pull requests and pushes to `main` run the website checks automatically. Publishing uses the separate, manually started deployment workflow. See the [deployment guide](docs/deployment.md).
+## Data and credits
 
-## Understand the results
+Uses official data from ONS, HM Land Registry, VOA/HMRC and MHCLG. Some areas have no usable estimate. Results are illustrative, not personal tax advice.
 
-The current release covers **296 councils and 6,856 neighbourhoods (MSOAs)** in England. Estimates are available for **293 councils and 2,961 neighbourhoods**. Areas with missing or invalid inputs remain unavailable.
+See the [methodology](docs/methodology.md) and [data licences and attribution](DATA-LICENSES.md).
 
-This is an illustrative reform scenario, not enacted policy or personal tax advice. The figures use dated sources and area estimates; they are not property valuations or individual tax bills. Northern Ireland postcode records are excluded from the distributed data.
+## Licence
 
-Read the [methodology](docs/methodology.md) for assumptions and the [source register](docs/source-register.md) for sources. To rebuild datasets, follow the separate [Python pipeline guide](pipeline/README.md); the original raw downloads and source archive are not included in a clone.
-
-## Licences
-
-Original project code and documentation are licensed under the [MIT Licence](LICENSE).
-
-Third-party datasets, derived data, map geometry and dependencies retain their own licences. MIT does not replace those terms. See [data licences and attribution](DATA-LICENSES.md) before reusing data or map assets.
-
-## Contribute
-
-Follow the [contribution guide](CONTRIBUTING.md) for code changes or [open an issue](https://github.com/Lionel-Lim/tax-map/issues) for a bug or data correction. Report security issues using the [security guide](SECURITY.md).
+[MIT](LICENSE) for original code and documentation. Data, map assets and dependencies retain their own licences.
