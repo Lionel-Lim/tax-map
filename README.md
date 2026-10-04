@@ -1,65 +1,53 @@
 # Property Tax Reform Map
 
-An interactive map for exploring how an illustrative property-tax reform could affect a typical home in England. The static SvelteKit application uses pinned official data and browser-side calculations.
+**[Open the live map](https://taxmap.limsight.com/)** to explore how an illustrative property-tax reform could affect a typical home in England.
 
-Phases 1–3 are complete, and the internal dataset now includes all **296 English councils and 6,856 neighbourhoods (MSOAs)**. The map includes postcode and area search, all three comparison modes, personal inputs, source details and versioned sharing. It opens on the Leicester council estimate, comparing Council Tax with an annual property tax. Users can change the property tax percentage and optionally include Stamp Duty, spread over a custom ownership period (initially 20 years) or included in full in the purchase year. Shared links retain these settings.
+Compare Council Tax with an annual property tax, starting at **0.48%**. Change the rate, include Stamp Duty, enter your own figures, or share a result. Calculations run in your browser using pinned official data.
 
-- [England expansion](docs/england-expansion.md): national coverage, boundary exclusions, validation and remaining publication work.
-- [Cloudflare deployment](docs/deployment.md): manually run the GitHub deployment Action to publish to `taxmap.limsight.com` on the free plan.
-- [Data publication](docs/data-publication.md): Northern Ireland exclusions, retained data licences and repository history cleanup.
-- [Phase 3 findings](docs/phase3-findings.md): application guide and original sample acceptance evidence.
-- [Implementation plan](docs/implementation-plan.md): scope, milestones, dependencies, tasks and acceptance criteria.
-- [Source register](docs/source-register.md): official data and technical references, with known source limitations.
-- [Phase 0 findings](docs/phase0-findings.md): validated sources, sample selection and limitations.
-- [Methodology](docs/methodology.md): calculation rules and the user-confirmed missing-data decision.
-- [Phase 1 findings](docs/phase1-findings.md): delivered artifacts, verification, coverage and publication constraints.
-- [Pipeline instructions](pipeline/README.md): pinned setup, source recovery, rebuilding and tests.
-- [Phase 2 findings](docs/phase2-findings.md): delivered calculations and acceptance evidence.
-- [Try the calculation engine](docs/phase2-engine.md): terminal examples and integration guide.
-- [SDLT rules](docs/sdlt-rules.md): dated rates, eligibility, scope and official sources.
+![Tax Map showing the England map and a Leicester comparison](docs/images/tax-map.png)
 
-The plan draws on the earlier **Interactive Property Tax Map** and **Implementation Phases** conversations. It preserves postcode lookup, an area overview and Council Tax plus Stamp Duty comparisons.
+## Run locally
 
-The initial rate is an illustrative **0.48% annually** (`0.0048`). Results identify it as a reform scenario and expose its assumptions.
+1. Install Node.js **22.14.0 or newer**.
+2. Install dependencies and start the app:
 
-With Node 22.14.0 or a compatible newer version, start the application:
+   ```sh
+   npm ci
+   npm run dev
+   ```
+
+3. Open the local URL printed by Vite. Try postcode **LE4 0DD**.
+
+The website uses the data committed to this repository. No API keys, Python setup or private source archive are needed to run it.
+
+## Check your changes
 
 ```sh
-npm ci
-npm run dev
+npm run check
+npm test
+npm run test:app
+npm run test:deployment
+npm run build
 ```
 
-Open the local URL printed by Vite. Try postcode **LE4 0DD**, then choose **Ongoing owner**: the area estimate is approximately **£814 less per year**. Choose **Annualised ownership** or **Purchase year** to include the supported Stamp Duty scenario. The personal-input panel changes only the selected home’s calculation.
+For browser tests, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser` after building. Preview the production build with `npm run preview`.
 
-Build and preview the static application with `npm run build` and `npm run preview`. Run `npm run check`, `npm test` (**99 domain tests**), `npm run test:app` (**32 data/state tests**) and `npm run test:browser`. The app tests load every England district and compare all 7,152 area records in all three modes. For a fresh browser-test setup, run `npx playwright install chromium`, or provide an existing browser with `PLAYWRIGHT_CHROMIUM_EXECUTABLE`. See the Phase 3 guide for details.
+Pull requests and pushes to `main` run the website checks automatically. Publishing uses the separate, manually started deployment workflow. See the [deployment guide](docs/deployment.md).
 
-The calculation engine also runs in the terminal:
+## Understand the results
 
-```sh
-npm ci
-npm run compare -- --value 300000 --bill 1800
-```
+The current release covers **296 councils and 6,856 neighbourhoods (MSOAs)** in England. Estimates are available for **293 councils and 2,961 neighbourhoods**. Areas with missing or invalid inputs remain unavailable.
 
-The command accepts pounds. This example gives **£1,440/year**, a difference of **−£360/year** or **−£30/month**. Try a retained sample area with `npm run compare -- --area E02002830`; see the engine guide for purchase modes and personal overrides.
+This is an illustrative reform scenario, not enacted policy or personal tax advice. The figures use dated sources and area estimates; they are not property valuations or individual tax bills. Northern Ireland postcode records are excluded from the distributed data.
 
-The current England release has **293 available council estimates and 2,961 available neighbourhood estimates**. The other three councils and 3,895 neighbourhoods remain explicitly unavailable, with no council fallback. Six neighbourhood polygons failed boundary validation: their records remain visible as unavailable in search and results, and their geometry is excluded from the map. Full inventory coverage does not mean every area has a usable estimate.
+Read the [methodology](docs/methodology.md) for assumptions and the [source register](docs/source-register.md) for sources. To rebuild datasets, follow the separate [Python pipeline guide](pipeline/README.md); the original raw downloads and source archive are not included in a clone.
 
-The browser initially loads council statistics and overview geometry. Neighbourhood statistics and geometry load by council on demand; the global name/code index remains searchable before detail loads. The cleaned postcode files retain 2,651,940 current/terminated records in 3,039 outward-code shards, excluding Northern Ireland, with only the requested shard downloaded for a lookup.
+## Licences
 
-The published `public-v1/sample-2026-09-26-v1` bundle remains unchanged and explicitly versioned sample links still work. It contains 198 neighbourhoods across five councils: 91 available and 107 unavailable, with all five independent council estimates available.
+Original project code and documentation are licensed under the [MIT Licence](LICENSE).
 
-After the pinned setup in the pipeline instructions, rebuild with:
+Third-party datasets, derived data, map geometry and dependencies retain their own licences. MIT does not replace those terms. See [data licences and attribution](DATA-LICENSES.md) before reusing data or map assets.
 
-```sh
-.venv/bin/python -m pipeline build --scope england --release-id england-rebuild-check --output-dir .private-research/releases
-.venv/bin/python -m pipeline verify-release --scope england --release-id england-rebuild-check --output-dir .private-research/releases
-.venv/bin/python -m unittest discover -s tests -v
-```
+## Contribute
 
-The [active release](static/data/manifest.json) selects `england-2026-09-26-v1`. The pipeline has **67 passing tests**. The original 17 source files and independent source archive are retained locally and excluded from Git; they are not needed to build the website from a clone.
-
-The pipeline CLI still defaults to `--scope sample` for compatibility. The historical sample release is immutable: current implementation hashes differ, so rebuilding that original ID requires its historical code. Use a fresh release ID and a separate output directory for a current-code sample compatibility build; the [pipeline instructions](pipeline/README.md) give commands.
-
-The tracked `static/data/` releases contain only the cleaned public distributions. Northern Ireland postcode records have been removed, and the website build rejects their reintroduction. Original research inputs remain in ignored local storage and a private backup outside this repository. Historical validation metadata remains as provenance; it does not imply complete usable coverage. Deploy the generated `build/` directory. Retain and back up the private source archive before removing the workspace.
-
-The filtered public preview is live at **[taxmap.limsight.com](https://taxmap.limsight.com/)** on Cloudflare Workers Static Assets. Production page, postcode lookup and shared-link checks passed on 28 September 2026. Updates use the manually started **Deploy to Cloudflare** GitHub Action after its one-time setup; pushing to GitHub does not change the live site. Local Wrangler deployment remains available. See [deployment status](docs/deployment.md) and [audit instructions](scripts/phase0/README.md) for the historical Phase 0 evidence.
+Follow the [contribution guide](CONTRIBUTING.md) for code changes or [open an issue](https://github.com/Lionel-Lim/tax-map/issues) for a bug or data correction. Report security issues using the [security guide](SECURITY.md).
