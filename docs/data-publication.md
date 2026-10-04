@@ -58,14 +58,22 @@ with source exports. A private Git bundle outside the repository preserves the
 pre-cleanup research state. `.gitignore` also excludes restricted shard paths,
 research output directories and Git bundle files.
 
-Deleting files in a new commit does not erase earlier versions. A history cleanup
-must also remove `static/data/*/postcodes/BT*` from every published branch and tag
-before this existing repository is made public. Old clones, private backups and
-GitHub cached commit views may still retain the original data after a rewrite.
-Keep those copies private; do not merge or push the old history back. Review
+On 4 October 2026, all eight commits in the published `main` history were rewritten
+to remove `static/data/*/postcodes/BT*` and all 164 identified restricted blobs.
+The cleaned history was pushed with an explicit lease on the previous `main`,
+then the local branch was aligned after checking that its working files were
+identical. GitHub reported no other branches, tags, pull-request refs or forks.
+
+**The existing GitHub repository must remain private for now.** A post-rewrite
+API check still retrieved a removed file through its old commit ID. Rewriting
+branches does not purge these retained objects. A fresh repository populated
+only from the cleaned history, or a confirmed GitHub-side purge of the retained
+objects, is needed before public release. Old local clones and private backups
+also retain the original data; do not merge or push their history back. Review
 [GitHub's history-removal guidance](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository)
-before changing repository visibility. A cleaned new repository is another
-option if removal of old hosted copies cannot be established.
+before changing repository visibility. Local reflogs and editor recovery refs
+are private recovery state and must not be included in source exports or mirror
+pushes; use the separately verified cleaned Git bundle when creating a new repo.
 
 Deployment remains a manually started GitHub Action. Data cleanup does not run
 the Action, deploy the website or change repository visibility.
@@ -80,3 +88,6 @@ the Action, deploy the website or change repository visibility.
   and built public manifest hashes match the published hashes above.
 - A scan of the original `main` history identified 164 unique restricted Git
   blobs shared by the 328 deleted paths. No source ZIPs were found in that history.
+- The cleaned history scan checked 6,902 unique blobs and found zero restricted
+  dataset blobs. All 164 original restricted object IDs were also absent from
+  the separate cleaned Git object database.
