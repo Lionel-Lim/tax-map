@@ -4,7 +4,16 @@
   import ComparisonHelp from './ComparisonHelp.svelte';
   import type { AreaRecord, ComparisonResult, MoneyAmount } from '$lib/domain/tax/index.js';
   import { resultPresentation } from '$lib/map/presentation.js';
-  let { area, result, display = 'annual' }: { area: AreaRecord; result: ComparisonResult; display?: 'annual' | 'monthly' | 'percentage' } = $props();
+  let { area, result, display = 'annual', hasPersonalFigures, personalInputsBusy = false, oneditfigures, onresetfigures }: {
+    area: AreaRecord;
+    result: ComparisonResult;
+    display?: 'annual' | 'monthly' | 'percentage';
+    hasPersonalFigures: boolean;
+    personalInputsBusy?: boolean;
+    oneditfigures: () => void;
+    onresetfigures: () => void;
+  } = $props();
+  let editFiguresButton: HTMLButtonElement;
   let sourcesOpen = $state(false);
   const quality: Record<string,string> = {
     'authority-average-charge-proxy': 'Council-average charges; local parish bills may differ.',
@@ -27,16 +36,27 @@
 <section class="impact-panel" aria-labelledby="impact-heading" data-testid="impact-panel">
   <div class="panel-eyebrow"><span>ESTIMATED TAX CHANGE</span><span class="live-dot" aria-hidden="true"></span></div>
   <h2 id="impact-heading" tabindex="-1">{area.name}</h2>
-  <div class="area-subtitle">{area.geography === 'LAD' ? 'Council' : 'Neighbourhood'} estimate
+  <div class="area-subtitle"><span aria-live="polite">{hasPersonalFigures ? 'Personal comparison · your figures' : `${area.geography === 'LAD' ? 'Council' : 'Neighbourhood'} estimate · area figures`}</span>
     <HelpPopover title="About this estimate" fallback="/methodology/#area-estimates">
-      <p>This result uses the area’s median sale price and estimated average Council Tax bill. It is not a bill for a specific address.</p>
-      <p>You can use your own property value and Council Tax bill below.</p>
+      {#if hasPersonalFigures}<p>This comparison uses your entered figures. Any field left blank uses the area value, when available.</p>
+      {:else}<p>This result uses the area’s median sale price and estimated average Council Tax bill. It is not a bill for a specific address.</p>{/if}
+      <p>You can use your own property value and Council Tax bill. Your entries do not change the map’s area estimates.</p>
     </HelpPopover>
   </div>
-  {#if result.status === 'available'}
-    {#if result.estimateKind === 'personal-comparison'}
-      <p class="notice personal-label">Using your entered values. Area estimates on the map are unchanged.</p>
+  <div class="personal-actions">
+    <button bind:this={editFiguresButton} type="button" disabled={personalInputsBusy} aria-haspopup="dialog" onclick={(event) => { event.currentTarget.focus({ preventScroll: true }); oneditfigures(); }}>
+      <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 5 5M4 15 16 3a3.54 3.54 0 0 1 5 5L9 20l-6 1 1-6Z" /></svg>
+      {hasPersonalFigures ? 'Edit your figures' : 'Use your own figures'}
+    </button>
+    {#if hasPersonalFigures}
+      <button class="personal-reset" type="button" disabled={personalInputsBusy} onclick={() => { onresetfigures(); editFiguresButton.focus({ preventScroll: true }); }}>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a9 9 0 1 1 2.6 8.4M3 4v6h6" /></svg>
+        Reset to area figures
+      </button>
     {/if}
+  </div>
+  {#if hasPersonalFigures}<p class="personal-map-note">Area estimates on the map are unchanged.</p>{/if}
+  {#if result.status === 'available'}
     {#if area.availability === 'unavailable'}
       <p class="notice">The area estimate is still unavailable on the map.</p>
     {/if}

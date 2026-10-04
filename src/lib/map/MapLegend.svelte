@@ -1,5 +1,4 @@
 <script lang="ts">
-  import HelpPopover from '../components/HelpPopover.svelte';
   import type { ComparisonMode } from '../domain/tax/types.js';
   import { colourByKind } from './presentation.js';
 
@@ -7,13 +6,7 @@
 </script>
 
 <div class="map-legend" aria-label="Map colour legend">
-  <div class="legend-heading">Estimated change <span>{mode === 'purchase-year' ? '· purchase year' : '· per year'}</span>
-    <HelpPopover title="How map colours work" fallback="/methodology/#unavailable">
-      <p>“Within £100” includes changes from <strong>−£100 to +£100</strong>. It groups similar results; it does not measure the uncertainty of an estimate.</p>
-      <p>Colours use annual pounds even when you display monthly equivalents or percentages. In purchase-year mode, they use purchase-year pounds.</p>
-      <p>Hatched areas have no estimate.</p>
-    </HelpPopover>
-  </div>
+  <div class="legend-heading">Estimated change <span>{mode === 'purchase-year' ? '· purchase year' : '· per year'}</span></div>
   <ul>
     <li><i style:background={colourByKind.lower}></i>Lower by <span>over £100</span></li>
     <li><i style:background={colourByKind['near-zero']}></i>Within £100</li>

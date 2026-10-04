@@ -30,7 +30,7 @@ function areaButton(page: Page, code: string) {
 }
 
 async function openPersonalInputs(page: Page): Promise<void> {
-  await page.getByRole('button', { name: 'Use your own figures', exact: true }).click();
+  await page.getByTestId('impact-panel').getByRole('button', { name: /^(Use your own figures|Edit your figures)$/ }).click();
 }
 
 test('landing view excludes Stamp Duty and loads no postcode files', async ({ page }) => {
@@ -131,15 +131,21 @@ test('unavailable postcode keeps its area unavailable through partial overrides 
   await page.getByLabel('Property value (£)', { exact: true }).fill('300000');
   await page.getByRole('button', { name: 'Update comparison', exact: true }).click();
   await expect(page.getByTestId('primary-difference')).toHaveCount(0);
+  await panel.getByRole('button', { name: 'Reset to area figures', exact: true }).click();
+  await expect(panel.getByRole('button', { name: 'Use your own figures', exact: true })).toBeFocused();
+  await expect(panel.getByRole('heading', { name: 'Area estimate unavailable' })).toBeVisible();
+  await openPersonalInputs(page);
+  await expect(page.getByLabel('Property value (£)', { exact: true })).toHaveValue('');
+  await page.getByLabel('Property value (£)', { exact: true }).fill('300000');
+  await page.getByRole('button', { name: 'Update comparison', exact: true }).click();
   await openPersonalInputs(page);
   await page.getByLabel('Annual Council Tax bill (£)', { exact: true }).fill('1800');
   await page.getByRole('button', { name: 'Update comparison', exact: true }).click();
-  await expect(panel).toContainText('Using your entered values');
+  await expect(panel).toContainText('Personal comparison · your figures');
   await expect(page.getByTestId('primary-difference')).toContainText('£360');
   await expect(panel).toContainText('area estimate is still unavailable');
   await expect(areaButton(page, BEAUMONT)).toHaveAttribute('data-kind', 'unavailable');
-  await openPersonalInputs(page);
-  await page.getByRole('button', { name: 'Use area figures', exact: true }).click();
+  await panel.getByRole('button', { name: 'Reset to area figures', exact: true }).click();
   await expect(panel.getByRole('heading', { name: 'Area estimate unavailable' })).toBeVisible();
   await expect(page.getByTestId('primary-difference')).toHaveCount(0);
   await expect(areaButton(page, BEAUMONT)).toHaveAttribute('data-kind', 'unavailable');
@@ -157,9 +163,32 @@ test('personal inputs can reverse the selected-home outcome without recolouring 
   await expect(page.getByTestId('primary-difference')).toContainText('£3,000');
   await expect(page.getByTestId('impact-panel')).toContainText('Estimated increase');
   await expect(areaButton(page, BRADGATE)).toHaveAttribute('data-kind', 'lower');
-  await openPersonalInputs(page);
-  await page.getByRole('button', { name: 'Use area figures', exact: true }).click();
+  await page.getByTestId('impact-panel').getByRole('button', { name: 'Reset to area figures', exact: true }).click();
   await expect(page.getByTestId('primary-difference')).toContainText('£814');
+});
+
+test('reset from an ineligible personal comparison preserves area and comparison settings', async ({ page }) => {
+  await page.goto(sharedPath({ mode: 'annualised-ownership', buyer: 'first-time-buyer', years: '30', display: 'percentage' }));
+  const panel = page.getByTestId('impact-panel');
+  const rate = page.getByLabel('Annual property tax (%)', { exact: true });
+  await expect(page.getByTestId('primary-difference')).toBeVisible();
+  await rate.fill('0.6');
+  await rate.press('Tab');
+  const originalUrl = page.url();
+  const originalDifference = await page.getByTestId('primary-difference').innerText();
+  await openPersonalInputs(page);
+  await page.getByLabel('Property value (£)', { exact: true }).fill('600000');
+  await page.getByRole('button', { name: 'Update comparison', exact: true }).click();
+  await expect(page.getByTestId('primary-difference')).toHaveCount(0);
+  await panel.getByRole('button', { name: 'Reset to area figures', exact: true }).click();
+  await expect(page.getByTestId('primary-difference')).toHaveText(originalDifference);
+  await expect(panel.getByRole('heading', { name: 'Bradgate Heights & Beaumont Leys' })).toBeVisible();
+  await expect(rate).toHaveValue('0.6');
+  await expect(page.getByLabel('Compare costs', { exact: true })).toHaveValue('annualised-ownership');
+  await expect(page.getByLabel('Buyer type', { exact: true })).toHaveValue('first-time-buyer');
+  await expect(page.getByLabel('Years of ownership', { exact: true })).toHaveValue('30');
+  await expect(page.getByLabel('Show change as', { exact: true })).toHaveValue('percentage');
+  expect(page.url()).toBe(originalUrl);
 });
 
 test('purchase and buyer controls use the shared engine and purchase year has no monthly option', async ({ page }) => {
@@ -349,7 +378,8 @@ test('explicit share links preserve area settings and exclude personal amounts a
   expect(shared.toString()).not.toMatch(/300000|1800/);
   await page.goto(shared.toString());
   await expect(page.getByTestId('primary-difference')).toContainText('£68');
-  await expect(page.getByTestId('impact-panel')).not.toContainText('Using your entered values');
+  await expect(page.getByTestId('impact-panel')).not.toContainText('Personal comparison · your figures');
+  await expect(page.getByRole('button', { name: 'Reset to area figures', exact: true })).toHaveCount(0);
   await page.reload();
   await expect(page.getByLabel('Compare costs', { exact: true })).toHaveValue('ongoing-owner');
   await expect(page.getByLabel('Show change as', { exact: true })).toHaveValue('monthly');
@@ -454,13 +484,19 @@ test('methodology and data credits remain readable without JavaScript', async ({
   try {
     await page.goto('/methodology/');
     await expect(page.getByRole('heading', { name: 'How it works', exact: true })).toBeVisible();
-    await expect(page.locator('article')).toContainText('−£100 through +£100 per year, inclusive');
-    await page.getByRole('link', { name: 'data sources and coverage' }).click();
+    await expect(page.getByText('Annual Council Tax + (Stamp Duty ÷ years of ownership).', { exact: true })).toBeVisible();
+    await page.getByText('Reading and navigating the map', { exact: true }).click();
+    await expect(page.getByText(/except in purchase-year mode, which uses the first-year change/)).toBeVisible();
+    await page.getByRole('link', { name: 'Data sources and coverage', exact: true }).click();
     await expect(page.getByRole('heading', { name: 'Data & coverage' })).toBeVisible();
-    await expect(page.getByRole('table')).toContainText('3,895');
-    await expect(page.locator('article')).toContainText('107 unavailable');
-    await expect(page.locator('article')).toContainText('2,651,940');
-    await expect(page.locator('article')).toContainText('Northern Ireland postcode data has separate LPS terms and is excluded');
+    await expect(page.getByText('3,895 unavailable', { exact: true })).toBeVisible();
+    await expect(page.getByText(/Personal home values and Council Tax bills are never included/)).toBeVisible();
+    await page.getByText('Postcode lookup details and privacy', { exact: true }).click();
+    await expect(page.getByText(/The lookup contains 2,651,940/)).toBeVisible();
+    await page.getByText('Release files and the earlier sample', { exact: true }).click();
+    await expect(page.getByText(/91 available and 107 unavailable/)).toBeVisible();
+    await page.getByText('Attribution and reuse', { exact: true }).click();
+    await expect(page.getByText(/Northern Ireland postcode data has separate LPS terms and is excluded/)).toBeVisible();
     await expect(page.getByRole('link', { name: 'Open Government Licence v.3.0' })).toBeVisible();
   } finally {
     await context.close();

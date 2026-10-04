@@ -1,130 +1,94 @@
 <script lang="ts">
   import type { PageData } from './$types';
   let { data }: { data: PageData } = $props();
+  const formatCount = (value: number) => value.toLocaleString('en-GB');
+  const formatPercent = (part: number, total: number) => (part / total * 100).toFixed(1);
 </script>
 <svelte:head>
   <title>Data &amp; coverage · Tax Map</title>
-  <meta name="description" content="Pinned official data, England coverage, source periods and reuse credits for Tax Map." />
+  <meta name="description" content="Where Tax Map estimates are available, why some areas have gaps, and the official sources behind the comparison." />
 </svelte:head>
 
 <article class="prose">
   <p class="eyebrow">Evidence behind the map</p>
   <h1>Data &amp; coverage</h1>
-  <p class="lead">The map includes {data.coverage.LAD.total} English councils and {data.coverage.MSOA.total.toLocaleString('en-GB')} neighbourhoods. Some have no estimate because data or valid boundaries are missing.</p>
-  <p><strong>Coverage is incomplete. Missing data is not counted as zero.</strong></p>
+  <p class="lead">Official data supports estimates for most English councils and some neighbourhoods. Coverage is incomplete.</p>
+  <p class="reading-actions"><a class="reading-action" href="/map">Find your area →</a><a href="/methodology">How the estimate works</a></p>
 
-  <h2 id="coverage">England coverage</h2>
-  <p class="table-hint">Scroll sideways to see all columns →</p>
-  <!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard focus lets users scroll the table with arrow keys.) -->
-  <div class="table-wrap" role="region" aria-label="Coverage of area estimates" tabindex="0"><table><caption>Coverage of area estimates</caption><thead><tr><th scope="col">Geography</th><th scope="col">Available</th><th scope="col">Unavailable</th><th scope="col">Total</th></tr></thead><tbody>
-    <tr><th scope="row">Councils</th><td>{data.coverage.LAD.available}</td><td>{data.coverage.LAD.unavailable}</td><td>{data.coverage.LAD.total}</td></tr>
-    <tr><th scope="row">Neighbourhoods</th><td>{data.coverage.MSOA.available.toLocaleString('en-GB')}</td><td>{data.coverage.MSOA.unavailable.toLocaleString('en-GB')}</td><td>{data.coverage.MSOA.total.toLocaleString('en-GB')}</td></tr>
-  </tbody></table></div>
-  <p>Most neighbourhood gaps come from unverified markers in VOA housing-stock counts. Other gaps reflect incompatible geography or invalid source boundaries. Barnsley and Sheffield have no compatible stock totals for their current boundaries; City of London's stock contains an unverified marker. Their council estimates remain unavailable.</p>
-  <p>These counts measure area-record coverage. They do not measure the number of households that benefit or provide an individual home's tax bill. Council estimates use independent council inputs and are never substituted for an unavailable neighbourhood.</p>
-  <p>Available neighbourhoods contain {data.dwellingCoverage.reportedDwellingsInAvailableAreas.toLocaleString('en-GB')} of {data.dwellingCoverage.totalReportedDwellings.toLocaleString('en-GB')} dwellings in the rounded published stock totals (about 43.9%). This describes where estimates are supported, not how many households benefit.</p>
-  <details><summary>Neighbourhood coverage for every council</summary><p class="table-hint">Scroll sideways to see all columns →</p><!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard focus lets users scroll the table with arrow keys.) -->
-  <div class="table-wrap" role="region" aria-label="Neighbourhood coverage for every council" tabindex="0"><table><thead><tr><th scope="col">Council</th><th scope="col">Council estimate</th><th scope="col">Available neighbourhoods</th><th scope="col">Total neighbourhoods</th></tr></thead><tbody>
-    {#each data.councils as council}<tr><th scope="row"><a href={`/map/?data=${data.releaseId}&area=${council.code}&geography=LAD`}>{council.name}</a></th><td>{council.availability}</td><td>{council.available}</td><td>{council.total}</td></tr>{/each}
-  </tbody></table></div></details>
-  <details><summary>Boundaries withheld pending source review</summary><p>These source shapes fail polygon or shared-edge validation. No automatic repairs are applied. Their area records remain searchable, but their shapes and estimates are withheld.</p><ul>{#each data.boundaryExclusions as area}<li>{area.name} · {area.code}</li>{/each}</ul></details>
-  <p>The original <a href="/map/?data=sample-2026-09-26-v1">five-council sample</a> remains available for existing shared links. It contains 198 neighbourhoods, including 91 available and 107 unavailable estimates.</p>
-
-  <h2>Official inputs</h2>
-  <dl>
-    <dt><strong>Median sale prices · Office for National Statistics</strong></dt>
-    <dd>
-      <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/medianhousepricesbymiddlelayersuperoutputarea">Neighbourhood prices</a>
-      and <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/medianhousepricesforadministrativegeographies">independent council prices</a>,
-      year ending September 2025, released 26 March 2026. All-property medians cover 1 October
-      2024–30 September 2025. The imported fields are sheets 1a and 2a, column DT.
-    </dd>
-    <dt><strong>Council Tax property stock · VOA / HMRC</strong></dt>
-    <dd>
-      <a href="https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2025">Council Tax: stock of properties, 2025</a>,
-      CTSOP1.1, stock at 31 March 2025 in the May 2026 update. Band A–H counts supply the weights.
-      Published rounding and source markers are retained. Property-type calculations remain deferred.
-    </dd>
-    <dt><strong>Annual Council Tax charge · MHCLG</strong></dt>
-    <dd>
-      <a href="https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027">Council Tax levels, England 2026–27</a>,
-      Table 10, Data_Billing column AL. This is the full authority-average Band D charge with local
-      and major precepts for 1 April 2026–31 March 2027.
-    </dd>
-    <dt><strong>Boundaries and parent lookup · ONS</strong></dt>
-    <dd>
-      <a href="https://geoportal.statistics.gov.uk/datasets/61ff711e89ba4c24ae5dc8a487e422a8/about">MSOA 2021 boundaries, BSC V3</a>,
-      <a href="https://www.data.gov.uk/dataset/cd5eb88d-305b-43f6-933f-61874773f245/local-authority-districts-may-2025-boundaries-uk-bsc-v2">LAD May 2025 boundaries, BSC V2</a>,
-      and the <a href="https://www.data.gov.uk/dataset/009c5c9c-3187-4d78-ab23-330dd265002d/msoa-2021-to-ward-2025-to-lad-2025-best-fit-lookup-in-ew-v3">MSOA 2021 to LAD 2025 best-fit lookup, V3</a>.
-      Joins use official GSS codes. The MSOA polygons were converted from British National
-      Grid to WGS84 and checked for topology and island preservation. Invalid source shapes are explicitly withheld.
-    </dd>
-    <dt><strong>Postcode lookup · ONS</strong></dt>
-    <dd>
-      <a href="https://geoportal.statistics.gov.uk/datasets/3be72478d8454b59bb86ba97b4ee325b/about">ONS Postcode Directory, May 2025 V2</a>,
-      including the 17 June 2025 coordinate correction. The lookup preserves source country,
-      current/terminated status, coordinates and geography assignments.
-    </dd>
-    <dt><strong>Purchase-tax rules · HMRC</strong></dt>
-    <dd>
-      <a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates">Residential SDLT rates and first-time-buyer relief</a>,
-      effective 1 April 2025 and reviewed 26 September 2026. A separately versioned rule set supplies
-      supported purchase scenarios; see the <a href="/methodology">methodology</a> for their limits.
-    </dd>
+  <h2 id="coverage">Where estimates are available</h2>
+  <dl class="coverage-totals">
+    <div><dt>Councils</dt><dd><strong>{formatCount(data.coverage.LAD.available)}</strong> of {formatCount(data.coverage.LAD.total)}<span>{formatCount(data.coverage.LAD.unavailable)} unavailable</span></dd></div>
+    <div><dt>Neighbourhoods</dt><dd><strong>{formatCount(data.coverage.MSOA.available)}</strong> of {formatCount(data.coverage.MSOA.total)}<span>{formatCount(data.coverage.MSOA.unavailable)} unavailable</span></dd></div>
   </dl>
-  <p>
-    The price period, stock date and tax year differ. They remain visible separately and do not imply
-    a current valuation or a single common observation date.
-  </p>
+  <p>These are counts of areas with a supported estimate. They do not show how many households would benefit.</p>
 
-  <h2 id="postcodes">Postcode coverage and privacy</h2>
-  <p>
-    The lookup contains {data.publicPostcodes.postcodeRecords.toLocaleString('en-GB')} current and terminated postcode records across {data.publicPostcodes.postcodeShards.toLocaleString('en-GB')} outward-code
-    files, excluding Northern Ireland. Its country and status fields distinguish unsupported or terminated postcodes from unknown records. BT inputs are outside the lookup; their existence is not checked. A match only establishes presence in the May 2025 edition; newer postcodes may be absent.
-    Source coordinates can be approximate or unavailable.
-  </p>
-  <p>{data.postcodeCoverage.withAvailableMsoa.toLocaleString('en-GB')} of {data.postcodeCoverage.currentEnglishPostcodes.toLocaleString('en-GB')} current English postcodes in that edition lead to an available neighbourhood estimate (about 49.1%). Other matched postcodes show the relevant data limitation instead.</p>
-  <p>
-    After the appropriate outward-code file is loaded, the full postcode is matched locally in the
-    browser. A network failure is shown separately from an unknown postcode. Full-postcode sharing
-    is an explicit choice; personal value and bill inputs are excluded from sharing by default.
-    Static-host requests and shared URLs may be logged by the services handling them.
-  </p>
+  <h2>Why some areas have no estimate</h2>
+  <p>Most gaps come from housing-stock counts that cannot be verified. Missing prices or charges, incompatible geography and invalid boundaries can also prevent an estimate.</p>
+  <p><strong>Missing data is never counted as zero.</strong> A council result is never substituted for an unavailable neighbourhood. <a href="/methodology/#your-figures">Your own figures</a> can replace missing prices or bills, but cannot fix an invalid boundary.</p>
 
-  <h2>Attribution and reuse</h2>
-  <p>
-    Source: Office for National Statistics licensed under the
-    <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v.3.0</a>.
-    Price statistics are adapted by ONS from HM Land Registry data licensed under OGL v3.0.
-    Council Tax stock data: VOA/HMRC, licensed under OGL v3.0. Council Tax charge data: MHCLG,
-    licensed under OGL v3.0. Logos are excluded from these reuse permissions.
-  </p>
+  <h2 id="postcodes">Postcodes and sharing</h2>
   <ul>
-    <li>MSOA boundaries: Contains OS data © Crown copyright and database right 2021.</li>
-    <li>LAD boundaries and postcode data: Contains OS data © Crown copyright and database right 2025.</li>
-    <li>Postcode data: Contains Royal Mail data © Royal Mail copyright and database right 2025.</li>
+    <li><strong>A postcode finds an area</strong> — it does not identify your home's value or Council Tax bill.</li>
+    <li><strong>The directory is from May 2025.</strong> Newer postcodes may be missing; estimates cover England only.</li>
+    <li><strong>Sharing a full postcode is optional.</strong> Personal home values and Council Tax bills are never included in shared links.</li>
   </ul>
-  <p>
-    See <a href="https://www.ons.gov.uk/methodology/geography/licences">ONS geographical licensing guidance</a>.
-    Northern Ireland postcode data has separate LPS terms and is excluded from this website,
-    including its downloadable data files. The map remains a preview with the coverage gaps
-    described above; it is not an individual property valuation or tax bill.
-  </p>
 
+  <h2>Sources and details</h2>
   <details>
-    <summary>Inspect the pinned release and provenance</summary>
-    <p>
-      Data release <code>{data.releaseId}</code> preserves exact source editions and records SHA-256
-      checksums, sizes, input periods, geography vintages, methodology and policy versions. Area
-      records retain the source workbook cells or CSV rows used for their inputs. The original
-      workbooks and source archives are kept outside the browser data bundle.
-    </p>
-    <p>
-      Inspect the <a href="/data/public-v1/england-2026-09-26-v1/manifest.json">release manifest</a>
-      and <a href="/data/public-v1/england-2026-09-26-v1/sources.json">source register</a>.
-      The application combines these pinned statistics with
-      rule version <code>sdlt-england-2025-04-01-v1</code>.
-    </p>
+    <summary>Official sources and dates</summary>
+    <p>The price period, stock date and tax year differ. Together they provide an area estimate, not a current valuation of an individual home.</p>
+    <dl>
+      <dt>Sale prices · Office for National Statistics</dt>
+      <dd><a href="https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/medianhousepricesbymiddlelayersuperoutputarea">Neighbourhood medians</a> and <a href="https://www.ons.gov.uk/peoplepopulationandcommunity/housing/datasets/medianhousepricesforadministrativegeographies">council medians</a> for all property types, covering <strong>1 October 2024–30 September 2025</strong>. Released 26 March 2026; sheets 1a and 2a, column DT.</dd>
+      <dt>Council Tax property stock · VOA / HMRC</dt>
+      <dd><a href="https://www.gov.uk/government/statistics/council-tax-stock-of-properties-2025">Stock of properties, 2025</a>: counts in bands A–H at <strong>31 March 2025</strong>, from CTSOP1.1 in the May 2026 update. Source rounding and markers are preserved.</dd>
+      <dt>Council Tax charges · MHCLG</dt>
+      <dd><a href="https://www.gov.uk/government/statistics/council-tax-levels-set-by-local-authorities-in-england-2026-to-2027">Council Tax levels, England 2026–27</a>: authority-average Band D charges, including local and major precepts, for <strong>1 April 2026–31 March 2027</strong>. Table 10, Data_Billing column AL.</dd>
+      <dt>Boundaries and postcodes · ONS</dt>
+      <dd><a href="https://geoportal.statistics.gov.uk/datasets/61ff711e89ba4c24ae5dc8a487e422a8/about">MSOA 2021 neighbourhood boundaries, BSC V3</a>; <a href="https://www.data.gov.uk/dataset/cd5eb88d-305b-43f6-933f-61874773f245/local-authority-districts-may-2025-boundaries-uk-bsc-v2">May 2025 council boundaries, BSC V2</a>; and the <a href="https://www.data.gov.uk/dataset/009c5c9c-3187-4d78-ab23-330dd265002d/msoa-2021-to-ward-2025-to-lad-2025-best-fit-lookup-in-ew-v3">MSOA-to-council lookup, V3</a>. Joins use official geographic codes. <a href="https://geoportal.statistics.gov.uk/datasets/3be72478d8454b59bb86ba97b4ee325b/about">ONS Postcode Directory, May 2025 V2</a> includes the 17 June 2025 coordinate correction.</dd>
+      <dt>Stamp Duty rules · HMRC</dt>
+      <dd><a href="https://www.gov.uk/stamp-duty-land-tax/residential-property-rates">Residential SDLT rates and first-time-buyer relief</a>, effective <strong>1 April 2025</strong> and reviewed 26 September 2026. See <a href="/methodology/#buyers">supported buyer scenarios</a>.</dd>
+    </dl>
   </details>
-  <p><a href="/methodology">Read the methodology</a> or <a href="/map">explore the England map</a>.</p>
+  <details>
+    <summary>Council coverage and boundary exclusions</summary>
+    <p>Barnsley and Sheffield have no compatible stock totals for their current boundaries. City of London's stock contains an unverified marker. These three council estimates are unavailable.</p>
+    <p>Available neighbourhoods contain {formatCount(data.dwellingCoverage.reportedDwellingsInAvailableAreas)} of {formatCount(data.dwellingCoverage.totalReportedDwellings)} dwellings in the rounded published totals ({formatPercent(data.dwellingCoverage.reportedDwellingsInAvailableAreas, data.dwellingCoverage.totalReportedDwellings)}%). This measures coverage, not households benefiting.</p>
+    <h3>Boundaries awaiting review</h3>
+    <p>These {data.boundaryExclusions.length} source shapes fail polygon or shared-edge checks. Their records remain searchable, but their shapes and comparisons are withheld, even with personal figures. No automatic repairs are applied.</p>
+    <dl>{#each data.boundaryExclusions as area}<dt>{area.name}</dt><dd>{area.code}</dd>{/each}</dl>
+    <h3>Neighbourhood coverage by council</h3>
+    <p>Select a council name to open it on the map.</p>
+    <p class="table-hint">Scroll sideways to see all columns →</p>
+    <!-- svelte-ignore a11y_no_noninteractive_tabindex (Keyboard focus lets users scroll the table with arrow keys.) -->
+    <div class="table-wrap" role="region" aria-label="Neighbourhood coverage for every council" tabindex="0">
+      <table><thead><tr><th scope="col">Council</th><th scope="col">Council estimate</th><th scope="col">Available neighbourhoods</th><th scope="col">Total neighbourhoods</th></tr></thead><tbody>
+        {#each data.councils as council}<tr><th scope="row"><a href={`/map/?data=${data.releaseId}&area=${council.code}&geography=LAD`}>{council.name}</a></th><td>{council.availability}</td><td>{council.available}</td><td>{council.total}</td></tr>{/each}
+      </tbody></table>
+    </div>
+  </details>
+  <details>
+    <summary>Postcode lookup details and privacy</summary>
+    <p>{formatCount(data.postcodeCoverage.withAvailableMsoa)} of {formatCount(data.postcodeCoverage.currentEnglishPostcodes)} current English postcodes in this edition lead to an available neighbourhood estimate ({formatPercent(data.postcodeCoverage.withAvailableMsoa, data.postcodeCoverage.currentEnglishPostcodes)}%). Other matches show the relevant data limitation.</p>
+    <p>The lookup contains {formatCount(data.publicPostcodes.postcodeRecords)} current and terminated records in {formatCount(data.publicPostcodes.postcodeShards)} outward-code files, excluding Northern Ireland. Country and status fields distinguish unsupported or terminated postcodes from unknown records. BT postcodes are outside the lookup; their existence is not checked.</p>
+    <p>The browser loads the relevant outward-code file, then matches the full postcode locally. Network failures are shown separately from unknown postcodes. Source coordinates may be approximate or missing; official assignments, rather than map shapes, determine an area's council.</p>
+    <p>Static-host requests and shared URLs may be logged by the services handling them. A full postcode appears in a shared link only if you choose to include it. Your personal home value and Council Tax bill are always excluded.</p>
+  </details>
+  <details>
+    <summary>Attribution and reuse</summary>
+    <p>Source: Office for National Statistics licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v.3.0</a>. Price statistics are adapted by ONS from HM Land Registry data licensed under OGL v3.0. Council Tax stock data: VOA/HMRC, licensed under OGL v3.0. Council Tax charge data: MHCLG, licensed under OGL v3.0. Logos are excluded from these reuse permissions.</p>
+    <ul>
+      <li>MSOA boundaries: Contains OS data © Crown copyright and database right 2021.</li>
+      <li>LAD boundaries and postcode data: Contains OS data © Crown copyright and database right 2025.</li>
+      <li>Postcode data: Contains Royal Mail data © Royal Mail copyright and database right 2025.</li>
+    </ul>
+    <p>See <a href="https://www.ons.gov.uk/methodology/geography/licences">ONS geographical licensing guidance</a>. Northern Ireland postcode data has separate LPS terms and is excluded from this website, including its downloadable data files.</p>
+  </details>
+  <details>
+    <summary>Release files and the earlier sample</summary>
+    <p>Data release <code>{data.releaseId}</code> records source editions, dates, SHA-256 checksums, file sizes and calculation versions. Area records retain their source workbook cells or CSV rows. Original workbooks and archives are kept outside the browser bundle.</p>
+    <p>Inspect the <a href={`/data/public-v1/${data.releaseId}/manifest.json`}>release manifest</a> and <a href={`/data/public-v1/${data.releaseId}/sources.json`}>source register</a>. The purchase-rule version is <code>sdlt-england-2025-04-01-v1</code>.</p>
+    <p>The original <a href="/map/?data=sample-2026-09-26-v1">five-council sample</a> remains available for existing shared links. It contains 198 neighbourhoods: 91 available and 107 unavailable estimates.</p>
+  </details>
+  <p class="reading-actions"><a class="reading-action" href="/map">Find your area →</a></p>
 </article>

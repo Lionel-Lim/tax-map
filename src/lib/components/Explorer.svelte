@@ -33,6 +33,7 @@
   let personalOpen = $state(false);
   let shareOpen = $state(false);
   let overrides = $state<AreaComparisonOptions['overrides']>({});
+  let hasPersonalFigures = $derived(overrides?.propertyValuePence !== undefined || overrides?.annualCouncilTaxPence !== undefined);
   let shareUrl = $state('');
   let shareMessage = $state('');
   let includePostcode = $state(false);
@@ -84,6 +85,17 @@
   }
 
   function resetPersonal() { overrides = {}; valueInput = ''; billInput = ''; personalErrors = { value: '', bill: '' }; personalOpen = false; }
+  function personalInput(pence: number | undefined): string {
+    if (pence === undefined) return '';
+    const pounds = Math.floor(pence / 100), pennies = pence % 100;
+    return pennies ? `${pounds}.${String(pennies).padStart(2, '0')}` : String(pounds);
+  }
+  function openPersonal() {
+    valueInput = personalInput(overrides?.propertyValuePence);
+    billInput = personalInput(overrides?.annualCouncilTaxPence);
+    personalErrors = { value: '', bill: '' };
+    personalOpen = true;
+  }
   function clearShared() { shareUrl = ''; shareMessage = ''; shareOpen = false; }
   function remember() {
     clearShared();
@@ -337,24 +349,17 @@
       {#if areaError}<p class="postcode-status warning" role="alert">{areaError} Select the area to retry.</p>{/if}
     </section>
     <aside class="result-column" aria-label="Selected home comparison">
-      {#if selected && selectedResult}<ImpactPanel area={selected} result={selectedResult} display={scenario.display} />{:else}<div class="impact-panel"><h2>Select an area</h2><p>Search a postcode, choose an area from the list, or select a map shape.</p></div>{/if}
+      {#if selected && selectedResult}<ImpactPanel area={selected} result={selectedResult} display={scenario.display} {hasPersonalFigures} personalInputsBusy={postcodeBusy || areaLoading} oneditfigures={openPersonal} onresetfigures={resetPersonal} />{:else}<div class="impact-panel"><h2>Select an area</h2><p>Search a postcode, choose an area from the list, or select a map shape.</p></div>{/if}
       {#if selected}
-        <section class="personal-inputs">
-          <div class="section-heading"><button type="button" class="text-action" aria-haspopup="dialog" onclick={(event) => { event.currentTarget.focus({ preventScroll: true }); personalOpen = true; }}>Use your own figures</button><HelpPopover title="About your figures" fallback="/methodology/#your-figures">
-            <p>Your entries update this comparison only. They do not change the map’s area estimates.</p>
-            <p>If an area estimate is unavailable, you must supply every missing value before a personal comparison can be calculated.</p>
-            <p>Personal values are excluded from share links.</p>
-          </HelpPopover></div>
-          <p>Enter pounds. Leave a field blank to keep the area value.</p>
-        </section>
-        <OverlayDialog bind:open={personalOpen} title="Use your own figures">
-          <p>Enter pounds. Leave a field blank to keep the area value.</p>
+        <OverlayDialog bind:open={personalOpen} title={hasPersonalFigures ? 'Edit your figures' : 'Use your own figures'}>
+          <p>Enter pounds. Leave a field blank to keep the area value. Your entries update this comparison only and are excluded from shared links.</p>
+          {#if selected.availability === 'unavailable'}<p>To calculate a personal comparison, enter every value missing from the area estimate.</p>{/if}
           <form class="overlay-form" onsubmit={(event) => { event.preventDefault(); applyPersonal(); }}>
             <label for="personal-value">Property value (£)</label><input id="personal-value" inputmode="decimal" placeholder="Use area value" bind:value={valueInput} aria-invalid={Boolean(personalErrors.value)} aria-describedby={personalErrors.value ? 'personal-value-error' : undefined} />
             {#if personalErrors.value}<p id="personal-value-error" role="alert" class="error-text">{personalErrors.value}</p>{/if}
             <label for="personal-bill">Annual Council Tax bill (£)</label><input id="personal-bill" inputmode="decimal" placeholder="Use area bill" bind:value={billInput} aria-invalid={Boolean(personalErrors.bill)} aria-describedby={personalErrors.bill ? 'personal-bill-error' : undefined} />
             {#if personalErrors.bill}<p id="personal-bill-error" role="alert" class="error-text">{personalErrors.bill}</p>{/if}
-            <div class="button-row"><button class="primary" type="submit" disabled={postcodeBusy || areaLoading}>Update comparison</button><button type="button" onclick={resetPersonal}>Use area figures</button></div>
+            <div class="button-row"><button class="primary" type="submit" disabled={postcodeBusy || areaLoading}>Update comparison</button><button type="button" onclick={() => personalOpen = false}>Cancel</button></div>
           </form>
         </OverlayDialog>
         <section class="share-box">
