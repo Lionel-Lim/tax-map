@@ -62,10 +62,12 @@ companions are checked as part of the public artifact inventory.
 ## GitHub source and manual publishing
 
 The chosen workflow is **GitHub stores the project; Cloudflare hosts the app;
-updates are deployed manually**. The user selected manual deployment on
-28 September 2026. The private source repository is
+updates are deployed through a manually started GitHub Action**. The user selected
+manual Actions runs on 4 October 2026. The private source repository is
 [`Lionel-Lim/tax-map`](https://github.com/Lionel-Lim/tax-map).
 GitHub Pages and Cloudflare's automatic GitHub build integration are not enabled.
+The [deployment workflow](../.github/workflows/deploy.yml) uses only
+`workflow_dispatch`: pushes, pull requests and schedules do not start it.
 Pushing a commit does not update the live website.
 
 Keep source, dependencies' lockfile, tests, Wrangler configuration and original
@@ -75,7 +77,34 @@ The `.gitignore` excludes generated files, local credentials, Wrangler state,
 raw-source downloads and the independent source archive. Back up the raw data
 and archive separately; they are not included in a repository clone.
 
-For an update:
+### Run the GitHub Action
+
+One-time setup:
+
+1. Commit and push `.github/workflows/deploy.yml` to the default branch, `main`.
+   GitHub only shows **Run workflow** once the workflow is on the default branch.
+2. In the repository's **Settings → Secrets and variables → Actions**, add the
+   repository secret `CLOUDFLARE_API_TOKEN` using a securely supplied deployment
+   token with the account and zone scope described below. The account ID is
+   already in `wrangler.jsonc`; no separate account-ID secret is needed.
+
+For an update, push the changes to `main`, then open **Actions → Deploy to
+Cloudflare → Run workflow**, select `main`, and start the run. The deployment job
+only runs for `main`. It installs pinned dependencies, runs `build:cloudflare`
+(type checks, unit/app/publication tests, static build, asset validation and
+Wrangler dry run), then runs the Chromium browser tests before publishing the
+checked `build/` directory. Failed checks prevent deployment. Production runs
+share a concurrency group so deployments cannot overlap.
+
+The token is passed only to the deployment step. Keep it in Actions secrets,
+never in the workflow or other committed files. No action has been dispatched
+as part of adding this workflow; its first hosted run remains to be verified.
+After a successful run, verify pages, a postcode lookup and a shared-result
+reload on the live domain.
+
+### Local deployment alternative
+
+To publish from a local checkout:
 
 1. Make and verify the changes, then save the source to GitHub.
 2. Authenticate Wrangler to the selected account using a securely supplied API
@@ -91,8 +120,8 @@ For an update:
 4. Verify pages, a postcode lookup and a shared-result reload on the live domain.
 
 Supply an API token through `CLOUDFLARE_API_TOKEN` using secure local credential
-handling, never in source, command history, public assets or GitHub. The temporary
-owner-readable token file used for initial deployment was removed after use.
+handling, never in source, command history, public assets or GitHub source files.
+The temporary owner-readable token file used for initial deployment was removed after use.
 The token remains active in Cloudflare with its original three permissions.
 
 Automatic publishing can be reconsidered separately. During setup, a custom user
@@ -149,6 +178,11 @@ References (checked 28 September 2026):
 - [Static response headers](https://developers.cloudflare.com/workers/static-assets/headers/)
 - [Cloudflare GitHub integration](https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/github-integration/)
 - [Workers build configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)
+
+Manual Actions references (checked 4 October 2026):
+
+- [Manually running a GitHub workflow](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/manually-run-a-workflow)
+- [Deploying Workers with GitHub Actions](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/)
 
 ## Local validation recorded 28 September 2026
 
