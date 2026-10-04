@@ -4,7 +4,7 @@
   import ComparisonHelp from './ComparisonHelp.svelte';
   import type { AreaRecord, ComparisonResult, MoneyAmount } from '$lib/domain/tax/index.js';
   import { resultPresentation } from '$lib/map/presentation.js';
-  let { area, result, display = 'annual', hasPersonalFigures, personalInputsBusy = false, oneditfigures, onresetfigures }: {
+  let { area, result, display = 'annual', hasPersonalFigures, personalInputsBusy = false, oneditfigures, onresetfigures, parentCouncil, canUsePersonalFigures = true, onselectcouncil }: {
     area: AreaRecord;
     result: ComparisonResult;
     display?: 'annual' | 'monthly' | 'percentage';
@@ -12,8 +12,11 @@
     personalInputsBusy?: boolean;
     oneditfigures: () => void;
     onresetfigures: () => void;
+    parentCouncil?: AreaRecord;
+    canUsePersonalFigures?: boolean;
+    onselectcouncil: (code: string) => void;
   } = $props();
-  let editFiguresButton: HTMLButtonElement;
+  let editFiguresButton = $state<HTMLButtonElement>();
   let sourcesOpen = $state(false);
   const quality: Record<string,string> = {
     'authority-average-charge-proxy': 'Council-average charges; local parish bills may differ.',
@@ -23,7 +26,15 @@
     'geometry-unavailable': 'This neighbourhood has no validated map shape in this release.',
     'geography-needs-review': 'The source geographies or charging authority assignments are incompatible; no estimate is substituted.',
     'stock-unavailable': 'Compatible housing-stock counts are unavailable for this area.',
-    'stock-marker-unverified': 'A stock-count marker has an unverified meaning; no estimate is substituted.',
+    'stock-marker-unverified': 'We cannot verify the Council Tax band counts, so an average bill cannot be calculated for this area.',
+    'price-unavailable': 'A typical property value is not available for this area.',
+    'charge-unavailable': 'The Council Tax charge is not available for this area.',
+    'stock-suppressed': 'Some Council Tax band counts are withheld, so an average bill cannot be calculated.',
+    'council-tax-unavailable': 'An estimated annual Council Tax bill is not available for this area.',
+    'stock-total-unavailable': 'The housing counts needed to estimate an average Council Tax bill are missing.',
+    'stock-denominator-zero': 'The housing counts needed to estimate an average Council Tax bill are missing.',
+    'stock-total-nonpositive': 'The housing counts needed to estimate an average Council Tax bill are missing.',
+    'source-value-unrecognised': 'The source does not provide usable figures for this comparison.',
   };
   const pounds = (v: string) => v.replace(/^[+-]/, '');
   // Floating-point conversion is only for chart pixels; money comes from the exact engine result.
@@ -43,18 +54,18 @@
       <p>You can use your own property value and Council Tax bill. Your entries do not change the map’s area estimates.</p>
     </HelpPopover>
   </div>
-  <div class="personal-actions">
+  {#if canUsePersonalFigures || hasPersonalFigures}<div class="personal-actions">
     <button bind:this={editFiguresButton} type="button" disabled={personalInputsBusy} aria-haspopup="dialog" onclick={(event) => { event.currentTarget.focus({ preventScroll: true }); oneditfigures(); }}>
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m16 3 5 5M4 15 16 3a3.54 3.54 0 0 1 5 5L9 20l-6 1 1-6Z" /></svg>
       {hasPersonalFigures ? 'Edit your figures' : 'Use your own figures'}
     </button>
     {#if hasPersonalFigures}
-      <button class="personal-reset" type="button" disabled={personalInputsBusy} onclick={() => { onresetfigures(); editFiguresButton.focus({ preventScroll: true }); }}>
+      <button class="personal-reset" type="button" disabled={personalInputsBusy} onclick={() => { onresetfigures(); editFiguresButton?.focus({ preventScroll: true }); }}>
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10a9 9 0 1 1 2.6 8.4M3 4v6h6" /></svg>
         Reset to area figures
       </button>
     {/if}
-  </div>
+  </div>{/if}
   {#if hasPersonalFigures}<p class="personal-map-note">Area estimates on the map are unchanged.</p>{/if}
   {#if result.status === 'available'}
     {#if area.availability === 'unavailable'}
@@ -120,6 +131,14 @@
       {#each result.issues as issue}<p>{quality[issue.code] ?? issue.message}</p>{/each}
       {#each result.reasons.filter(reason => !result.issues.some(issue => issue.code === reason)) as reason}<p>{quality[reason] ?? reason.replaceAll('-', ' ')}</p>{/each}
       <p>Missing data is not counted as zero. We do not substitute a council estimate.</p>
+      {#if area.availability === 'unavailable' && result.status === 'unavailable'}
+        {#if canUsePersonalFigures}
+          <p class="recovery-guidance"><strong>You can still compare your own home.</strong> Choose “{hasPersonalFigures ? 'Edit your figures' : 'Use your own figures'}” and enter {area.pricePence === null && area.councilTaxExactPence === null ? 'your property value and annual Council Tax bill' : area.pricePence === null ? 'your property value' : 'your annual Council Tax bill'}.</p>
+        {:else}<p>Personal figures cannot resolve this area's boundary or source limitation.</p>{/if}
+        {#if parentCouncil?.availability === 'available'}
+          <div class="council-recovery"><button type="button" disabled={personalInputsBusy} onclick={() => onselectcouncil(parentCouncil!.code)}>View {parentCouncil.name} council estimate</button><p>This opens a separate, council-wide comparison.</p></div>
+        {/if}
+      {/if}
       {#each result.guidanceUrls as url}<a href={url} target="_blank" rel="noreferrer">Read official SDLT guidance ↗</a>{/each}
     </div>
   {/if}

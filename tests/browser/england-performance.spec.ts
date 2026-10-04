@@ -27,6 +27,7 @@ test('England mobile overview and lazy detail stay within measured delivery budg
   const postcodeMilliseconds = Date.now() - lookupStarted;
   const afterLookup = await resources();
   const detail = afterLookup.filter(row => /\/postcodes\/|\/areas\/msoa\/|\/boundaries\/msoa\//.test(row.path));
+  await page.locator('.scenario-settings > summary').click();
   const changeStarted = Date.now();
   await page.getByLabel('Compare costs', { exact: true }).selectOption('annualised-ownership');
   await expect(page.getByLabel('Compare costs', { exact: true })).toHaveValue('annualised-ownership');

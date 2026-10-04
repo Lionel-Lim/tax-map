@@ -15,6 +15,7 @@ for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto('/');
     await expect(page.getByTestId('primary-difference')).toContainText('£741');
+    if (width === 390) await page.locator('.scenario-settings > summary').click();
     const before = await geometry(page);
     const trigger = page.getByRole('button', { name: 'About the property tax scenario', exact: true });
     await trigger.focus();
@@ -71,6 +72,7 @@ for (const width of [390, 1440]) {
     const originalDifference = await page.getByTestId('primary-difference').innerText();
     const originalMap = await page.getByTestId('map-selection-summary').innerText();
     const panel = page.getByTestId('impact-panel');
+    if (width === 390) await page.locator('.scenario-settings > summary').click();
     const before = await geometry(page);
     const opener = panel.getByRole('button', { name: 'Use your own figures', exact: true });
     await expect(panel.getByRole('button', { name: 'Reset to area figures', exact: true })).toHaveCount(0);
@@ -107,9 +109,11 @@ for (const width of [390, 1440]) {
     await expect(editor).toBeFocused();
     await expect(page.getByTestId('primary-difference')).toContainText('£360');
     await editor.click();
-    await expect(page.getByLabel('Property value (£)', { exact: true })).toHaveValue('300000');
-    await expect(page.getByLabel('Annual Council Tax bill (£)', { exact: true })).toHaveValue('1800');
+    await expect(page.getByLabel('Property value (£)', { exact: true })).toHaveValue('300,000');
+    await expect(page.getByLabel('Annual Council Tax bill (£)', { exact: true })).toHaveValue('1,800');
     await page.keyboard.press('Escape');
+    await expect(dialog).not.toBeVisible();
+    await expect(editor).toBeFocused();
     const reset = panel.getByRole('button', { name: 'Reset to area figures', exact: true });
     await reset.focus();
     await page.keyboard.press('Enter');

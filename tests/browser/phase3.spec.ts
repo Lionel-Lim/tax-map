@@ -65,6 +65,7 @@ test('the real map renders council labels and selects an independent council est
   await expect(page.locator('.area-map-label')).toHaveCount(5);
   await expect(page.getByText('Explore using search or the area list', { exact: true })).toHaveCount(0);
   await page.getByRole('button', { name: 'Show all sample councils' }).click();
+  await page.getByTestId('tax-map').scrollIntoViewIfNeeded();
   const wandsworth = page.getByRole('button', { name: /^Wandsworth: .* Select council area\.$/ });
   await expect(wandsworth).toBeInViewport();
   await wandsworth.click();

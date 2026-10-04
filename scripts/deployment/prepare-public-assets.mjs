@@ -16,6 +16,7 @@ await rm(output, { recursive: true, force: true });
 await mkdir(path.join(output, 'data/public-v1'), { recursive: true });
 await copyFile(path.join(sourceRoot, '_headers'), path.join(output, '_headers'));
 await copyFile(path.join(sourceRoot, 'favicon.svg'), path.join(output, 'favicon.svg'));
+await copyFile(path.join(sourceRoot, 'social-preview.png'), path.join(output, 'social-preview.png'));
 for (const releaseId of releases) {
   const source = path.join(sourceRoot, 'data', releaseId);
   const destination = path.join(output, 'data/public-v1', releaseId);

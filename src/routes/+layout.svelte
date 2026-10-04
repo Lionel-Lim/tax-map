@@ -1,8 +1,40 @@
 <script lang="ts">
   import '../app.css';
   import { page } from '$app/state';
+  import { setContext } from 'svelte';
+  import { beforeNavigate } from '$app/navigation';
+  import { COMPARISON_SESSION, type ComparisonSession } from '$lib/comparison-session.js';
+  const comparisonSession = $state<ComparisonSession>({ saved: null, resume: false });
+  setContext(COMPARISON_SESSION, comparisonSession);
+  beforeNavigate(({ from, to, type }) => {
+    comparisonSession.resume = Boolean(comparisonSession.saved && from && to
+      && /^\/(methodology|data-sources)\/?$/.test(from.url.pathname)
+      && (to.url.pathname === '/' || /^\/map\/?$/.test(to.url.pathname))
+      // Shallow history entries retain the route's original URL in SvelteKit.
+      // The address bar identifies the actual comparison being revisited.
+      && (type === 'popstate' ? window.location.search === comparisonSession.saved.query : !to.url.search));
+  });
   let { children } = $props();
+  const socialTitle = $derived(page.url.pathname.startsWith('/methodology') ? 'How it works — Tax Map' : page.url.pathname.startsWith('/data-sources') ? 'Data & coverage — Tax Map' : 'See how property tax could change — Tax Map');
+  const socialDescription = 'Find your area in England and compare Council Tax with an illustrative annual property tax. Choose a rate or use your own figures.';
 </script>
+
+<svelte:head>
+  <link rel="canonical" href={`https://taxmap.limsight.com${page.url.pathname}`} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Tax Map" />
+  <meta property="og:title" content={socialTitle} />
+  <meta property="og:description" content={socialDescription} />
+  <meta property="og:url" content={`https://taxmap.limsight.com${page.url.pathname}`} />
+  <meta property="og:image" content="https://taxmap.limsight.com/social-preview.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Tax Map: explore how an illustrative property tax could change costs for a home in England." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={socialTitle} />
+  <meta name="twitter:description" content={socialDescription} />
+  <meta name="twitter:image" content="https://taxmap.limsight.com/social-preview.png" />
+</svelte:head>
 
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
@@ -13,9 +45,20 @@
     <a href="/data-sources/" aria-current={page.url.pathname.startsWith('/data-sources') ? 'page' : undefined}>Data & coverage</a>
   </nav>
 </header>
-<main id="main" tabindex="-1">{@render children()}</main>
+<main id="main" tabindex="-1">
+  {#if comparisonSession.saved && /^\/(methodology|data-sources)/.test(page.url.pathname)}
+    <div class="return-comparison"><a href="/map/">← Return to your comparison</a><span>Your figures are kept while you read.</span></div>
+  {/if}
+  {@render children()}
+</main>
 <footer class="site-footer">
-  <span><strong>Tax Map</strong> · An illustration of change, grounded in open data.</span>
+  <div class="footer-brand">
+    <div class="footer-attribution">
+      <strong>Tax Map</strong><span aria-hidden="true">·</span>
+      <span class="footer-project">A project by <a href="https://limsight.com/" target="_blank" rel="noopener noreferrer">Limsight <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></span>
+    </div>
+    <p>An illustration of change, grounded in open data.</p>
+  </div>
   <div class="footer-meta">
     <span>Data preview · 26 September 2026</span>
     <a class="github-link" href="https://github.com/Lionel-Lim/tax-map" target="_blank" rel="noopener noreferrer">

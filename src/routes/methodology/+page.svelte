@@ -11,8 +11,8 @@
 
   <h2 id="using-the-map">Start in 3 steps</h2>
   <ol>
-    <li><strong>Choose an area.</strong> Search by postcode or select a council or neighbourhood on the map.</li>
-    <li><strong>Choose your comparison.</strong> Keep Council Tax only, or include Stamp Duty when buying.</li>
+    <li><strong>Choose an area.</strong> Search by postcode or area name, or select a council or neighbourhood on the map. Leicester is shown as an example until you choose an area.</li>
+    <li><strong>Choose your comparison.</strong> Open <strong>Comparison settings</strong> on a small screen. Keep Council Tax only, or include Stamp Duty when buying.</li>
     <li><strong>Read “Estimated tax change”.</strong> A minus means lower costs; a plus means higher costs.</li>
   </ol>
 
@@ -34,6 +34,7 @@
   <h2 id="your-figures">Use your own figures</h2>
   <p>Under <strong>Estimated tax change</strong>, select <strong>Use your own figures</strong>. Enter a home value, an annual Council Tax bill, or both, then select <strong>Update comparison</strong>. A blank field keeps the area figure.</p>
   <p><strong>Edit your figures</strong> changes them; <strong>Cancel</strong> discards edits. <strong>Reset to area figures</strong> restores the area estimate and keeps your comparison settings. Selecting another area clears personal figures. Map colours always use area figures.</p>
+  <p>Amounts can include a £ sign and commas, such as <strong>£300,000</strong>. Your applied figures stay in this tab's memory while you read How it works or Data &amp; coverage. Use <strong>Return to your comparison</strong> to continue. Refreshing the page or opening a shared link clears personal figures.</p>
 
   <h2 id="unavailable">Why an estimate may be unavailable</h2>
   <p>Missing or incompatible data is never treated as zero or replaced with a council estimate. Your own figures can replace missing prices or bills, but cannot restore a comparison withheld for an invalid boundary.</p>

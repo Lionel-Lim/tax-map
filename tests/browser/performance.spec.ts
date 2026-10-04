@@ -25,6 +25,7 @@ test('sample mobile payload and interaction budget', async ({ page }) => {
   await page.getByRole('button', { name: 'Find area', exact: true }).click();
   await expect(page.getByTestId('postcode-status')).toContainText('Bradgate');
   const postcodeMilliseconds = Date.now() - lookupStarted;
+  await page.locator('.scenario-settings > summary').click();
   const changeStarted = Date.now();
   await page.getByLabel('Compare costs', { exact: true }).selectOption('annualised-ownership');
   await expect(page.getByTestId('primary-difference')).toContainText('£935');

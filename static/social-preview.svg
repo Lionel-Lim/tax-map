@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f6f5ef"/>
+  <rect x="64" y="62" width="52" height="52" rx="12" fill="#254c41"/>
+  <path d="m76 78 9-4 10 4 9-4v25l-9 4-10-4-9 4Zm9-4v25m10-21v25" fill="none" stroke="#fffef9" stroke-width="2"/>
+  <text x="132" y="98" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#213d3a">Tax Map</text>
+  <text x="64" y="226" font-family="Georgia,serif" font-size="58" fill="#213d3a">See how property</text>
+  <text x="64" y="296" font-family="Georgia,serif" font-size="58" fill="#213d3a">tax could change.</text>
+  <text x="64" y="363" font-family="Arial,sans-serif" font-size="24" fill="#5d6f6a">Explore your area. Choose a rate.</text>
+  <text x="64" y="401" font-family="Arial,sans-serif" font-size="24" fill="#5d6f6a">Compare with Council Tax.</text>
+  <rect x="64" y="454" width="233" height="54" rx="8" fill="#254c41"/>
+  <text x="91" y="489" font-family="Arial,sans-serif" font-size="21" fill="#fffef9">Find your area →</text>
+  <rect x="735" y="94" width="401" height="420" rx="24" fill="#e4ece9"/>
+  <path d="m802 270 132-112 133 112" fill="none" stroke="#254c41" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M825 260v142h218V260" fill="#fffef9" stroke="#254c41" stroke-width="9" stroke-linejoin="round"/>
+  <rect x="904" y="309" width="63" height="93" rx="4" fill="#d6d2c3"/>
+  <rect x="847" y="297" width="36" height="42" rx="3" fill="#397b9d"/>
+  <rect x="986" y="297" width="36" height="42" rx="3" fill="#ca7847"/>
+  <text x="815" y="463" font-family="Arial,sans-serif" font-size="23" fill="#213d3a">Your area. Your comparison.</text>
+  <path d="M64 555h1072" stroke="#dce1d8"/>
+  <text x="64" y="590" font-family="Arial,sans-serif" font-size="18" fill="#5d6f6a">An illustrative scenario for England · Not an enacted tax</text>
+  <text x="925" y="590" font-family="Arial,sans-serif" font-size="18" fill="#254c41">taxmap.limsight.com</text>
+</svg>

@@ -15,8 +15,8 @@ test('England landing loads councils and global search without national neighbou
   page.on('request', request => requests.push(new URL(request.url()).pathname));
   await page.goto('/map/');
   await expect(page.getByTestId('primary-difference')).toContainText('£741');
-  await expect(page.locator('.coverage-stamp')).toContainText('296');
-  await expect(page.locator('.coverage-stamp')).toContainText('6,856');
+  await expect(page.locator('.coverage-stamp')).toContainText('293');
+  await expect(page.locator('.coverage-stamp')).toContainText('2,961');
   await expect(page.getByRole('button', { name: 'Show all England councils', exact: true })).toBeVisible();
   expect(requests).toContain(`/data/public-v1/${DATA}/councils.json`);
   expect(requests.some(path => path.endsWith('/areas.json') || path.endsWith('/msoa.geojson') || path.includes('/areas/msoa/') || path.includes('/postcodes/'))).toBe(false);
@@ -85,12 +85,12 @@ test('current-vintage Barnsley stock is unavailable rather than relabelled from 
 
 test('old sample links stay pinned and can deliberately open the England release', async ({ page }) => {
   await page.goto(`/map/?data=${SAMPLE}&area=E09000032`);
-  await expect(page.locator('.coverage-stamp')).toContainText('198');
+  await expect(page.locator('.coverage-stamp')).toContainText('91');
   await expect(page.locator('.archive-notice')).toBeVisible();
   await page.getByRole('link', { name: 'Explore the new England-wide data →' }).click();
-  await expect(page.locator('.coverage-stamp')).toContainText('6,856');
+  await expect(page.locator('.coverage-stamp')).toContainText('2,961');
   await page.goBack();
-  await expect(page.locator('.coverage-stamp')).toContainText('198');
+  await expect(page.locator('.coverage-stamp')).toContainText('91');
   await expect(page.getByTestId('impact-panel')).toContainText('Wandsworth');
 });
 

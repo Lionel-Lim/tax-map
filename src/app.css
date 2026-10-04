@@ -47,6 +47,11 @@ summary { cursor: pointer; }
 main { max-width: 1600px; margin: auto; padding: 0 4% 48px; }
 .site-footer { border-top: 1px solid var(--border); padding: 24px max(4%, calc((100% - 1472px) / 2)); display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: .75rem; color: var(--muted); }
 .site-footer strong { color: var(--ink); }
+.footer-brand { min-width: 0; }
+.footer-brand p { margin: 0; }
+.footer-attribution { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.footer-project, .footer-project a { display: inline-flex; align-items: center; gap: 4px; }
+.footer-project a { min-height: 44px; font-weight: 600; }
 .footer-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; }
 .github-link { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; }
 .github-link svg { flex-shrink: 0; }
@@ -56,7 +61,7 @@ main { max-width: 1600px; margin: auto; padding: 0 4% 48px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 
 /* Introduction and shared scenario settings. */
-.explorer-heading { padding: 30px 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+.explorer-heading { padding: 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .eyebrow { font-size: .7rem; letter-spacing: .13em; font-weight: 700; margin-bottom: 12px; color: #587064; }
 .lead { font-size: .94rem; max-width: 760px; color: var(--muted); margin-bottom: 0; }
 .explorer-heading .lead { max-width: 900px; }
@@ -81,11 +86,12 @@ main { max-width: 1600px; margin: auto; padding: 0 4% 48px; }
 .buyer-scope summary { width: fit-content; padding: 4px 0; }
 .buyer-scope p { max-width: 900px; margin: 10px 0; }
 
-/* The result follows the map before the area list on narrow screens. */
-.explorer-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(360px, 1fr); gap: 24px; align-items: start; }
-.map-column { min-width: 0; grid-column: 1; grid-row: 1; }
-.result-column { min-width: 0; grid-column: 2; grid-row: 1 / span 2; }
-.search-toolbar { display: flex; gap: 16px; align-items: end; background: var(--paper); border: 1px solid var(--border); border-bottom: 0; border-radius: 10px 10px 0 0; padding: 18px; }
+/* Postcode and map lead the mobile journey; desktop retains two columns. */
+.explorer-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(360px, 1fr); column-gap: 24px; align-items: start; }
+.postcode-search { min-width: 0; grid-column: 1; grid-row: 1; }
+.map-column { min-width: 0; grid-column: 1; grid-row: 5; margin-bottom: 24px; }
+.result-column { min-width: 0; grid-column: 2; grid-row: 5 / span 2; }
+.search-toolbar { display: flex; gap: 24px; align-items: end; background: var(--paper); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
 .search-toolbar form { flex: 1; min-width: 0; }
 .search-toolbar form > .field-label { margin-bottom: 7px; }
 .input-button { display: flex; gap: 8px; }
@@ -95,12 +101,40 @@ main { max-width: 1600px; margin: auto; padding: 0 4% 48px; }
 .primary:hover { background: #376251; }
 .geography-control { width: 160px; flex-shrink: 0; }
 .geography-control select { width: 100%; font-weight: 400; font-size: .85rem; }
+.name-search { min-width: 0; grid-column: 2; grid-row: 1; padding: 18px; background: var(--paper); border: 1px solid var(--border); border-radius: 10px; }
+.name-search input { width: 100%; font-size: .9rem; }
+.search-matches { grid-column: 1 / -1; grid-row: 2; margin-top: 8px; padding: 8px 18px 18px; background: var(--paper); border: 1px solid var(--border); border-radius: 10px; }
+.search-matches .area-list { max-height: 400px; overflow: auto; }
+.search-matches .section-heading { margin-bottom: 0; }
+.map-toolbar { display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 16px 18px; background: var(--paper); border: 1px solid var(--border); border-bottom: 0; border-radius: 10px 10px 0 0; }
+.map-toolbar > a { font-size: .8rem; padding-block: 12px; }
+.map-toolbar .geography-control { width: min(220px, 60%); }
+.scope-strip { grid-column: 1 / -1; grid-row: 3; margin-top: 16px; }
+.scope-strip > strong { white-space: normal; }
+.scenario-settings { min-width: 0; grid-column: 1 / -1; grid-row: 4; margin-block: 16px 20px; border-block: 1px solid var(--border); }
+.scenario-settings > summary { padding: 13px 0; font-size: .85rem; }
+.scenario-settings > summary span { margin-left: 16px; font-size: .8rem; color: var(--muted); }
+.scenario-settings .scenario-controls { padding-top: 4px; }
+.example-notice { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 12px 16px; margin-bottom: 12px; border: 1px solid #d2dccc; border-radius: 8px; background: #eef2e8; font-size: .78rem; }
+.example-notice a { font-weight: 600; }
+.mobile-result-links { display: none; }
+.return-comparison { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; padding-top: 24px; font-size: .85rem; }
+.return-comparison a { min-height: 44px; display: inline-flex; align-items: center; font-weight: 600; }
+.return-comparison span { color: var(--muted); }
+.council-recovery { border-top: 1px solid var(--border); padding-top: 16px; }
+.council-recovery button { width: 100%; font-size: .8rem; }
+.council-recovery p { font-size: .75rem; margin: 8px 0 0; }
+@media (min-width: 961px) {
+  .scenario-settings > summary { display: none; }
+  .scenario-settings { border: 0; margin: 0 0 20px; }
+  .scenario-settings .scenario-controls { padding: 18px 0 0; }
+}
 .lookup-privacy { font-size: .75rem; line-height: 1.55; color: var(--muted); background: var(--paper); border-inline: 1px solid var(--border); margin: 0; padding: 0 18px 14px; }
 .postcode-status { font-size: .85rem; padding: 14px 18px; border: 1px solid #c1d4c0; background: #edf3e8; margin: 0; }
 .postcode-status.warning { border-color: #e0c7a2; background: #fff5e5; }
 .map-note { font-size: .75rem; line-height: 1.6; color: var(--muted); margin: 12px 2px 0; }
 .mobile-explorer-links { display: none; }
-.area-browser { grid-column: 1; grid-row: 2; min-width: 0; border: 1px solid var(--border); border-radius: 10px; padding: 20px; background: var(--paper); }
+.area-browser { grid-column: 1; grid-row: 6; min-width: 0; border: 1px solid var(--border); border-radius: 10px; padding: 20px; background: var(--paper); }
 .section-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 16px; }
 .section-heading h2, .section-heading h3 { font-size: 1.05rem; margin: 0; }
 .section-heading > span { font-size: .75rem; color: var(--muted); }
@@ -220,9 +254,7 @@ pre { max-height: 300px; overflow: auto; background: #f4f4ec; padding: 12px; fon
   .site-header { gap: 18px; }
   .site-header nav { gap: 4px; }
   .coverage-stamp { display: none; }
-  .explorer-grid { grid-template-columns: minmax(0, 1.25fr) minmax(340px, 1fr); gap: 20px; }
-  .search-toolbar { flex-wrap: wrap; }
-  .search-toolbar form { flex-basis: 100%; }
+  .explorer-grid { grid-template-columns: minmax(0, 1.25fr) minmax(340px, 1fr); column-gap: 20px; }
   .geography-control { width: 100%; }
   .impact-panel { padding: 20px; }
   .scope-strip { flex-wrap: wrap; }
@@ -243,13 +275,21 @@ pre { max-height: 300px; overflow: auto; background: #f4f4ec; padding: 12px; fon
   .scope-strip { font-size: .75rem; gap: 7px; }
   .scope-strip > span:not(.status-dot) { flex-basis: 100%; }
   .scope-strip > a { display: inline-flex; align-items: center; min-height: 32px; }
+  .scope-strip { display: grid; grid-template-columns: 6px minmax(0, 1fr) 32px; }
+  .scope-strip > a { grid-column: 2 / -1; }
   .scenario-controls { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; padding: 20px 0; }
   .scenario-controls label { min-width: 0; }
   .control-note, .buyer-eligibility, .scenario-controls .error-text { grid-column: 1 / -1; }
   .scenario-controls select, .scenario-controls input, .input-button input, .geography-control select, .area-browser > input, .share-box > label > input { font-size: 1rem; }
   .explorer-grid { display: flex; flex-direction: column; gap: 24px; }
-  .map-column, .result-column, .area-browser { width: 100%; }
-  .search-toolbar { padding: 16px; }
+  .explorer-grid > * { width: 100%; }
+  .map-column, .scenario-settings, .scope-strip, .search-matches { margin: 0; }
+  .search-toolbar, .name-search { padding: 16px; }
+  .search-toolbar { flex-direction: column; align-items: stretch; gap: 14px; }
+  .search-toolbar input, .name-search input { font-size: 1rem; }
+  .scenario-settings > summary span { display: block; margin: 4px 0 0 17px; }
+  .mobile-result-links { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 12px; font-size: .8rem; }
+  .mobile-result-links a { min-height: 44px; display: inline-flex; align-items: center; }
   .input-button button { font-size: .8rem; padding-inline: .75rem; }
   .input-button input { width: 1px; flex: 1; }
   .lookup-privacy { padding-inline: 16px; }
