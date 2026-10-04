@@ -143,7 +143,7 @@ class EnglandPublishedSourceTests(unittest.TestCase):
 
     def test_postcode_conflicts_and_invalid_boundaries_withhold_without_dropping_area_rows(self):
         areas = copy.deepcopy(self.areas)
-        postcode = json.loads((ROOT / "static/data" / RELEASE_ID / "validation.json").read_text())["postcodes"]
+        postcode = json.loads((ROOT / "docs/evidence/phase1-validation.json").read_text())["postcodes"]
         review = {row["msoaCode"] for key in ("parentConflicts", "crossAuthorityMsoas", "legacyAuthorityAssignments")
                   for row in postcode[key] if row["msoaCode"] is not None}
         self.assertEqual(len(review), 140)

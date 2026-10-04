@@ -4,7 +4,7 @@ The sample uses the [ONS Postcode Directory, May 2025](https://geoportal.statist
 
 [postcode-source-manifest.json](../data/postcode-source-manifest.json) pins the exact download URL, bytes, archive checksum, checksums for every imported CSV and both user-guide formats, the publisher item metadata, the ONS licence page and the Northern Ireland end-user licence. The build incorporates this manifest into the durable source archive along with the Phase 0 sources. The raw cache and the source archive stay outside the browser release. Use the integrated pipeline command in [README.md](../README.md) for source preservation and rebuilding; sharding has no network dependency.
 
-The source includes current and terminated postcodes across the United Kingdom and Crown Dependencies. This is a historical edition: “unknown” means absent from this edition, not that a postcode never existed or cannot have been created later. Keeping the national minimal lookup is necessary to distinguish a known postcode outside the five sample authorities from an unknown postcode. Country and status come from source fields, never a postcode prefix or a syntax test.
+The upstream source includes current and terminated postcodes across the United Kingdom and Crown Dependencies. The tracked lookup excludes Northern Ireland: 2,651,940 records in 3,039 shards remain. This is a historical edition: “unknown” means absent from this edition, not that a postcode never existed or cannot have been created later. Country and status for retained records come from source fields. BT inputs are excluded by publication policy before lookup, without asserting that a particular postcode exists.
 
 ## Geography limitations
 
@@ -43,13 +43,13 @@ The [ONS postcode licensing guidance](https://www.ons.gov.uk/methodology/geograp
 - Contains Royal Mail data © Royal Mail copyright and database right 2025.
 - Source: Office for National Statistics licensed under the Open Government Licence v.3.0.
 
-ONS separately identifies Northern Ireland data as subject to LPS terms and says commercial use needs a separate licence; it describes the supplied Northern Ireland End User Licence as for internal business use only. The exact licence document is pinned alongside the source. This acquisition and validation work does not assert clearance for public redistribution or commercial use. The generated lookup and release are marked `publicReleaseReady: false`; Northern Ireland reuse must be resolved before publication. This is a publication dependency and does not require replacing supported postcode searches with guesses from syntax.
+ONS separately identifies Northern Ireland data as subject to LPS terms and says commercial use needs a separate licence; it describes the supplied Northern Ireland End User Licence as for internal business use only. The exact licence document is pinned alongside the private source archive. This project does not assert permission to redistribute those records. They are removed from the tracked releases, and the Python builder excludes rows with either a BT postcode prefix or the Northern Ireland country code before writing JSON/gzip shards. The website build rejects any such rows reintroduced into its sources. The pinned `publicReleaseReady: false` metadata is retained as historical provenance and coverage caution, not as an assertion that the cleaned releases still contain Northern Ireland data. See [data publication](data-publication.md).
 
 ## Verification
 
 `tests/test_postcodes.py` covers national-versus-sample retention, current/terminated records, outside-England records, canonical duplicate detection across CSV members, schema validation, unknown geography failures, reviewed legacy-code handling, missing geography/coordinates, sample withholding, cross-authority conflicts, and deterministic JSON/gzip output. The integrated validation report adds counts and conflict evidence for the full pinned source. The source edition is changed only by a reviewed repin and a new release.
 
-The [Phase 1 validation report](evidence/phase1-validation.json) records the following results for `sample-2026-09-26-v1`:
+The [Phase 1 validation report](evidence/phase1-validation.json) records the following historical, pre-filter results for `sample-2026-09-26-v1`. These totals describe the original private input, not the cleaned tracked release:
 
 | Check | Observed result |
 | --- | ---: |

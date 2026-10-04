@@ -6,6 +6,11 @@ data/archive/sha256/
 data/archive/manifests/
 data/archive/catalogues/
 .pipeline-staging/
+.private-research/
+# Northern Ireland postcode data requires separate redistribution permission.
+static/data/**/postcodes/BT*.json
+static/data/**/postcodes/BT*.json.gz
+*.bundle
 node_modules/
 .build/
 .svelte-kit/

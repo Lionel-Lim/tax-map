@@ -1,4 +1,4 @@
-"""Stream the pinned ONSPD into minimal, national outward-code lookups.
+"""Stream the pinned ONSPD into minimal lookups excluding Northern Ireland.
 
 The intermediate SQLite database is temporary and is never a browser artifact.
 No postcode validity, country or geography is inferred from postcode syntax.
@@ -25,6 +25,7 @@ FIELDS = ["postcode", "latitude", "longitude", "country", "msoa21", "sourceLad",
           "status", "terminationMonth", "positionQuality"]
 REQUIRED_FIELDS = {"pcds", "doterm", "ctry", "msoa21", "oslaua", "lat", "long", "osgrdind"}
 ENGLAND = "E92000001"
+NORTHERN_IRELAND = "N92000002"
 # Reviewed source-vintage exceptions in the Phase 0 methodology. Keep original
 # codes; they cannot establish the geography of the replacement LAD boundaries.
 LEGACY_LADS = {"E08000016": "Barnsley", "E08000019": "Sheffield"}
@@ -124,6 +125,7 @@ def build_postcodes(source_path: Path, output_dir: Path, sample_msoas: set[str],
     sample_seen: Counter = Counter()
     source_members = []
     shards = {}
+    excluded_northern_ireland = 0
     english_msoas = {code for code in parent_lookup if code.startswith("E")}
     english_lads = {parent_lookup[code] for code in english_msoas}
     with tempfile.TemporaryDirectory(prefix="tax-map-postcodes-") as temp:
@@ -140,6 +142,12 @@ def build_postcodes(source_path: Path, output_dir: Path, sample_msoas: set[str],
                     for source_row, row in enumerate(reader, 2):
                         postcode = normalise_postcode(row["pcds"])
                         outward = postcode.split(" ")[0]
+                        member_count += 1
+                        # Publication policy, not postcode validity inference:
+                        # exclude either NI marker before retaining any record.
+                        if outward.startswith("BT") or row["ctry"].strip() == NORTHERN_IRELAND:
+                            excluded_northern_ireland += 1
+                            continue
                         termination = row["doterm"].strip() or None
                         if termination and not re.fullmatch(r"[0-9]{4}(0[1-9]|1[0-2])", termination):
                             raise ValueError(f"Invalid termination month: {postcode} {termination}")
@@ -159,7 +167,6 @@ def build_postcodes(source_path: Path, output_dir: Path, sample_msoas: set[str],
                                        (postcode, outward, json.dumps(record, separators=(",", ":"), allow_nan=False)))
                         except sqlite3.IntegrityError as error:
                             raise ValueError(f"Duplicate postcode {postcode} at {member}:{source_row}") from error
-                        member_count += 1
                         counts[status] += 1
                         countries[country or "unknown"] += 1
                         country_status[(country or "unknown", status)] += 1
@@ -265,12 +272,14 @@ def build_postcodes(source_path: Path, output_dir: Path, sample_msoas: set[str],
                                        for msoa, reasons in sorted(sample_reasons.items())],
         "sampleCurrentPostcodesByMsoa": dict(sorted(sample_seen.items())),
         "publicReleaseReady": False,
-        "publicationRestriction": "Northern Ireland postcode reuse requires review of the pinned LPS licence; this is an internal validation release.",
+        "publicationRestriction": "Northern Ireland records are excluded; coverage and other release readiness checks still apply.",
+        "publicationFilter": {"excludedCountry": NORTHERN_IRELAND,
+                              "excludedRecords": excluded_northern_ireland},
     }
     index = {
         "schemaVersion": 1, "sourceId": "postcode-directory", "referencePeriod": "2025-05",
-        "coverage": "All source postcode records, including current and terminated UK and Crown Dependency postcodes; validity is as at the pinned edition.",
-        "fields": FIELDS, "countries": COUNTRIES,
+        "coverage": "Pinned postcode directory excluding all Northern Ireland records. BT postcodes are outside this lookup.",
+        "fields": FIELDS, "countries": {code: label for code, label in COUNTRIES.items() if code != NORTHERN_IRELAND},
         "sampleMsoas": sorted(sample_msoas), "sampleLads": sorted(sample_lads),
         "records": report["records"], "shards": shards,
         "publicReleaseReady": False, "publicationRestriction": report["publicationRestriction"],

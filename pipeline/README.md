@@ -25,15 +25,17 @@ disabled and the coordinate transformation is explicit; see the boundary report.
 From the project root:
 
 ```sh
-.venv/bin/python -m pipeline build --scope england
-.venv/bin/python -m pipeline verify-release --scope england
+.venv/bin/python -m pipeline build --scope england --release-id england-rebuild-check --output-dir .private-research/releases
+.venv/bin/python -m pipeline verify-release --scope england --release-id england-rebuild-check --output-dir .private-research/releases
 ```
 
 The command verifies every source and pinned archive member, preserves an
 independent byte-for-byte copy in `data/archive/`, restores any missing raw cache
 files from that archive, validates joins and geometry, and builds
-`static/data/england-2026-09-26-v1/`. Only a complete validated bundle updates
-`static/data/manifest.json`. This pointer is local preparation, not deployment.
+the chosen output directory. Only a complete validated bundle updates that
+directory's `manifest.json`. `.private-research/` is ignored by Git. The tracked
+`static/data/` releases are the already-published cleaned distributions; do not
+rebuild or replace those immutable release IDs with current pipeline output.
 
 Existing release IDs are immutable: identical rebuilds are accepted; differing
 bytes fail without changing the pointer. For a reviewed source, code or toolchain
@@ -47,14 +49,14 @@ source and artifact hashes, geography vintages, coverage and policy version.
 .venv/bin/python -m pipeline verify-release --scope england
 ```
 
-The Python suite has **66 tests**. `--output-dir /path/to/output` builds elsewhere;
+The Python suite has **67 tests**. `--output-dir /path/to/output` builds elsewhere;
 compare manifest and artifact hashes to demonstrate reproduction. For example,
 build the current England release into a separate directory without updating the
 workspace's active pointer:
 
 ```sh
-.venv/bin/python -m pipeline build --scope england --output-dir /tmp/tax-map-england-rebuild
-.venv/bin/python -m pipeline verify-release --scope england --output-dir /tmp/tax-map-england-rebuild
+.venv/bin/python -m pipeline build --scope england --release-id england-rebuild-check --output-dir /tmp/tax-map-england-rebuild
+.venv/bin/python -m pipeline verify-release --scope england --release-id england-rebuild-check --output-dir /tmp/tax-map-england-rebuild
 ```
 
 `--archive-dir /path/to/archive` selects a separately retained source archive.
@@ -64,17 +66,17 @@ The output directory must remain outside
 ## Preserve the historical sample
 
 The CLI defaults to `--scope sample`; it does not infer scope from the active
-pointer. The original `sample-2026-09-26-v1` bundle remains unchanged for supported
-shared links. Verify its existing bytes with:
+pointer. The published `public-v1` form of `sample-2026-09-26-v1` remains unchanged
+for supported shared links. Verify its cleaned tracked bytes with:
 
 ```sh
 .venv/bin/python -m pipeline verify-release --scope sample
 ```
 
 Do not rebuild that original ID with the current implementation. Its manifest
-pins historical code hashes, so the immutable-release check correctly rejects
-changed output. To reproduce that exact bundle, use the matching historical code,
-configuration and toolchain alongside the retained source archive. To check the
+pins historical code hashes and the cleaned distribution inventory, so the
+immutable-release check correctly rejects changed output. The unfiltered
+research bundle is retained only in a private backup. To check the
 sample path using current code, choose a fresh ID and a separate output directory:
 
 ```sh
@@ -148,11 +150,13 @@ repinning. Upstream URLs are not the recovery mechanism for historical releases.
   ongoing-owner data default. The application separately declares annualised
   ownership over 20 years as its landing default and pins the supported SDLT rules.
 - `sources.json`: source metadata, periods, reuse conditions and attribution.
-- `validation.json`: evidence, exceptions, source reconciliation and coverage.
+- `validation.json`: evidence in fresh pipeline outputs. For the cleaned tracked
+  releases, historical reports are retained in `docs/evidence/` instead.
 - `manifest.json`: coherent bundle identity and complete artifact hash inventory.
 
 No raw workbook, source ZIP or full source postcode CSV is placed in browser
-output. National minimal postcode shards distinguish unknown, terminated and
+output. Northern Ireland records are excluded before shard generation. Retained
+postcode shards distinguish unknown, terminated and
 outside-England locations, and known outside-sample locations in the archived
 sample. The index retains its schema-1 `sampleMsoas` and `sampleLads` field names;
 in the England release they contain all 6,856 MSOAs and 296 LADs. The browser checks
@@ -165,10 +169,11 @@ availability reason and a `geometry-unavailable` quality flag; they have no nume
 exclusions and unresolved charging-geography cases are recorded in the release
 manifest and validation report. See [England expansion](../docs/england-expansion.md).
 
-These artifacts are for **internal validation**. Public release readiness is
-false: Northern Ireland postcode reuse, usable coverage and public hosting still
-need the planned review. The app, loader and browser tests are separate from this
-offline pipeline; **99 domain tests** and **32 data/state tests** include every
+New pipeline outputs still require review before promotion to a website release.
+Northern Ireland records are excluded, while coverage limitations remain. The
+tracked cleaned releases preserve their historical `publicReleaseReady: false`
+metadata without changing already-published bytes. The app, loader and browser tests are separate from this
+offline pipeline; **102 domain tests** and **34 data/state tests** include every
 England area across all three comparison modes. Run `npm run test:browser` for
 the interactive journeys. Nothing in these commands publishes the application.
 See [postcode data](../docs/postcode-data.md), [LAD validation](../docs/lad-validation.md),

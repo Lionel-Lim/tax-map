@@ -15,17 +15,18 @@ are disabled. No Worker script, database or external map-tile service is needed.
 The website serves only the generated `.build/public-static/` assets. Run
 `npm run prepare:public` to generate them; `npm run dev`, `npm run build` and
 `npm run test:app` do this automatically. Do not deploy `static/` directly.
-That directory retains the original research releases, including restricted
-Northern Ireland data, in the private repository.
+That directory contains the cleaned source data rather than the complete built
+website. Restricted Northern Ireland records have also been removed from these
+tracked sources; see [data publication](data-publication.md).
 
-The public distribution lives at `/data/public-v1/<release-id>/`. It removes all
-63,023 Northern Ireland postcode rows from each release, both JSON and gzip
-shards, and omits the internal validation report. The generator checks source
-checksums, updates public index and manifest hashes, and records the source
-manifest hash. Unchanged statistics and retained postcode shards are copied
-byte-for-byte. Share-link data versions stay the same because tax data is
-unchanged; the new distribution path separates the filtered files from the
-original immutable research artifacts. BT inputs return an out-of-scope message
+The public distribution lives at `/data/public-v1/<release-id>/`. All 63,023
+Northern Ireland postcode rows per release are excluded, in both JSON and gzip
+shards. The tracked releases now contain the exact previously published public
+manifests and artifacts. The generator validates the source inventory, checksums
+and postcode contents, then copies them byte-for-byte. It rejects contaminated
+source data instead of silently filtering it. Share-link data versions, public
+URLs and cached file bytes stay unchanged. Historical validation reports remain
+in `docs/evidence/` and are not website assets. BT inputs return an out-of-scope message
 without looking up or asserting the existence of that postcode.
 
 The final asset check rejects raw release directories, unexpected releases,
@@ -70,9 +71,9 @@ The [deployment workflow](../.github/workflows/deploy.yml) uses only
 `workflow_dispatch`: pushes, pull requests and schedules do not start it.
 Pushing a commit does not update the live website.
 
-Keep source, dependencies' lockfile, tests, Wrangler configuration and original
-`static/` research releases in the private repository. Never publish `static/`
-directly. Generated `build/` contains the filtered public distribution.
+Keep source, dependencies' lockfile, tests, Wrangler configuration and cleaned
+`static/` releases in the repository. Deploy generated `build/`, which contains
+the application and the filtered public distribution.
 The `.gitignore` excludes generated files, local credentials, Wrangler state,
 raw-source downloads and the independent source archive. Back up the raw data
 and archive separately; they are not included in a repository clone.

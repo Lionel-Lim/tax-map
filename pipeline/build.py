@@ -210,7 +210,7 @@ def build(root: Path, archive_root: Path, output_root: Path, release_id=None, *,
                       "Sample preparation only; interactive application and comparison engine are later phases.",
                       "Unverified stock markers remain unavailable without a parent-area fallback.",
                       "Cross-authority postcode assignments withhold affected MSOA estimates pending review.",
-                      "ONSPD Northern Ireland reuse terms require review before public redistribution.",
+                      "Northern Ireland postcode records are excluded from generated lookups.",
                       "Local archive survives raw-cache removal; off-machine backup is not configured.",
                       "Boundary rendering in MapLibre is a Phase 3 browser acceptance check."]}
         if scope == "england":
@@ -225,7 +225,7 @@ def build(root: Path, archive_root: Path, output_root: Path, release_id=None, *,
                 "Current Barnsley and Sheffield LAD stock totals are missing; older authority totals are not relabelled.",
                 "Cross-authority and legacy postcode assignments withhold affected MSOA estimates pending review.",
                 "Invalid source geometries are omitted without repair; their statistics remain explicitly unavailable.",
-                "ONS postcode Northern Ireland/LPS reuse terms require review before public redistribution.",
+                "Northern Ireland postcode records are excluded from generated lookups.",
                 "Internal validation only; hosting, usable-coverage publication review and sustained mobile performance checks remain.",
                 "Local source archive is retained; off-machine backup is not configured."]
         write_json(staging / "validation.json", report)

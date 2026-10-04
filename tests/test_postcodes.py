@@ -41,20 +41,40 @@ class PostcodeTests(unittest.TestCase):
             self.row("AA1 1AB", doterm="200011", osgrdind="8"),
             self.row("AA2 1AA", msoa21="E02000002", oslaua="E06000002"),
             self.row("CF1 1AA", ctry="W92000004", msoa21="W02000001", oslaua="W06000001"),
-            self.row("BT1 1AA", ctry="N92000002", msoa21="", oslaua="N09000001"),
+            # Synthetic record; no coordinates or other values copied from ONS.
+            self.row("BT99 9ZZ", ctry="N92000002", msoa21="", oslaua=""),
         ])
-        self.assertEqual(report["records"], 5)
-        self.assertEqual(report["counts"]["current"], 4)
+        self.assertEqual(report["records"], 4)
+        self.assertEqual(report["counts"]["current"], 3)
         self.assertEqual(report["counts"]["terminated"], 1)
         self.assertEqual(report["sampleGeographyNeedsReview"], [])
         index = json.loads((self.root / "result/postcodes/index.json").read_text())
         self.assertEqual(index["fields"], FIELDS)
-        self.assertEqual(set(index["shards"]), {"AA1", "AA2", "CF1", "BT1"})
+        self.assertEqual(set(index["shards"]), {"AA1", "AA2", "CF1"})
+        self.assertNotIn("N92000002", index["countries"])
+        self.assertEqual(report["publicationFilter"], {"excludedCountry": "N92000002", "excludedRecords": 1})
         rows = json.loads((self.root / "result/postcodes/AA1.json").read_text())["rows"]
         self.assertEqual(rows[0], ["AA1 1AA", 51.123456, -1.123456, "E92000001",
                                    "E02000001", "E06000001", "current", None, "1"])
         self.assertEqual(rows[1][6:9], ["terminated", "200011", "8"])
         self.assertFalse(index["publicReleaseReady"])
+
+    def test_ni_records_are_excluded_by_either_marker_in_json_and_gzip(self):
+        report = self.build([
+            self.row(),
+            self.row("BT99 9ZZ", ctry="", doterm="200001"),
+            self.row("AA9 9ZZ", ctry="N92000002"),
+        ])
+        self.assertEqual(report["records"], 1)
+        self.assertEqual(report["publicationFilter"]["excludedRecords"], 2)
+        self.assertEqual(report["sourceMembers"][0]["rows"], 3)
+        directory = self.root / "result/postcodes"
+        self.assertEqual({p.name for p in directory.iterdir()}, {"index.json", "AA1.json", "AA1.json.gz"})
+        for name in ["AA1.json", "AA1.json.gz"]:
+            payload = (directory / name).read_bytes()
+            if name.endswith(".gz"):
+                payload = gzip.decompress(payload)
+            self.assertEqual([row[0] for row in json.loads(payload)["rows"]], ["AA1 1AA"])
 
     def test_missing_location_and_geography_are_null_without_losing_postcode(self):
         report = self.build([self.row(lat="99.999999", long="0.000000", osgrdind="9",
