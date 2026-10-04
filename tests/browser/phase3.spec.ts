@@ -205,7 +205,7 @@ test('purchase and buyer controls use the shared engine and purchase year has no
   await expect(page.getByLabel('Show change as', { exact: true }).locator('option[value="monthly"]')).toHaveCount(0);
 });
 
-test('custom property tax rates update area colours, personal results and calculation details', async ({ page }) => {
+test('custom property tax rates update area colours, personal results and calculation details', { tag: '@smoke' }, async ({ page }) => {
   await page.goto(sharedPath());
   await expect(page.getByTestId('primary-difference')).toContainText('£814');
   await page.getByLabel('Area name or code').fill(BRADGATE);
@@ -356,7 +356,7 @@ test('ineligible first-time-buyer prices show official guidance rather than stan
   await expect(page.getByTestId('primary-difference')).toBeVisible();
 });
 
-test('explicit share links preserve area settings and exclude personal amounts and postcode by default', async ({ page }) => {
+test('explicit share links preserve area settings and exclude personal amounts and postcode by default', { tag: '@smoke' }, async ({ page }) => {
   await page.goto(sharedPath({ display: 'monthly' }));
   await findPostcode(page, 'LE4 0DD');
   await expect(page.getByTestId('primary-difference')).toContainText('£68');

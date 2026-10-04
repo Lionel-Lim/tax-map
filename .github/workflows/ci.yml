@@ -5,6 +5,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      browser_tests:
+        description: Optional browser tests
+        type: choice
+        default: none
+        options:
+          - none
+          - full
+          - performance
 
 permissions:
   contents: read
@@ -45,7 +54,24 @@ jobs:
         run: npm run build
 
       - name: Install Chromium
+        if: github.event_name == 'workflow_dispatch' && inputs.browser_tests != 'none'
         run: npx playwright install --with-deps chromium
 
-      - name: Run browser tests
+      - name: Run full browser suite (manual)
+        if: github.event_name == 'workflow_dispatch' && inputs.browser_tests == 'full'
         run: npm run test:browser
+
+      - name: Run performance tests (manual)
+        if: github.event_name == 'workflow_dispatch' && inputs.browser_tests == 'performance'
+        run: npm run test:browser:performance
+
+      - name: Upload browser test report and failure traces
+        if: ${{ !cancelled() && github.event_name == 'workflow_dispatch' && inputs.browser_tests != 'none' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: browser-test-results
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7

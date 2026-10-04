@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
 
-test('England mobile overview and lazy detail stay within measured delivery budgets', async ({ page }) => {
+test('England mobile overview and lazy detail stay within measured delivery budgets', { tag: '@performance' }, async ({ page }) => {
   test.setTimeout(60_000);
+  const budgets = { initialDecodedBytes: 6_000_000, detailDecodedBytes: 1_300_000, overviewMilliseconds: 20_000, postcodeMilliseconds: 8_000, scenarioMilliseconds: 3_000 };
   await page.setViewportSize({ width: 390, height: 844 });
   const cdp = await page.context().newCDPSession(page);
   await cdp.send('Network.enable');
@@ -12,10 +13,13 @@ test('England mobile overview and lazy detail stay within measured delivery budg
     .filter(entry => entry.name.startsWith(location.origin))
     .map(entry => { const r = entry as PerformanceResourceTiming; return { path: new URL(r.name).pathname, encodedBytes: r.encodedBodySize, decodedBytes: r.decodedBodySize }; }));
   const started = Date.now();
-  await page.goto('/map/');
-  await expect(page.getByTestId('primary-difference')).toContainText('£741');
-  await expect(page.getByRole('button', { name: 'Show all England councils', exact: true })).toBeVisible();
-  await expect.poll(() => page.locator('.area-map-label').count()).toBeGreaterThan(0);
+  await test.step('Load the England overview within its performance budget', async () => {
+    const overviewExpect = expect.configure({ timeout: budgets.overviewMilliseconds });
+    await page.goto('/map/');
+    await overviewExpect(page.getByTestId('primary-difference')).toContainText('£741');
+    await overviewExpect(page.getByRole('button', { name: 'Show all England councils', exact: true })).toBeVisible();
+    await overviewExpect.poll(() => page.locator('.area-map-label').count()).toBeGreaterThan(0);
+  }, { timeout: budgets.overviewMilliseconds });
   const overviewMilliseconds = Date.now() - started;
   const initial = await resources();
   expect(initial.some(row => /\/postcodes\/|\/areas\/msoa\/|\/boundaries\/msoa\/|\/areas.json$|\/msoa.geojson$/.test(row.path))).toBe(false);
@@ -40,7 +44,7 @@ test('England mobile overview and lazy detail stay within measured delivery budg
     initial: { encodedBytes: sum(initial, 'encodedBytes'), decodedBytes: sum(initial, 'decodedBytes'), resources: initial },
     detail: { encodedBytes: sum(detail, 'encodedBytes'), decodedBytes: sum(detail, 'decodedBytes'), resources: detail },
     timings: { overviewMilliseconds, postcodeMilliseconds, scenarioMilliseconds },
-    budgets: { initialDecodedBytes: 6_000_000, detailDecodedBytes: 1_300_000, overviewMilliseconds: 20_000, postcodeMilliseconds: 8_000, scenarioMilliseconds: 3_000 },
+    budgets,
   };
   await mkdir('docs/evidence', { recursive: true });
   await writeFile('docs/evidence/england-performance.json', JSON.stringify(report, null, 2) + '\n');

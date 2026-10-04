@@ -93,9 +93,13 @@ For an update, push the changes to `main`, then open **Actions → Deploy to
 Cloudflare → Run workflow**, select `main`, and start the run. The deployment job
 only runs for `main`. It installs pinned dependencies, runs `build:cloudflare`
 (type checks, unit/app/publication tests, static build, asset validation and
-Wrangler dry run), then runs the Chromium browser tests before publishing the
+Wrangler dry run), then runs seven Chromium smoke checks for the key user journeys before publishing the
 checked `build/` directory. Failed checks prevent deployment. Production runs
 share a concurrency group so deployments cannot overlap.
+
+The full browser suite and CPU-throttled performance tests are manual checks,
+available through **Actions → Check pull requests and main → Run workflow →
+Optional browser tests**. They do not block routine push checks or deployment.
 
 The token is passed only to the deployment step. Keep it in Actions secrets,
 never in the workflow or other committed files. No action has been dispatched

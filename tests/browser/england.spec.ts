@@ -10,7 +10,7 @@ async function lookup(page: import('@playwright/test').Page, postcode: string) {
   await expect(page.getByRole('button', { name: 'Find area', exact: true })).toBeEnabled();
 }
 
-test('England landing loads councils and global search without national neighbourhood data', async ({ page }) => {
+test('England landing loads councils and global search without national neighbourhood data', { tag: '@smoke' }, async ({ page }) => {
   const requests: string[] = [];
   page.on('request', request => requests.push(new URL(request.url()).pathname));
   await page.goto('/map/');
@@ -23,7 +23,7 @@ test('England landing loads councils and global search without national neighbou
   expect(await page.locator('.area-map-label').count()).toBeLessThan(40);
 });
 
-test('Manchester council and neighbourhoods use separate inputs and lazy shards', async ({ page }) => {
+test('Manchester council and neighbourhoods use separate inputs and lazy shards', { tag: '@smoke' }, async ({ page }) => {
   const requests: string[] = [];
   page.on('request', request => requests.push(new URL(request.url()).pathname));
   await page.goto('/map/');

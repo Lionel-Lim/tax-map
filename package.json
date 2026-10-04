@@ -18,6 +18,8 @@
     "check:domain": "tsc --noEmit -p tsconfig.domain.json && tsc --noEmit -p tsconfig.domain-browser.json",
     "test:app": "tsc -p tsconfig.app-tests.json && node --test .build/app-tests/tests/app/*.test.js",
     "test:browser": "playwright test",
+    "test:browser:smoke": "playwright test --grep @smoke",
+    "test:browser:performance": "playwright test --grep @performance --workers=1",
     "preview:cloudflare": "node scripts/deployment/preview.mjs",
     "deploy:check": "npm run build && node scripts/deployment/check-assets.mjs && wrangler deploy --dry-run",
     "build:cloudflare": "npm run check && npm test && npm run test:app && npm run test:deployment && npm run deploy:check",

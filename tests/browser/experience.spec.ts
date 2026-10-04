@@ -9,7 +9,7 @@ async function enterPersonalFigures(page: Page) {
 }
 
 for (const width of [320, 390]) {
-  test(`mobile prioritises postcode search then the map at ${width}px`, async ({ page }) => {
+  test(`mobile prioritises postcode search then the map at ${width}px`, { tag: '@smoke' }, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });
     await page.goto('/');
     await expect(page.getByLabel('Postcode', { exact: true })).toBeInViewport();
@@ -47,38 +47,46 @@ for (const width of [320, 390]) {
 
 for (const returnVia of ['navigation', 'back']) {
   test(`reading supporting pages preserves personal figures via ${returnVia}`, async ({ page }) => {
-    await page.goto('/map/?area=E08000003');
-    await enterPersonalFigures(page);
-    await page.getByLabel('Compare costs', { exact: true }).selectOption('annualised-ownership');
-    await page.getByLabel('Years of ownership', { exact: true }).fill('10');
-    await page.getByLabel('Annual property tax (%)', { exact: true }).fill('0.6');
-    await page.getByLabel('Annual property tax (%)', { exact: true }).press('Tab');
-    await expect(page.getByTestId('primary-difference')).toContainText('£500');
-    await page.getByRole('link', { name: 'How it works', exact: true }).click();
-    await expect(page.getByRole('link', { name: '← Return to your comparison', exact: true })).toBeVisible();
-    if (returnVia === 'back') await page.goBack();
-    else {
-      await page.getByRole('link', { name: 'Data & coverage', exact: true }).click();
-      await page.getByRole('link', { name: '← Return to your comparison', exact: true }).click();
-    }
-    await expect(page.getByTestId('impact-panel')).toContainText('Manchester');
-    await expect(page.getByTestId('impact-panel')).toContainText('Personal comparison · your figures');
-    await expect(page.getByTestId('primary-difference')).toContainText('£500');
-    await expect(page.getByLabel('Annual property tax (%)', { exact: true })).toHaveValue('0.6');
-    await expect(page.getByLabel('Years of ownership', { exact: true })).toHaveValue('10');
-    await page.getByRole('button', { name: 'Edit your figures', exact: true }).click();
-    await expect(page.getByLabel('Property value (£)', { exact: true })).toHaveValue('300,000');
-    await page.keyboard.press('Escape');
-    await page.getByRole('button', { name: 'Create link', exact: true }).click();
-    const shared = await page.getByLabel('Share link', { exact: true }).inputValue();
-    expect(shared).not.toMatch(/300000|1800|postcode=/);
-    await page.goto(shared);
-    await expect(page.getByTestId('impact-panel')).toContainText('Council estimate · area figures');
-    await expect(page.getByRole('button', { name: 'Edit your figures', exact: true })).toHaveCount(0);
+    await test.step('Enter personal figures and comparison settings', async () => {
+      await page.goto('/map/?area=E08000003');
+      await enterPersonalFigures(page);
+      await page.getByLabel('Compare costs', { exact: true }).selectOption('annualised-ownership');
+      await page.getByLabel('Years of ownership', { exact: true }).fill('10');
+      await page.getByLabel('Annual property tax (%)', { exact: true }).fill('0.6');
+      await page.getByLabel('Annual property tax (%)', { exact: true }).press('Tab');
+      await expect(page.getByTestId('primary-difference')).toContainText('£500');
+    });
+    await test.step('Read supporting pages and restore the comparison', async () => {
+      await page.getByRole('link', { name: 'How it works', exact: true }).click();
+      await expect(page.getByRole('link', { name: '← Return to your comparison', exact: true })).toBeVisible();
+      if (returnVia === 'back') await page.goBack();
+      else {
+        await page.getByRole('link', { name: 'Data & coverage', exact: true }).click();
+        await page.getByRole('link', { name: '← Return to your comparison', exact: true }).click();
+      }
+      await expect(page.getByTestId('impact-panel')).toContainText('Manchester');
+      await expect(page.getByTestId('impact-panel')).toContainText('Personal comparison · your figures');
+      await expect(page.getByTestId('primary-difference')).toContainText('£500');
+      await expect(page.getByLabel('Annual property tax (%)', { exact: true })).toHaveValue('0.6');
+      await expect(page.getByLabel('Years of ownership', { exact: true })).toHaveValue('10');
+    });
+    await test.step('Share the area estimate without personal figures', async () => {
+      await page.getByRole('button', { name: 'Edit your figures', exact: true }).click();
+      await expect(page.getByLabel('Property value (£)', { exact: true })).toHaveValue('300,000');
+      await page.keyboard.press('Escape');
+      await expect(page.getByRole('dialog')).not.toBeVisible();
+      await expect(page.getByRole('button', { name: 'Edit your figures', exact: true })).toBeFocused();
+      await page.getByRole('button', { name: 'Create link', exact: true }).click();
+      const shared = await page.getByLabel('Share link', { exact: true }).inputValue();
+      expect(shared).not.toMatch(/300000|1800|postcode=/);
+      await page.goto(shared);
+      await expect(page.getByTestId('impact-panel')).toContainText('Council estimate · area figures');
+      await expect(page.getByRole('button', { name: 'Edit your figures', exact: true })).toHaveCount(0);
+    });
   });
 }
 
-test('unavailable neighbourhood offers a separate council estimate and actionable personal inputs', async ({ page }) => {
+test('unavailable neighbourhood offers a separate council estimate and actionable personal inputs', { tag: '@smoke' }, async ({ page }) => {
   await page.goto('/');
   await page.getByLabel('Postcode', { exact: true }).fill('LE4 0SZ');
   await page.getByRole('button', { name: 'Find area', exact: true }).click();

@@ -22,6 +22,10 @@ npm run test:deployment
 npm run build
 ```
 
-For interface changes, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser` after building. Preview the build with `npm run preview`.
+For interface changes, install Chromium once with `npx playwright install chromium`, then run `npm run test:browser:smoke` after building. These seven checks cover map loading, postcode and area search, the mobile layout, personal comparisons, missing data and sharing. Preview the build with `npm run preview`.
 
-Pull requests and pushes to `main` run these checks automatically. Publishing is manual; see the [deployment guide](docs/deployment.md).
+Pull requests and pushes to `main` run the type, calculation, data, publication and build checks above. The deployment workflow also runs the browser smoke checks before publishing; it does not run the full browser suite or CPU-throttled performance tests.
+
+Run `npm run test:browser` manually for the full browser suite, or `npm run test:browser:performance` for the two performance checks only. Both commands require a build and Chromium. To run them on GitHub, open **Actions → Check pull requests and main → Run workflow** and choose **full** or **performance** under **Optional browser tests**. The default **none** runs only the core checks. Manual browser runs retain reports and failure traces for seven days.
+
+Publishing is manual; see the [deployment guide](docs/deployment.md).
